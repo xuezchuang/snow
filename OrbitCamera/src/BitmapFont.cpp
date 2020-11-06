@@ -71,7 +71,7 @@ bool BitmapFont::loadFont(const std::string& fileName)
 
     // compute buffer size
     inFile.seekg(0, std::ios::end);
-    size_t bufferSize = inFile.tellg();
+    size_t bufferSize = size_t(inFile.tellg());
     inFile.seekg(0, std::ios::beg);
 
     // get memory space based on image data size
@@ -185,13 +185,13 @@ int BitmapFont::drawText(float x, float y, const char* str)
     glColor4fv(this->color);
 
     glPushMatrix();
-    glTranslatef(shiftX, shiftY, 0);
+    glTranslatef((GLfloat)shiftX, (GLfloat)shiftY, 0);
     glScalef(scale.x, scale.y, 1);
     //glRotatef(angle.x, 1,0,0);
     //glRotatef(angle.y, 0,1,0);
     glRotatef(angle.z, 0,0,1);
 
-    int cursor = 0;
+    GLfloat cursor = 0.0;
     while((chr = *str++) != '\0')
     {
         character = characters[(short)chr];
@@ -204,7 +204,7 @@ int BitmapFont::drawText(float x, float y, const char* str)
         quadVertices[0].s = quadVertices[1].s = character.uvs[0];
         quadVertices[0].t = quadVertices[2].t = character.uvs[1];
         quadVertices[0].x = quadVertices[1].x = cursor + character.xOffset;
-        quadVertices[0].y = quadVertices[2].y = base - character.yOffset;
+        quadVertices[0].y = quadVertices[2].y = (GLfloat)(base - character.yOffset);
 
         quadVertices[3].s = quadVertices[2].s = character.uvs[2];
         quadVertices[3].t = quadVertices[1].t = character.uvs[3];
