@@ -1,0 +1,7 @@
+# ninja log v5
+32	736	625062190	CMakeFiles/Bullet3Collision.dir/BroadPhaseCollision/b3DynamicBvh.obj	cc73497626882216
+69	746	625062190	CMakeFiles/Bullet3Collision.dir/NarrowPhaseCollision/b3CpuNarrowPhase.obj	6714b32c8fa1295a
+17	749	625062190	CMakeFiles/Bullet3Collision.dir/BroadPhaseCollision/b3OverlappingPairCache.obj	f587c71dd9a2fdbf
+48	752	625062190	CMakeFiles/Bullet3Collision.dir/NarrowPhaseCollision/b3ConvexUtility.obj	74b74db8f8fbe17b
+1	756	625062191	CMakeFiles/Bullet3Collision.dir/BroadPhaseCollision/b3DynamicBvhBroadphase.obj	b721ccbb451b6cb5
+757	917	625062191	Bullet3Collision.lib	d33d88ee28b5e779

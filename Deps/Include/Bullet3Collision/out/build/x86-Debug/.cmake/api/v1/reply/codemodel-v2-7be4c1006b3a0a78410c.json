@@ -1,0 +1,55 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Project",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Bullet3Collision::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Bullet3Collision-Debug-06089b53468f90f8fe62.json",
+					"name" : "Bullet3Collision",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "F:/Game/3D-Game-Engine/Project/Deps/Include/Bullet3Collision/out/build/x86-Debug",
+		"source" : "F:/Game/3D-Game-Engine/Project/Deps/Include/Bullet3Collision"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

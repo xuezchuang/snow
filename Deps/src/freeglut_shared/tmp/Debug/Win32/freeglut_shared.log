@@ -1,0 +1,29 @@
+﻿  freeglut_callbacks.c
+  freeglut_cursor.c
+  freeglut_display.c
+  freeglut_ext.c
+  freeglut_font.c
+  freeglut_font_data.c
+  freeglut_gamemode.c
+  freeglut_geometry.c
+  freeglut_glutfont_definitions.c
+  freeglut_init.c
+  freeglut_input_devices.c
+  freeglut_joystick.c
+  freeglut_main.c
+  freeglut_menu.c
+  freeglut_misc.c
+  freeglut_overlay.c
+  freeglut_state.c
+  freeglut_stroke_mono_roman.c
+  freeglut_stroke_roman.c
+  freeglut_structure.c
+  正在生成代码...
+  正在编译...
+  freeglut_teapot.c
+  freeglut_videoresize.c
+  freeglut_window.c
+  fgSetupPixelFormat(): there is still some work to do here!
+  正在生成代码...
+    正在创建库 ..\..\Libs\Debug\x86\freeglut.lib 和对象 ..\..\Libs\Debug\x86\freeglut.exp
+  freeglut_shared.vcxproj -> F:\Game\3D-Game-Engine\Deps\src\freeglut_shared\..\..\..\bin\Debug\x86\freeglut.dll

@@ -1,0 +1,1 @@
+F:\Game\3D-Game-Engine\Project\Deps\Include\ambiera\node-irrklang\deps\irrKlang\examples\01.HelloWorld\Debug\01.HelloWorld.pdb
