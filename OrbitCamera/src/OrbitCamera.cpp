@@ -788,6 +788,7 @@ Matrix4 OrbitCamera::angleToMatrix(const Vector3& angle)
 
     // rotation angle about Y-axis (yaw)
     theta = -angle.y * DEG2RAD;
+    //theta = angle.y * DEG2RAD;
     sy = sinf(theta);
     cy = cosf(theta);
 

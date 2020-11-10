@@ -34,9 +34,9 @@ const float NEAR_PLANE = 0.1f;
 const float FAR_PLANE = 1000.0f;
 const int   MAX_LOG_LENGTH = 4096;
 const float OBJ_SCALE = 0.01f;
-const std::string OBJ_MODEL = "C:/Users/13436/Music/OrbitCamera/bin/data/debugger_small_5k.obj";
-const std::string OBJ_CAM = "C:/Users/13436/Music/OrbitCamera/bin/data/camera.obj";
-const std::string FONT_FILE = "C:/Users/13436/Music/OrbitCamera/bin/data/walkway32_bold.fnt";
+const std::string OBJ_MODEL = "../bin/data/debugger_small_5k.obj";
+const std::string OBJ_CAM = "../bin/data/camera.obj";
+const std::string FONT_FILE = "../bin/data/walkway32_bold.fnt";
 
 // flat shading ===========================================
 const char* vsSource1 = R"(
@@ -313,7 +313,7 @@ void ModelGL::draw(int screenId)
                 glLoadMatrixf(matModelView.get());
                 drawCameraWithVbo();
             }
-            else
+            else 
             {
                 drawObj();
                 glLoadMatrixf(matModelView.get());
@@ -333,7 +333,13 @@ void ModelGL::draw(int screenId)
 
         // from camera object
         glLoadMatrixf(cameraMatrix.get());
-
+        ///////////////////////////////////////////////////////////////////////////////
+		//Verify gluLookAt & OrbitCamera::lookAt 
+		//float mat[16];// get the modelview matrix
+		//glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+		//gluLookAt(cameraPosition.x, cameraPosition.y, cameraPosition.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, cam2.getMatrix()[1], cam2.getMatrix()[5], cam2.getMatrix()[9]);
+		//glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+        ///////////////////////////////////////////////////////////////////////////////
         // draw grid
         if(gridEnabled)
             drawGridXZ(gridSize, gridStep);
@@ -636,13 +642,14 @@ void ModelGL::drawGridXZ(float size, float step)
     }
 
     // x-axis
-    glColor4f(1, 0, 0, 0.5f);
+    glColor4f(1, 0, 0, 1.0f);
     glColor3f(1, 0, 0);
     glVertex3f(-size, 0, 0);
     glVertex3f( size, 0, 0);
 
     // z-axis
-    glColor4f(0, 0, 1, 0.5f);
+    glColor4f(0, 0, 1, 1.0f);
+    glColor3f(0, 0, 1);
     glVertex3f(0, 0, -size);
     glVertex3f(0, 0,  size);
 
@@ -1162,6 +1169,27 @@ void ModelGL::drawFov()
     glVertex3fv(&fovVertices[4][0]);
     glVertex3fv(&fovVertices[2][0]);
     glEnd();
+    //
+    glBegin(GL_LINES);
+	// x-axis
+	glColor4f(1, 0, 0, 1.0f);
+	glColor3f(1, 0, 0);
+	glVertex3f(-5, 0, 0);
+	glVertex3f(5, 0, 0);
+
+	// y-axis
+	glColor4f(0, 1, 0, 1.0f);
+	glColor3f(0, 1, 0);
+	glVertex3f(0, -5, 0);
+	glVertex3f(0, 5, 0);
+
+	// z-axis
+	glColor4f(0, 0, 1, 1.0f);
+	glColor3f(0, 0, 1);
+	glVertex3f(0, 0, -5);
+	glVertex3f(0, 0, 5);
+
+	glEnd();
 
     // draw frontface second
     glCullFace(GL_BACK);
