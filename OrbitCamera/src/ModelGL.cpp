@@ -115,6 +115,7 @@ ModelGL::ModelGL() : windowWidth(0), windowHeight(0), mouseLeftDown(false), mous
     cameraAngle = cam2.getAngle();
     cameraPosition = cam2.getPosition();
     cameraTarget = cam2.getTarget();
+    cameraTempTarget = cameraTarget;
     cameraQuaternion = cam2.getQuaternion();
     cameraMatrix = cam2.getMatrix();
 
@@ -129,6 +130,7 @@ ModelGL::ModelGL() : windowWidth(0), windowHeight(0), mouseLeftDown(false), mous
     camDiffuse[0] = camDiffuse[1] = camDiffuse[2] = 0.9f; camDiffuse[3] = 1.0f;
     camSpecular[0] = camSpecular[1] = camSpecular[2] = 1.0f; camSpecular[3] = 1.0f;
     camShininess = 256.0f;
+
 
     // init fov vertices
     computeFovVertices(fov);
@@ -362,7 +364,6 @@ void ModelGL::draw(int screenId)
 
     postFrame();
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -867,25 +868,44 @@ void ModelGL::setCameraPositionZ(float z)
 void ModelGL::setCameraTargetX(float x)
 {
     cameraTarget.x = x;
-    cam2.setTarget(cameraTarget);
+    Matrix4 temp = cam2.getMatrix();
+    cameraTempTarget = temp.transpose() * cameraTarget;
+    cam2.setTarget(cameraTempTarget);
     cameraPosition = cam2.getPosition();
     cameraMatrix = cam2.getMatrix();
 }
 void ModelGL::setCameraTargetY(float y)
 {
     cameraTarget.y = y;
-    cam2.setTarget(cameraTarget);
+	Matrix4 temp = cam2.getMatrix();
+	cameraTempTarget = temp.transpose() * cameraTarget;
+    cam2.setTarget(cameraTempTarget);
     cameraPosition = cam2.getPosition();
     cameraMatrix = cam2.getMatrix();
 }
 void ModelGL::setCameraTargetZ(float z)
 {
     cameraTarget.z = z;
-    cam2.setTarget(cameraTarget);
+	Matrix4 temp = cam2.getMatrix();
+	cameraTempTarget = temp.transpose() * cameraTarget;
+    cam2.setTarget(cameraTempTarget);
     cameraPosition = cam2.getPosition();
     cameraMatrix = cam2.getMatrix();
 }
-
+void ModelGL::setCameraTargetXY(float x,float y)
+{
+	float fx = (x - mouseX2) / (50);
+	float fy = (y - mouseY2) / (50);
+	mouseX2 = x;
+	mouseY2 = y;
+    cameraTarget.x -= fx;
+    cameraTarget.y += fy;
+	Matrix4 temp = cam2.getMatrix();
+    cameraTempTarget = temp.transpose() * cameraTarget;
+	cam2.setTarget(cameraTempTarget);
+	cameraPosition = cam2.getPosition();
+	cameraMatrix = cam2.getMatrix();
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////

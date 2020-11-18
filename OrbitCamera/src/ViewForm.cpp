@@ -225,6 +225,7 @@ void ViewForm::updateTrackbars()
 {
     model->setCamera();
     updatePosition();
+    updateTarget();
     updateAngle();
     updateMatrix();
     updateQuaternion();

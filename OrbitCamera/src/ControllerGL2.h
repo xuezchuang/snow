@@ -39,6 +39,7 @@ namespace Win
 		virtual int mouseLeave();                           // for WM_MOUSELEAVE
         virtual int mouseMove(WPARAM state, int x, int y);
 		virtual int lButtonDown(WPARAM state, int x, int y);
+        virtual int mButtonDown(WPARAM state, int x, int y);
 		virtual int lButtonUp(WPARAM state, int x, int y);
         virtual int mouseWheel(int state, int delta, int x, int y); // for WM_MOUSEWHEEL:state, delta, x, y
         void setViewForm(ViewForm* viewForm) { ViewForm = viewForm; }

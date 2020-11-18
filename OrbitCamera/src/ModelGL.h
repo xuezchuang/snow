@@ -62,6 +62,7 @@ public:
     void setCameraTargetX(float x);
     void setCameraTargetY(float y);
     void setCameraTargetZ(float z);
+    void setCameraTargetXY(float x, float y);
 
     Vector3 getCameraAngle()                { return cameraAngle; }
     float getCameraAngleX()                 { return cameraAngle.x; }
@@ -157,6 +158,7 @@ private:
     Vector3 cameraAngle;
     Vector3 cameraPosition;
     Vector3 cameraTarget;
+    Vector3 cameraTempTarget;
     Quaternion cameraQuaternion;
     Matrix4 cameraMatrix;
 

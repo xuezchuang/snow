@@ -110,12 +110,19 @@ int ControllerGL2::mouseMove(WPARAM state, int x, int y)
 		m_ControllerGL1->paint();
 		ViewForm->updateTrackbars();
 	}
-	if (state == MK_RBUTTON)
+	//if (state == MK_RBUTTON)
+	//{
+	//	//model->zoomCamera(y);
+	//	model->setOff(x, y);
+	//	paint();
+	//}
+	if (state == MK_MBUTTON)
 	{
-		model->zoomCamera(y);
+		model->setCameraTargetXY((float)x, (float)y);
 		paint();
+		m_ControllerGL1->paint();
+		ViewForm->updateTrackbars();
 	}
-
 	return 0;
 }
 
@@ -156,6 +163,22 @@ int ControllerGL2::lButtonDown(WPARAM state, int x, int y)
 	::SetFocus(handle);
 	return 0;
 }
+
+int ControllerGL2::mButtonDown(WPARAM state, int x, int y)
+{
+	// update mouse position
+	model->setMousePosition2(x, y);
+
+	if (state == MK_MBUTTON)
+	{
+		model->setMouseLeft2(true);
+	}
+
+	// set focus to receive wm_mousewheel event
+	::SetFocus(handle);
+	return 0;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // handle Left mouse up
 ///////////////////////////////////////////////////////////////////////////////
