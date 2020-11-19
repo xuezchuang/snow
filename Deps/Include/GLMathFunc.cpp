@@ -1,4 +1,7 @@
-#include "StdAfx.h"
+#ifdef _WIN32
+#include <windows.h>    // include windows.h to avoid thousands of compile errors even though this class is not depending on Windows
+#endif
+#include <math.h>
 #include "GLMathFunc.h"
 #include "AriesMathf.h"
 
@@ -44,7 +47,7 @@ void GLGetScreenNorm(const TViewMatInfo* pViewMatInfo, int x, int y, GLdouble no
 	TVector3GLd win(x, y, 0.f);
 	GLdouble oPnt1[3], oPnt2[3];
 	GLUnProject( pViewMatInfo, win.vec, oPnt1 );
-	win.vec[2] = 123.f;//´ë¿¡Ãæ
+	win.vec[2] = 123.f;
 	GLUnProject( pViewMatInfo, win.vec, oPnt2 );
 	Aries_TmplMath::getSub(oPnt2, oPnt1, norm);
 	Aries_TmplMath::getNormalize(norm);

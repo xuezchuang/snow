@@ -118,7 +118,7 @@ int ControllerGL2::mouseMove(WPARAM state, int x, int y)
 	//}
 	if (state == MK_MBUTTON)
 	{
-		model->setCameraTargetXY((float)x, (float)y);
+		model->setCameraTargetXY(x, y);
 		paint();
 		m_ControllerGL1->paint();
 		ViewForm->updateTrackbars();

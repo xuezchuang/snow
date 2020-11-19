@@ -154,7 +154,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="framebufferObject.cpp" />
-    <ClCompile Include="GLMathFunc.cpp" />
     <ClCompile Include="LevelGenerator.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -171,8 +170,6 @@
     <ClInclude Include="..\Deps\Include\glad\gl.h" />
     <ClInclude Include="Externs.h" />
     <ClInclude Include="framebufferObject.h" />
-    <ClInclude Include="GLMathFunc.h" />
-    <ClInclude Include="GLTypeDef.h" />
     <ClInclude Include="LevelGenerator.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="renderbuffer.h" />

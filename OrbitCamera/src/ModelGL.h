@@ -31,6 +31,7 @@
 #include "BitmapFont.h"
 #include "OrbitCamera.h"
 #include "Vertices.h"
+#include "GLMathFunc.h"
 
 class ModelGL
 {
@@ -62,7 +63,7 @@ public:
     void setCameraTargetX(float x);
     void setCameraTargetY(float y);
     void setCameraTargetZ(float z);
-    void setCameraTargetXY(float x, float y);
+    void setCameraTargetXY(int x, int y);
 
     Vector3 getCameraAngle()                { return cameraAngle; }
     float getCameraAngleX()                 { return cameraAngle.x; }
@@ -102,6 +103,11 @@ public:
 
 protected:
 
+private:
+    void screen2wcs(int x, int y, double& dx, double& dy, double& dz);
+    void ScreenCord2Wcs(int x, int y, const Vector3& plane_pos, const Vector3& plane_norm, Vector3& pdCoord);
+    void SetViewMatrixInfo();
+    TViewMatInfo* GetViewMatrixInfo() { return &m_viewMatInfo; }
 private:
     // member functions
     void initLights();                              // add a white light ti scene
@@ -196,6 +202,6 @@ private:
     Vector3 fovVertices[5];
     Vector3 fovNormals[4];
     bool    fovEnabled;
-
+    TViewMatInfo m_viewMatInfo;
 };
 #endif

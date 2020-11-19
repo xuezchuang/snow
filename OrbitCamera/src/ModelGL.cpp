@@ -288,6 +288,10 @@ void ModelGL::draw(int screenId)
         glLoadMatrixf(matrixProjection.get());
         glMatrixMode(GL_MODELVIEW);
 
+		float mat[16], _mat[16];// get the modelview matrix
+		glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+		glGetFloatv(GL_PROJECTION_MATRIX, _mat);
+
         // from 3rd person camera
         Matrix4 matView = cam1.getMatrix();
         glLoadMatrixf(matView.get());
@@ -327,6 +331,9 @@ void ModelGL::draw(int screenId)
     }
     else if(screenId == 2)
     {
+
+        float mat[16], _mat[16];// get the modelview matrix
+        glGetFloatv(GL_PROJECTION_MATRIX, _mat);
         // set projection matrix to OpenGL
         setFrustum(fov, (float)windowWidth/windowHeight, nearPlane, farPlane);
         glMatrixMode(GL_PROJECTION);
@@ -337,8 +344,10 @@ void ModelGL::draw(int screenId)
         glLoadMatrixf(cameraMatrix.get());
         ///////////////////////////////////////////////////////////////////////////////
 		//Verify gluLookAt & OrbitCamera::lookAt 
-		//float mat[16];// get the modelview matrix
-		//glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+		
+		glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+        glGetFloatv(GL_PROJECTION_MATRIX, _mat);
+  //      glGetIntegerv(GL_VIEWPORT, viewport);
 		//gluLookAt(cameraPosition.x, cameraPosition.y, cameraPosition.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, cam2.getMatrix()[1], cam2.getMatrix()[5], cam2.getMatrix()[9]);
 		//glGetFloatv(GL_MODELVIEW_MATRIX, mat);
         ///////////////////////////////////////////////////////////////////////////////
@@ -360,7 +369,7 @@ void ModelGL::draw(int screenId)
     }
 
     // draw 2D
-    draw2D(screenId);
+    //draw2D(screenId);
 
     postFrame();
 }
@@ -721,6 +730,7 @@ void ModelGL::resetCamera()
     cameraAngle = cam2.getAngle();
     cameraPosition = cam2.getPosition();
     cameraTarget = cam2.getTarget();
+    cameraTempTarget = cameraTarget;
     cameraQuaternion = cam2.getQuaternion();
     cameraMatrix = cam2.getMatrix();
 
@@ -867,46 +877,137 @@ void ModelGL::setCameraPositionZ(float z)
 }
 void ModelGL::setCameraTargetX(float x)
 {
-    cameraTarget.x = x;
-    Matrix4 temp = cam2.getMatrix();
-    cameraTempTarget = temp.transpose() * cameraTarget;
-    cam2.setTarget(cameraTempTarget);
+    cameraTempTarget.x = x;
+	Matrix4 temp = cam2.getMatrix();
+    cameraTarget = temp.transpose() * cameraTempTarget;
+    cam2.setTarget(cameraTarget);
     cameraPosition = cam2.getPosition();
     cameraMatrix = cam2.getMatrix();
 }
 void ModelGL::setCameraTargetY(float y)
 {
-    cameraTarget.y = y;
+	cameraTempTarget.y = y;
 	Matrix4 temp = cam2.getMatrix();
-	cameraTempTarget = temp.transpose() * cameraTarget;
-    cam2.setTarget(cameraTempTarget);
+    cameraTarget = temp.transpose() * cameraTempTarget;
+	cam2.setTarget(cameraTarget);
     cameraPosition = cam2.getPosition();
     cameraMatrix = cam2.getMatrix();
 }
 void ModelGL::setCameraTargetZ(float z)
 {
-    cameraTarget.z = z;
+	cameraTempTarget.z = z;
 	Matrix4 temp = cam2.getMatrix();
-	cameraTempTarget = temp.transpose() * cameraTarget;
-    cam2.setTarget(cameraTempTarget);
+    cameraTarget = temp.transpose() * cameraTempTarget;
+	cam2.setTarget(cameraTarget);
     cameraPosition = cam2.getPosition();
     cameraMatrix = cam2.getMatrix();
 }
-void ModelGL::setCameraTargetXY(float x,float y)
+void ModelGL::setCameraTargetXY(int x,int y)
 {
-	float fx = (x - mouseX2) / (50);
-	float fy = (y - mouseY2) / (50);
-	mouseX2 = x;
-	mouseY2 = y;
-    cameraTarget.x -= fx;
-    cameraTarget.y += fy;
-	Matrix4 temp = cam2.getMatrix();
-    cameraTempTarget = temp.transpose() * cameraTarget;
-	cam2.setTarget(cameraTempTarget);
-	cameraPosition = cam2.getPosition();
-	cameraMatrix = cam2.getMatrix();
+    SetViewMatrixInfo();
+ //   double wx, wy, wz, wx2, wy2, wz2;
+ //   screen2wcs(x, y, wx, wy, wz);
+ //   screen2wcs(mouseX2, mouseX2, wx2, wy2, wz2);
+	//mouseX2 = x;
+	//mouseY2 = y;
+ //   float fx = float(wx2 - wx);
+	//float fy = float(wy2 - wy);
+	//Vector3 v1 = { fx,fy,0 };
+	//Vector3 temp = cam2.getMatrix() * v1;
+
+	//cameraTarget.x += fx;
+	//cameraTarget.y -= fy;
+	//cameraTempTarget.x += temp.x;
+	//cameraTempTarget.y -= temp.y;
+
+	//cam2.setTarget(cameraTarget);
+	//cameraPosition = cam2.getPosition();
+	//cameraMatrix = cam2.getMatrix();
+
+
+	//glGetDoublev(GL_MODELVIEW_MATRIX, mmv);
+
+
+    //matrixProjection cameraMatrix
+
+	//glGetIntegerv(GL_VIEWPORT, viewport);
+
+	//GLdouble win[3], win2[3];
+	//gluUnProject(x, viewport[3] - y, 0.0, mmv, mp, viewport, &win[0], &win[1], &win[2]);
+	//gluUnProject(mouseX2, viewport[3] - mouseY2, 0.0, mmv, mp, viewport, &win2[0], &win2[1], &win2[2]);
+
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+    GLdouble mmv[16], mp[16];
+	setFrustum(fov, (float)windowWidth / windowHeight, nearPlane, farPlane);
+	for (int i = 0; i < 16; i++)
+	{
+		mmv[i] = cameraMatrix.get()[i];
+		mp[i] = matrixProjection.get()[i];
+	}
+	GLdouble obj[3] = { 0.0,0.0,0.0 };
+	GLdouble obj1[3] = { cameraTarget.x,cameraTarget.y,0.0 };
+    GLdouble win[3], win2[3];
+    //三维坐标转为屏幕坐标
+    gluProject(obj[0], obj[1], obj[2], mmv, mp, viewport, &win[0], &win[1], &win[2]);
+    gluProject(obj1[0], obj1[1], obj1[2], mmv, mp, viewport, &win2[0], &win2[1], &win2[2]);
+    
+    obj[0] = win[0]; obj[1] = win[1]; obj[2] = win[2];
+    obj1[0] = win2[0]; obj1[1] = win2[1]; obj1[2] = win2[2];
+
+    screen2wcs(obj[0], obj[1], win[0], win[1], win[2]);
+    screen2wcs(obj1[0], obj1[1], win2[0], win2[1], win2[2]);
+
+    //屏幕坐标转为三维坐标
+    gluUnProject(obj[0], obj[1], obj[2], mmv, mp, viewport, &win[0], &win[1], &win[2]);
+    gluUnProject(obj1[0], obj1[1], obj1[2], mmv, mp, viewport, &win2[0], &win2[1], &win2[2]);
+    //PS:鼠标移动没有z轴深度坐标,得到的坐标是? 一般投射到坐标系的xy平面内,
+       
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// transition screen to wcs
+///////////////////////////////////////////////////////////////////////////////
+void ModelGL::screen2wcs(int x, int y, double& dx, double& dy, double& dz)
+{
+    Vector3 obj;
+    const Vector3  plan_pos = { 0, 0, 0 };
+    const Vector3 plan_nomal = { 0, 0, 1 };
+	ScreenCord2Wcs(x, y, plan_pos, plan_nomal, obj);
+	dx = obj[0];
+	dy = obj[1];
+	dz = obj[2];
+}
+void ModelGL::ScreenCord2Wcs(int x, int y, const Vector3& plane_pos, const Vector3& plane_norm, Vector3& pdCoord)
+{
+	const TViewMatInfo* viewMat = GetViewMatrixInfo();
+
+	TVector3GLd objPnt, screenNorm;
+	GLUnProject(viewMat, x, viewMat->viewport.vec[3] - y, objPnt.vec);
+	GLGetScreenNorm(viewMat, x, viewMat->viewport.vec[3] - y, screenNorm.vec);
+
+
+    float t = 0.0;
+	const float num = plane_norm.dot(plane_pos) - plane_norm.dot(Vector3((float)objPnt.vec[0], (float)objPnt.vec[1], (float)objPnt.vec[2]));
+	const float denom = plane_norm.dot(Vector3((float)screenNorm.vec[0], (float)screenNorm.vec[1], (float)screenNorm.vec[2]));
+
+	t = num / denom;
+
+	pdCoord[0] = (float)objPnt.vec[0] + t * (float)screenNorm.vec[0];
+	pdCoord[1] = (float)objPnt.vec[1] + t * (float)screenNorm.vec[1];
+	pdCoord[2] = (float)objPnt.vec[2] + t * (float)screenNorm.vec[2];
+}
+void ModelGL::SetViewMatrixInfo()
+{
+	GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    for(int i = 0;i < 4;i++)
+	    m_viewMatInfo.viewport.vec[i] = viewport[i];
+	for (int i = 0; i < 16; i++)
+        m_viewMatInfo.mmv._mat[i] = cameraMatrix.get()[i];
+	for (int i = 0; i < 16; i++)
+        m_viewMatInfo.mp._mat[i] = matrixProjection.get()[i];
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // load obj model
