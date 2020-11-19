@@ -47,7 +47,7 @@ void GLGetScreenNorm(const TViewMatInfo* pViewMatInfo, int x, int y, GLdouble no
 	TVector3GLd win(x, y, 0.f);
 	GLdouble oPnt1[3], oPnt2[3];
 	GLUnProject( pViewMatInfo, win.vec, oPnt1 );
-	win.vec[2] = 123.f;
+	win.vec[2] = 4.0;
 	GLUnProject( pViewMatInfo, win.vec, oPnt2 );
 	Aries_TmplMath::getSub(oPnt2, oPnt1, norm);
 	Aries_TmplMath::getNormalize(norm);

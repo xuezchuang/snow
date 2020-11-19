@@ -131,7 +131,8 @@ ModelGL::ModelGL() : windowWidth(0), windowHeight(0), mouseLeftDown(false), mous
     camSpecular[0] = camSpecular[1] = camSpecular[2] = 1.0f; camSpecular[3] = 1.0f;
     camShininess = 256.0f;
 
-
+    dxOff = 0.0;
+    dyOff = 0.0;
     // init fov vertices
     computeFovVertices(fov);
 }
@@ -335,7 +336,7 @@ void ModelGL::draw(int screenId)
         float mat[16], _mat[16];// get the modelview matrix
         glGetFloatv(GL_PROJECTION_MATRIX, _mat);
         // set projection matrix to OpenGL
-        setFrustum(fov, (float)windowWidth/windowHeight, nearPlane, farPlane);
+        setFrustum2(fov, (float)windowWidth/windowHeight, nearPlane, farPlane);
         glMatrixMode(GL_PROJECTION);
         glLoadMatrixf(matrixProjection.get());
         glMatrixMode(GL_MODELVIEW);
@@ -532,18 +533,29 @@ void ModelGL::setFrustum(float l, float r, float b, float t, float n, float f)
 
 
 
+void ModelGL::setFrustum(float fovY, float aspectRatio, float front, float back)
+{
+	float tangent = tanf(fovY / 2 * DEG2RAD);   // tangent of half fovY
+	float height = front * tangent;           // half height of near plane
+	float width = height * aspectRatio;       // half width of near plane
+
+	// params: left, right, bottom, top, near, far
+	setFrustum(-width, width, -height,height , front, back);
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // set a symmetric perspective frustum with 4 params similar to gluPerspective
 // (vertical field of view, aspect ratio, near, far)
 ///////////////////////////////////////////////////////////////////////////////
-void ModelGL::setFrustum(float fovY, float aspectRatio, float front, float back)
+void ModelGL::setFrustum2(float fovY, float aspectRatio, float front, float back)
 {
     float tangent = tanf(fovY/2 * DEG2RAD);   // tangent of half fovY
     float height = front * tangent;           // half height of near plane
     float width = height * aspectRatio;       // half width of near plane
 
     // params: left, right, bottom, top, near, far
-    setFrustum(-width, width, -height, height, front, back);
+    setFrustum(-width + dxOff, width + dxOff, -height + dyOff, height + dyOff, front, back);
 }
 
 
@@ -902,23 +914,38 @@ void ModelGL::setCameraTargetZ(float z)
     cameraPosition = cam2.getPosition();
     cameraMatrix = cam2.getMatrix();
 }
-void ModelGL::setCameraTargetXY(int x,int y)
+void ModelGL::DragScreen(int x,int y)
 {
-    SetViewMatrixInfo();
- //   double wx, wy, wz, wx2, wy2, wz2;
- //   screen2wcs(x, y, wx, wy, wz);
- //   screen2wcs(mouseX2, mouseX2, wx2, wy2, wz2);
+    //SetViewMatrixInfo();
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	float tangent = 0.1 * tanf(50 / 2 * DEG2RAD);
+    double dradio = (tangent * 2) / viewport[3];
+    
+    dxOff += dradio * (mouseX2 - x);
+    dyOff -= dradio * (mouseY2 - y);
+	mouseX2 = x;
+    mouseY2 = y;
+
+	// params: left, right, bottom, top, near, far
+	//setFrustum(-width, width, -height, height, front, back);
+
+	//double wx, wy, wz, wx2, wy2, wz2;
+	//
+
+ //   float fx = mouseX2 - x;
+ //   float fy = mouseY2 - y;
 	//mouseX2 = x;
 	//mouseY2 = y;
- //   float fx = float(wx2 - wx);
-	//float fy = float(wy2 - wy);
-	//Vector3 v1 = { fx,fy,0 };
-	//Vector3 temp = cam2.getMatrix() * v1;
+	////Vector3 v1 = { fx,fy,0 };
 
-	//cameraTarget.x += fx;
-	//cameraTarget.y -= fy;
-	//cameraTempTarget.x += temp.x;
-	//cameraTempTarget.y -= temp.y;
+ //   screen2wcs(fx, fy, wx, wy, wz);
+
+ //   cameraTarget.x += wx;
+	//cameraTarget.y += wy;
+ //   cameraTarget.z += wz;
+	//Matrix4 temp = cam2.getMatrix();
+ //   cameraTempTarget = temp * cameraTarget;
 
 	//cam2.setTarget(cameraTarget);
 	//cameraPosition = cam2.getPosition();
@@ -936,32 +963,31 @@ void ModelGL::setCameraTargetXY(int x,int y)
 	//gluUnProject(x, viewport[3] - y, 0.0, mmv, mp, viewport, &win[0], &win[1], &win[2]);
 	//gluUnProject(mouseX2, viewport[3] - mouseY2, 0.0, mmv, mp, viewport, &win2[0], &win2[1], &win2[2]);
 
-	GLint viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-    GLdouble mmv[16], mp[16];
-	setFrustum(fov, (float)windowWidth / windowHeight, nearPlane, farPlane);
-	for (int i = 0; i < 16; i++)
-	{
-		mmv[i] = cameraMatrix.get()[i];
-		mp[i] = matrixProjection.get()[i];
-	}
-	GLdouble obj[3] = { 0.0,0.0,0.0 };
-	GLdouble obj1[3] = { cameraTarget.x,cameraTarget.y,0.0 };
-    GLdouble win[3], win2[3];
-    //三维坐标转为屏幕坐标
-    gluProject(obj[0], obj[1], obj[2], mmv, mp, viewport, &win[0], &win[1], &win[2]);
-    gluProject(obj1[0], obj1[1], obj1[2], mmv, mp, viewport, &win2[0], &win2[1], &win2[2]);
-    
-    obj[0] = win[0]; obj[1] = win[1]; obj[2] = win[2];
-    obj1[0] = win2[0]; obj1[1] = win2[1]; obj1[2] = win2[2];
 
-    screen2wcs(obj[0], obj[1], win[0], win[1], win[2]);
-    screen2wcs(obj1[0], obj1[1], win2[0], win2[1], win2[2]);
+ //   GLdouble mmv[16], mp[16];
+	//setFrustum(fov, (float)windowWidth / windowHeight, nearPlane, farPlane);
+	//for (int i = 0; i < 16; i++)
+	//{
+	//	mmv[i] = cameraMatrix.get()[i];
+	//	mp[i] = matrixProjection.get()[i];
+	//}
+	//GLdouble obt[3] = { 1.0,0.0,0.0 };
+	//GLdouble obj1[3] = { cameraTarget.x,cameraTarget.y,0.0 };
+ //   GLdouble win[3], win2[3];
+ //   //三维坐标转为屏幕坐标
+ //   gluProject(obt[0], obt[1], obt[2], mmv, mp, viewport, &win[0], &win[1], &win[2]);
+ //   gluProject(obj1[0], obj1[1], obj1[2], mmv, mp, viewport, &win2[0], &win2[1], &win2[2]);
+ //   
+ //   obt[0] = win[0]; obt[1] = viewport[3]-win[1]; obt[2] = win[2];
+ //   obj1[0] = win2[0]; obj1[1] = viewport[3]-win2[1]; obj1[2] = win2[2];
 
-    //屏幕坐标转为三维坐标
-    gluUnProject(obj[0], obj[1], obj[2], mmv, mp, viewport, &win[0], &win[1], &win[2]);
-    gluUnProject(obj1[0], obj1[1], obj1[2], mmv, mp, viewport, &win2[0], &win2[1], &win2[2]);
-    //PS:鼠标移动没有z轴深度坐标,得到的坐标是? 一般投射到坐标系的xy平面内,
+ //   screen2wcs((int)obt[0], (int)obt[1], win[0], win[1], win[2]);
+ //   screen2wcs((int)obj1[0], (int)obj1[1], win2[0], win2[1], win2[2]);
+
+ //   //屏幕坐标转为三维坐标
+ //   gluUnProject(obt[0], obt[1], obt[2], mmv, mp, viewport, &win[0], &win[1], &win[2]);
+ //   gluUnProject(obj1[0], obj1[1], obj1[2], mmv, mp, viewport, &win2[0], &win2[1], &win2[2]);
+ //   //PS:鼠标移动没有z轴深度坐标,得到的坐标是? 一般投射到坐标系的xy平面内,
        
 }
 
@@ -1001,6 +1027,7 @@ void ModelGL::SetViewMatrixInfo()
 {
 	GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
+    setFrustum(fov, (float)windowWidth / windowHeight, nearPlane, farPlane);
     for(int i = 0;i < 4;i++)
 	    m_viewMatInfo.viewport.vec[i] = viewport[i];
 	for (int i = 0; i < 16; i++)

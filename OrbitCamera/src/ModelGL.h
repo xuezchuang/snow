@@ -63,7 +63,7 @@ public:
     void setCameraTargetX(float x);
     void setCameraTargetY(float y);
     void setCameraTargetZ(float z);
-    void setCameraTargetXY(int x, int y);
+    void DragScreen(int x, int y);
 
     Vector3 getCameraAngle()                { return cameraAngle; }
     float getCameraAngleX()                 { return cameraAngle.x; }
@@ -127,11 +127,15 @@ private:
     void draw2D(int screenId);
     void setFrustum(float l, float r, float b, float t, float n, float f);
     void setFrustum(float fovy, float ratio, float n, float f);
+    void setFrustum2(float fovy, float ratio, float n, float f);
     void setOrthoFrustum(float l, float r, float b, float t, float n=-1, float f=1);
     bool createShaderPrograms();
     void createVertexBufferObjects();
     void logShaders();
     void computeFovVertices(float fov);
+
+    float dxOff;
+    float dyOff;
 
     // members
     int windowWidth;
@@ -152,6 +156,8 @@ private:
 
     float gridSize;         // half length of grid
     float gridStep;         // step for next grid line
+
+
 
     // obj
     ObjModel objModel;
