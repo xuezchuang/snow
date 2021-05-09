@@ -27,6 +27,11 @@
 #ifndef GLAD_GL_H_
 #define GLAD_GL_H_
 
+#ifdef __gl_h_
+#error OpenGL header already included (API: gl), remove previous include!
+#endif
+#define __gl_h_ 1
+
 
 #define GLAD_GL
 
@@ -116,6 +121,14 @@ extern "C" {
   #endif
 #endif
 
+#ifdef APIENTRY
+  #define GLAD_API_PTR APIENTRY
+#elif GLAD_PLATFORM_WIN32
+  #define GLAD_API_PTR __stdcall
+#else
+  #define GLAD_API_PTR
+#endif
+
 #ifndef GLAPI
 #define GLAPI GLAD_API_CALL
 #endif
@@ -138,81 +151,6 @@ typedef void (*GLADprecallback)(const char *name, GLADapiproc apiproc, int len_a
 typedef void (*GLADpostcallback)(void *ret, const char *name, GLADapiproc apiproc, int len_args, ...);
 
 #endif /* GLAD_PLATFORM_H_ */
-
-#include <glad/khrplatform.h>
-typedef unsigned int GLenum;
-typedef unsigned char GLboolean;
-typedef unsigned int GLbitfield;
-typedef void GLvoid;
-typedef khronos_int8_t GLbyte;
-typedef khronos_uint8_t GLubyte;
-typedef khronos_int16_t GLshort;
-typedef khronos_uint16_t GLushort;
-typedef int GLint;
-typedef unsigned int GLuint;
-typedef khronos_int32_t GLclampx;
-typedef int GLsizei;
-typedef khronos_float_t GLfloat;
-typedef khronos_float_t GLclampf;
-typedef double GLdouble;
-typedef double GLclampd;
-typedef void *GLeglClientBufferEXT;
-typedef void *GLeglImageOES;
-typedef char GLchar;
-typedef char GLcharARB;
-#ifdef __APPLE__
-typedef void *GLhandleARB;
-#else
-typedef unsigned int GLhandleARB;
-#endif
-typedef khronos_uint16_t GLhalf;
-typedef khronos_uint16_t GLhalfARB;
-typedef khronos_int32_t GLfixed;
-#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1060)
-typedef khronos_intptr_t GLintptr;
-#else
-#ifndef __GLEW_H__
-typedef khronos_intptr_t GLintptr;
-#endif
-#endif
-#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1060)
-typedef khronos_intptr_t GLintptrARB;
-#else
-#ifndef __GLEW_H__
-typedef khronos_intptr_t GLintptrARB;
-#endif
-#endif
-#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1060)
-typedef khronos_ssize_t GLsizeiptr;
-#else
-#ifndef __GLEW_H__
-typedef khronos_ssize_t GLsizeiptr;
-#endif
-#endif
-#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1060)
-typedef khronos_ssize_t GLsizeiptrARB;
-#ifndef __GLEW_H__
-typedef khronos_ssize_t GLsizeiptrARB;
-#endif
-#endif
-typedef khronos_int64_t GLint64;
-typedef khronos_int64_t GLint64EXT;
-typedef khronos_uint64_t GLuint64;
-typedef khronos_uint64_t GLuint64EXT;
-typedef struct __GLsync *GLsync;
-struct _cl_context;
-struct _cl_event;
-#ifndef __GLEW_H__
-typedef void ( *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
-typedef void ( *GLDEBUGPROCARB)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
-typedef void ( *GLDEBUGPROCKHR)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
-typedef void ( *GLDEBUGPROCAMD)(GLuint id,GLenum category,GLenum severity,GLsizei length,const GLchar *message,void *userParam);
-typedef void (*GLVULKANPROCNV)(void);
-#endif
-typedef unsigned short GLhalfNV;
-typedef GLintptr GLvdpauSurfaceNV;
-
-#ifndef __GLEW_H__
 
 #define GL_2D 0x0600
 #define GL_2_BYTES 0x1407
@@ -1518,7 +1456,72 @@ typedef GLintptr GLvdpauSurfaceNV;
 #define GL_ZERO 0
 #define GL_ZOOM_X 0x0D16
 #define GL_ZOOM_Y 0x0D17
+
+
+#include <glad/khrplatform.h>
+typedef unsigned int GLenum;
+typedef unsigned char GLboolean;
+typedef unsigned int GLbitfield;
+typedef void GLvoid;
+typedef khronos_int8_t GLbyte;
+typedef khronos_uint8_t GLubyte;
+typedef khronos_int16_t GLshort;
+typedef khronos_uint16_t GLushort;
+typedef int GLint;
+typedef unsigned int GLuint;
+typedef khronos_int32_t GLclampx;
+typedef int GLsizei;
+typedef khronos_float_t GLfloat;
+typedef khronos_float_t GLclampf;
+typedef double GLdouble;
+typedef double GLclampd;
+typedef void *GLeglClientBufferEXT;
+typedef void *GLeglImageOES;
+typedef char GLchar;
+typedef char GLcharARB;
+#ifdef __APPLE__
+typedef void *GLhandleARB;
+#else
+typedef unsigned int GLhandleARB;
 #endif
+typedef khronos_uint16_t GLhalf;
+typedef khronos_uint16_t GLhalfARB;
+typedef khronos_int32_t GLfixed;
+#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1060)
+typedef khronos_intptr_t GLintptr;
+#else
+typedef khronos_intptr_t GLintptr;
+#endif
+#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1060)
+typedef khronos_intptr_t GLintptrARB;
+#else
+typedef khronos_intptr_t GLintptrARB;
+#endif
+#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1060)
+typedef khronos_ssize_t GLsizeiptr;
+#else
+typedef khronos_ssize_t GLsizeiptr;
+#endif
+#if defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1060)
+typedef khronos_ssize_t GLsizeiptrARB;
+#else
+typedef khronos_ssize_t GLsizeiptrARB;
+#endif
+typedef khronos_int64_t GLint64;
+typedef khronos_int64_t GLint64EXT;
+typedef khronos_uint64_t GLuint64;
+typedef khronos_uint64_t GLuint64EXT;
+typedef struct __GLsync *GLsync;
+struct _cl_context;
+struct _cl_event;
+typedef void ( *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
+typedef void ( *GLDEBUGPROCARB)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
+typedef void ( *GLDEBUGPROCKHR)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
+typedef void ( *GLDEBUGPROCAMD)(GLuint id,GLenum category,GLenum severity,GLsizei length,const GLchar *message,void *userParam);
+typedef unsigned short GLhalfNV;
+typedef GLintptr GLvdpauSurfaceNV;
+typedef void ( *GLVULKANPROCNV)(void);
+
 
 #define GL_VERSION_1_0 1
 GLAD_API_CALL int GLAD_GL_VERSION_1_0;
@@ -1551,13 +1554,6 @@ GLAD_API_CALL int GLAD_GL_ARB_robustness;
 #define GL_KHR_debug 1
 GLAD_API_CALL int GLAD_GL_KHR_debug;
 
-#ifdef APIENTRY
-#define GLAD_API_PTR APIENTRY
-#elif GLAD_PLATFORM_WIN32
-#define GLAD_API_PTR __stdcall
-#else
-#define GLAD_API_PTR
-#endif
 
 typedef void (GLAD_API_PTR *PFNGLACCUMPROC)(GLenum   op, GLfloat   value);
 typedef void (GLAD_API_PTR *PFNGLACTIVETEXTUREPROC)(GLenum   texture);
@@ -1788,9 +1784,7 @@ typedef void (GLAD_API_PTR *PFNGLGETMATERIALFVPROC)(GLenum   face, GLenum   pnam
 typedef void (GLAD_API_PTR *PFNGLGETMATERIALIVPROC)(GLenum   face, GLenum   pname, GLint  * params);
 typedef void (GLAD_API_PTR *PFNGLGETMULTISAMPLEFVPROC)(GLenum   pname, GLuint   index, GLfloat  * val);
 typedef void (GLAD_API_PTR *PFNGLGETOBJECTLABELPROC)(GLenum   identifier, GLuint   name, GLsizei   bufSize, GLsizei  * length, GLchar  * label);
-#ifndef __GLEW_H__
 typedef void (GLAD_API_PTR *PFNGLGETOBJECTPTRLABELPROC)(const void * ptr, GLsizei   bufSize, GLsizei  * length, GLchar  * label);
-#endif
 typedef void (GLAD_API_PTR *PFNGLGETPIXELMAPFVPROC)(GLenum   map, GLfloat  * values);
 typedef void (GLAD_API_PTR *PFNGLGETPIXELMAPUIVPROC)(GLenum   map, GLuint  * values);
 typedef void (GLAD_API_PTR *PFNGLGETPIXELMAPUSVPROC)(GLenum   map, GLushort  * values);
@@ -1981,9 +1975,7 @@ typedef void (GLAD_API_PTR *PFNGLNORMALP3UIPROC)(GLenum   type, GLuint   coords)
 typedef void (GLAD_API_PTR *PFNGLNORMALP3UIVPROC)(GLenum   type, const  GLuint  * coords);
 typedef void (GLAD_API_PTR *PFNGLNORMALPOINTERPROC)(GLenum   type, GLsizei   stride, const void * pointer);
 typedef void (GLAD_API_PTR *PFNGLOBJECTLABELPROC)(GLenum   identifier, GLuint   name, GLsizei   length, const  GLchar  * label);
-#ifndef __GLEW_H__
 typedef void (GLAD_API_PTR *PFNGLOBJECTPTRLABELPROC)(const void * ptr, GLsizei   length, const  GLchar  * label);
-#endif
 typedef void (GLAD_API_PTR *PFNGLORTHOPROC)(GLdouble   left, GLdouble   right, GLdouble   bottom, GLdouble   top, GLdouble   zNear, GLdouble   zFar);
 typedef void (GLAD_API_PTR *PFNGLPASSTHROUGHPROC)(GLfloat   token);
 typedef void (GLAD_API_PTR *PFNGLPIXELMAPFVPROC)(GLenum   map, GLsizei   mapsize, const  GLfloat  * values);
@@ -2320,7 +2312,6 @@ typedef void (GLAD_API_PTR *PFNGLWINDOWPOS3IVPROC)(const  GLint  * v);
 typedef void (GLAD_API_PTR *PFNGLWINDOWPOS3SPROC)(GLshort   x, GLshort   y, GLshort   z);
 typedef void (GLAD_API_PTR *PFNGLWINDOWPOS3SVPROC)(const  GLshort  * v);
 
-#ifndef __GLEW_H__
 GLAD_API_CALL PFNGLACCUMPROC glad_glAccum;
 #define glAccum glad_glAccum
 GLAD_API_CALL PFNGLACTIVETEXTUREPROC glad_glActiveTexture;
@@ -3833,7 +3824,7 @@ GLAD_API_CALL PFNGLWINDOWPOS3SPROC glad_glWindowPos3s;
 #define glWindowPos3s glad_glWindowPos3s
 GLAD_API_CALL PFNGLWINDOWPOS3SVPROC glad_glWindowPos3sv;
 #define glWindowPos3sv glad_glWindowPos3sv
-#endif
+
 
 GLAD_API_CALL int gladLoadGLUserPtr( GLADuserptrloadfunc load, void *userptr);
 GLAD_API_CALL int gladLoadGL( GLADloadfunc load);

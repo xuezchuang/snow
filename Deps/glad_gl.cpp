@@ -1,9 +1,9 @@
-#include "../Game/stdafx.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#ifndef __gl_h_
 #include <glad/gl.h>
-
+//#endif
 #ifndef GLAD_IMPL_UTIL_C_
 #define GLAD_IMPL_UTIL_C_
 

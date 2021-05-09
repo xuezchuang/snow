@@ -37,6 +37,7 @@
 //#include <afxcmn.h>
 //#endif
 //#include <C:\Code\Visual_Leak_Detector\src\vld.h>
+
 #include <afxwin.h>
 
 //#include <windows.h>

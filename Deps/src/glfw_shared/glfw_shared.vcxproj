@@ -54,7 +54,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -122,7 +122,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(INCLUDE_DIR);../;</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_GLFW_WIN32;_CRT_SECURE_NO_DEPRECATE;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;GLFW_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_GLFW_WIN32;_CRT_SECURE_NO_DEPRECATE;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;glfw_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

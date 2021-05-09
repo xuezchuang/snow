@@ -2,10 +2,9 @@
 #pragma once
 
 //Needs to have glfw and glew
-#include <GL\glew.h>
-#include "glad\gl.h"
-#include <GLFW\glfw3.h>
 
+//#include <GL\glew.h>
+//#include <GLFW\glfw3.h>
 //Engine
 #include <Engine\Camera.h>
 #include <Engine\GameObject.h>
@@ -14,7 +13,6 @@
 #include <Engine\Collider.h>
 #include <Engine\Rigidbody.h>
 #include <Engine\Physics.h>
-
 //Enum shows all the possible states of the program
 enum programState { Starting, Running, Closing };
 

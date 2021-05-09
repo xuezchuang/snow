@@ -1,9 +1,14 @@
 //Rely on manager
 #include "stdafx.h"
-#include "Manager.h"
+//#include "glad\gl.h"
+#include <GL\glew.h>
 
-//#include "framebufferObject.h"
+#include <GLFW\glfw3.h>
+#include "Manager.h"
+#include "framebufferObject.h"
 #include "renderbuffer.h"
+
+//#endif
 #define _TEST1
 #ifdef _TEST1
 static GLfloat view_rotx = 0.f, view_roty = 0.f, view_rotz = 0.f;
@@ -613,7 +618,7 @@ int main(int argc, char* argv[])
 	//glfwSetMouseButtonCallback(window, mymouse);
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwMakeContextCurrent(window);
-	gladLoadGL(glfwGetProcAddress);
+	//gladLoadGL(glfwGetProcAddress);
 	glfwSwapInterval(1);
 
 	glfwGetFramebufferSize(window, &width, &height);
