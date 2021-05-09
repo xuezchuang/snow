@@ -51,7 +51,7 @@ int ControllerGL2::destroy()
 int ControllerGL2::create()
 {
     // set DC only, and use RC from view 1
-    bool result = view->setContext(handle, hglrc, pixelFormat);
+	bool result = view->setContext(handle, hglrc, pixelFormat);
     if(result)
         Win::log("Created OpenGL window for screen 2.");
     else
@@ -118,7 +118,7 @@ int ControllerGL2::mouseMove(WPARAM state, int x, int y)
 	//}
 	if (state == MK_MBUTTON)
 	{
-		model->setCameraTargetXY(x, y);
+		model->DragScreen(x, y);
 		paint();
 		m_ControllerGL1->paint();
 		ViewForm->updateTrackbars();

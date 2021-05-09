@@ -291,6 +291,10 @@ int ViewGL::findPixelFormatWithAttributes(int colorBits, int depthBits, int sten
         0
     };
 
+    //if (WGLEW_ARB_pixel_format)
+    //{
+
+    //}
     // if WGL_ARB_pixel_format is not supported, you cannot use wglChoosePixelFormatARB()
     // if WGL_ARB_multisample is not supported, you cannot use MSAA
     glExtension& extension = glExtension::getInstance(tmpHdc);

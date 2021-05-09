@@ -1,9 +1,10 @@
 //Rely on manager
 #include "stdafx.h"
 #include "Manager.h"
+
 //#include "framebufferObject.h"
 #include "renderbuffer.h"
-#define _TEST1
+//#define _TEST1
 #ifdef _TEST1
 static GLfloat view_rotx = 0.f, view_roty = 0.f, view_rotz = 0.f;
 static GLint gear1, gear2, gear3;
@@ -230,6 +231,7 @@ static void drawFBO(void)
 /* OpenGL draw function & timing */
 static void draw(void)
 {
+	
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
 	//glEnable(GL_POLYGON_OFFSET_FILL);
@@ -496,7 +498,7 @@ void mymouse(GLFWwindow* window, int button, int action, int mods)
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	scale -= 0.05f*yoffset;
+	scale -= 0.05f*(GLfloat)yoffset;
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	reshape(window, width, height);
@@ -509,7 +511,7 @@ static void createFBO()
 	//glEnable(GL_FRAMEBUFFER_EXT);
 	if (glewGetExtension("GL_EXT_framebuffer_object") != GL_TRUE)
 	{
-		TRACE("Driver does not support Framebuffer Objects (GL_EXT_framebuffer_object)\n");
+		//TRACE("Driver does not support Framebuffer Objects (GL_EXT_framebuffer_object)\n");
 		return;
 	}
 	GLuint texID; GLint ntest;
@@ -542,7 +544,7 @@ static void createFBO()
 	// Validate the FBO after attaching textures and render buffers
 	if (!m_pFBO->IsValid())
 	{
-		TRACE0("FBO Error!");
+		//TRACE0("FBO Error!");
 		if (m_pFBO)
 		{
 			UINT texID;
@@ -564,6 +566,7 @@ static void createFBO()
 /* program & OpenGL initialization */
 static void init(void)
 {
+	int* abc = new int(4);
 	static GLfloat pos[4] = { 5.f, 5.f, 10.f, 0.f };
 
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
@@ -585,7 +588,6 @@ static void init(void)
 /* program entry */
 int main(int argc, char* argv[])
 {
-	
 	int width, height;
 
 	if (!glfwInit())
@@ -641,7 +643,7 @@ int main(int argc, char* argv[])
 
 	// Terminate GLFW
 	glfwTerminate();
-
+	//VLDRefreshModules();
 	// Exit program
 	exit(EXIT_SUCCESS);
 }
@@ -649,25 +651,46 @@ int main(int argc, char* argv[])
 #else
 #pragma region Main
 /*Enter program*/
+
+
+#ifdef _DEBUG
+#define DEBUG_CLIENTBLOCK   new( _CLIENT_BLOCK, __FILE__, __LINE__)
+#else
+#define DEBUG_CLIENTBLOCK
+#endif
+
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+
+
+#ifdef _DEBUG
+#define new DEBUG_CLIENTBLOCK
+#endif
+
 int main(int argc, char** argv)
 {
 	//Create manager object and call sequential functions
-	Manager manager;
-	manager.init();
+	_CrtSetBreakAlloc(340);
+	_CrtSetBreakAlloc(368);
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//Manager manager;
+	//manager.init();
 
-	//Enter main loop
-	while (manager.state != programState::Closing)
-	{
-		//Call frame functions chronologically
-		manager.early();
-		manager.input();
-		manager.logic();
-		manager.draw();
-		manager.late();
-	}
+	////Enter main loop
+	//while (manager.state != programState::Closing)
+	//{
+	//	//Call frame functions chronologically
+	//	manager.early();
+	//	manager.input();
+	//	manager.logic();
+	//	manager.draw();
+	//	manager.late();
+	//}
 
-	//Done
-	manager.quit();
+	////Done
+	//manager.quit();
+	int* abc = new int(31);
+	//_CrtDumpMemoryLeaks();
 	return 0;
 }
 #pragma endregion

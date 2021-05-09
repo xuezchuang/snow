@@ -305,11 +305,20 @@ void ModelGL::draw(int screenId)
         drawFocalLine();
         drawFocalPoint();
 
+		Matrix4 matModel2 = cam2.getMatrix();
+        Matrix4 matModel3 = cam2.getMatrix();
+        Matrix4 matModel4 = cam2.getMatrix();
+        Matrix4 matModel5 = cam2.getMatrix();
+		matModel2.invertEuclidean();
+		matModel3.invertAffine();
+        matModel4.invertProjective();
+        matModel5.invertGeneral();
         // matrix for camera model
         Matrix4 matModel;
         matModel.translate(cameraPosition);
         matModel.lookAt(cameraTarget, cam2.getUpAxis());
         Matrix4 matModelView = matView * matModel;
+
 
         // draw obj models
         if(objLoaded)
@@ -460,11 +469,11 @@ void ModelGL::rotateCamera2(int x, int y)
 	mouseX2= x;
 	mouseY2 = y;
 
-	// constrain x angle -89 < x < 89
-	if (angle.x < -89.0f)
-		angle.x = -89.0f;
-	else if (angle.x > 89.0f)
-		angle.x = 89.0f;
+	//// constrain x angle -89 < x < 89
+	//if (angle.x < -89.0f)
+	//	angle.x = -89.0f;
+	//else if (angle.x > 89.0f)
+	//	angle.x = 89.0f;
 
 	cam2.rotateTo(angle);
 }
@@ -666,13 +675,19 @@ void ModelGL::drawGridXZ(float size, float step)
     // x-axis
     glColor4f(1, 0, 0, 1.0f);
     glColor3f(1, 0, 0);
-    glVertex3f(-size, 0, 0);
+    glVertex3f(0, 0, 0);
     glVertex3f( size, 0, 0);
+
+	// y-axis
+	glColor4f(0, 1, 0, 1.0f);
+	glColor3f(0, 1, 0);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, size, 0);
 
     // z-axis
     glColor4f(0, 0, 1, 1.0f);
     glColor3f(0, 0, 1);
-    glVertex3f(0, 0, -size);
+    glVertex3f(0, 0, 0);
     glVertex3f(0, 0,  size);
 
     glEnd();
@@ -1265,8 +1280,8 @@ void ModelGL::drawCameraWithVbo()
     glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
     glDisableClientState(GL_NORMAL_ARRAY);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // reset shader
     if(glslReady)
@@ -1322,19 +1337,19 @@ void ModelGL::drawFov()
 	// x-axis
 	glColor4f(1, 0, 0, 1.0f);
 	glColor3f(1, 0, 0);
-	glVertex3f(-5, 0, 0);
+	glVertex3f(0, 0, 0);
 	glVertex3f(5, 0, 0);
 
 	// y-axis
 	glColor4f(0, 1, 0, 1.0f);
 	glColor3f(0, 1, 0);
-	glVertex3f(0, -5, 0);
+	glVertex3f(0, 0, 0);
 	glVertex3f(0, 5, 0);
 
 	// z-axis
 	glColor4f(0, 0, 1, 1.0f);
 	glColor3f(0, 0, 1);
-	glVertex3f(0, 0, -5);
+	glVertex3f(0, 0, 0);
 	glVertex3f(0, 0, 5);
 
 	glEnd();
