@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{AA3DA364-F
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "noise", "Deps\Include\noise\build\src\noise.vcxproj", "{64106C64-39C6-3468-ACA0-F2782FBB77EF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Teapot", "Teapot - 副本\Teapot2.vcxproj (1).vcxproj", "{1FFD71E7-79D1-4D29-973D-9827972183FD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Teapot", "Teapot\Teapot.vcxproj", "{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -174,22 +174,22 @@ Global
 		{64106C64-39C6-3468-ACA0-F2782FBB77EF}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
 		{64106C64-39C6-3468-ACA0-F2782FBB77EF}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
 		{64106C64-39C6-3468-ACA0-F2782FBB77EF}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.Debug|Win32.Build.0 = Debug|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.Debug|x64.ActiveCfg = Debug|x64
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.Debug|x64.Build.0 = Debug|x64
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.MinSizeRel|Win32.ActiveCfg = Debug|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.MinSizeRel|Win32.Build.0 = Debug|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.MinSizeRel|x64.ActiveCfg = Debug|x64
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.MinSizeRel|x64.Build.0 = Debug|x64
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.Release|Win32.ActiveCfg = Release|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.Release|Win32.Build.0 = Release|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.Release|x64.ActiveCfg = Release|x64
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.Release|x64.Build.0 = Release|x64
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.RelWithDebInfo|Win32.Build.0 = Release|Win32
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.RelWithDebInfo|x64.ActiveCfg = Release|x64
-		{1FFD71E7-79D1-4D29-973D-9827972183FD}.RelWithDebInfo|x64.Build.0 = Release|x64
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.Debug|Win32.Build.0 = Debug|Win32
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.Debug|x64.ActiveCfg = Debug|x64
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.Debug|x64.Build.0 = Debug|x64
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.MinSizeRel|Win32.ActiveCfg = Debug|Win32
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.MinSizeRel|Win32.Build.0 = Debug|Win32
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.MinSizeRel|x64.ActiveCfg = Debug|x64
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.MinSizeRel|x64.Build.0 = Debug|x64
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.Release|Win32.ActiveCfg = Release|Win32
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.Release|Win32.Build.0 = Release|Win32
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.Release|x64.ActiveCfg = Release|x64
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.Release|x64.Build.0 = Release|x64
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.RelWithDebInfo|Win32.Build.0 = Release|Win32
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{EA5A5470-30C7-4CE5-9EE6-2346D60F4534}.RelWithDebInfo|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
