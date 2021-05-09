@@ -4,7 +4,7 @@
 
 //#include "framebufferObject.h"
 #include "renderbuffer.h"
-//#define _TEST1
+#define _TEST1
 #ifdef _TEST1
 static GLfloat view_rotx = 0.f, view_roty = 0.f, view_rotz = 0.f;
 static GLint gear1, gear2, gear3;
