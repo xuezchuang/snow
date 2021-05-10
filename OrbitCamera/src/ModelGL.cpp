@@ -18,7 +18,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
-
+#include <GL/glut.h>
 #include <cmath>
 #include <sstream>
 #include "ModelGL.h"
@@ -60,6 +60,7 @@ varying vec3 esVertex, esNormal;
 void main()
 {
     esVertex = vec3(gl_ModelViewMatrix * gl_Vertex);
+    //esNormal = gl_ModelViewMatrix * gl_Normal;
     esNormal = gl_NormalMatrix * gl_Normal;
     gl_FrontColor = gl_Color;
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
@@ -178,6 +179,12 @@ void ModelGL::init()
 
     initLights();
     initFont();
+
+    
+	//if (!gladLoadGL(glfwGetProcAddress)) {
+	//	std::cout << "Failed to initialize GLAD" << std::endl;
+	//	return -1;
+	//}
 }
 
 
@@ -211,6 +218,7 @@ void ModelGL::initFont()
 {
     font.loadFont(FONT_FILE.c_str());
     font.setColor(1, 1, 1, 1);
+    font.setScale(0.5, 0.5);
 }
 
 
@@ -268,8 +276,6 @@ void ModelGL::setViewport(int x, int y, int w, int h)
     setFrustum(fov, (float)(w)/h, nearPlane, farPlane); // FOV, AspectRatio, NearClip, FarClip
 }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // draw 2D/3D scene
 ///////////////////////////////////////////////////////////////////////////////
@@ -290,9 +296,10 @@ void ModelGL::draw(int screenId)
         glMatrixMode(GL_MODELVIEW);
 
 		float mat[16], _mat[16];// get the modelview matrix
+        float normat[16];
 		glGetFloatv(GL_MODELVIEW_MATRIX, mat);
 		glGetFloatv(GL_PROJECTION_MATRIX, _mat);
-
+        //glGetFloatv(GL_MATRIX_MODE, normat);
         // from 3rd person camera
         Matrix4 matView = cam1.getMatrix();
         glLoadMatrixf(matView.get());
@@ -338,6 +345,7 @@ void ModelGL::draw(int screenId)
             if(fovEnabled)
                 drawFov();
         }
+        //showInfo(screenId);
     }
     else if(screenId == 2)
     {
@@ -364,7 +372,6 @@ void ModelGL::draw(int screenId)
         // draw grid
         if(gridEnabled)
             drawGridXZ(gridSize, gridStep);
-
         // draw focal point
         drawFocalPoint();
 
@@ -378,8 +385,8 @@ void ModelGL::draw(int screenId)
         }
     }
 
-    // draw 2D
-    //draw2D(screenId);
+     //draw 2D
+    draw2D(screenId);
 
     postFrame();
 }
@@ -401,7 +408,46 @@ void ModelGL::draw2D(int screenId)
 
     if(screenId == 1)
     {
-        font.drawText(5, (float)windowHeight-font.getHeight(), "3rd Person View");
+        //gl_NormalMatrix验证glsl的法向量矩阵为modematrix的invert.transpose 逆转换矩阵，得不到当前的gl_NormalMatrix,可在glsl中导出gl_NormalMatrix查看
+        //当前程序的glsl版本太旧，在opengl 140版本后已放弃gl_NormalMatrix全局变量；用户自己输入，公式 Normal = mat3(transpose(inverse(model)) * aNormal;
+        std::stringstream ss;
+        Matrix4 matView = cam1.getMatrix();
+        Vector4 v1 = { matView[0],matView[1],matView[2],matView[3] };
+        Vector4 v2 = { matView[4],matView[5],matView[6],matView[7] };
+        Vector4 v3 = { matView[8],matView[9],matView[10],matView[11] };
+        Vector4 v4 = { matView[12],matView[13],matView[14],matView[16] };
+        ss << "Normalized: " << v1.normalize();
+        font.drawText(5, (float)windowHeight - font.getHeight(), ss.str().c_str());
+        ss.str("");
+        ss << "Normalized: " << v2.normalize();
+        font.drawText(5, (float)windowHeight - 2*font.getHeight(), ss.str().c_str());
+        ss.str("");
+        ss << "Normalized: " << v3.normalize();
+        font.drawText(5, (float)windowHeight - 3 * font.getHeight(), ss.str().c_str());
+        ss.str("");
+        ss << "Normalized: " << v4.normalize();
+        font.drawText(5, (float)windowHeight - 4 * font.getHeight(), ss.str().c_str());
+        //
+        matView.invertGeneral().transpose();
+        //
+
+		v1 = { matView[0],matView[1],matView[2],matView[3] };
+		v2 = { matView[4],matView[5],matView[6],matView[7] };
+		v3 = { matView[8],matView[9],matView[10],matView[11] };
+		v4 = { matView[12],matView[13],matView[14],matView[16] };
+        ss.str("");
+		ss << "Normalized: " << v1.normalize();
+		font.drawText(5, (float)windowHeight - 5 * font.getHeight(), ss.str().c_str());
+		ss.str("");
+		ss << "Normalized: " << v2.normalize();
+		font.drawText(5, (float)windowHeight - 6 * font.getHeight(), ss.str().c_str());
+		ss.str("");
+		ss << "Normalized: " << v3.normalize();
+		font.drawText(5, (float)windowHeight - 7 * font.getHeight(), ss.str().c_str());
+		ss.str("");
+		ss << "Normalized: " << v4.normalize();
+		font.drawText(5, (float)windowHeight - 8 * font.getHeight(), ss.str().c_str());
+
     }
     else if(screenId == 2)
     {

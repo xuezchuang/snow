@@ -365,8 +365,8 @@ int initGLUT(int argc, char **argv)
     return handle;
 }
 
-
-
+GLuint TextFont;
+#define MAX_CHAR    128
 ///////////////////////////////////////////////////////////////////////////////
 // initialize OpenGL
 // disable unused features
@@ -401,6 +401,9 @@ void initGL()
     float white[] = {1,1,1,1};
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
+    
+	TextFont = glGenLists(MAX_CHAR);
+	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
 }
 
 
@@ -419,12 +422,14 @@ void drawString(const char *str, int x, int y, float color[4], void *font)
     glColor4fv(color);          // set text color
     glRasterPos2i(x, y);        // place text position
 
-    // loop all characters in the string
+     //loop all characters in the string
     while(*str)
     {
         glutBitmapCharacter(font, *str);
         ++str;
     }
+    //glListBase(TextFont);
+    //glCallLists(strlen(str), GL_UNSIGNED_BYTE, str);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);

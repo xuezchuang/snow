@@ -7,13 +7,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glfw_shared", "..\Deps\src\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chapter-16-Firstwindow", "chapter-16-glfw\firstWindow\chapter-16-Firstwindow.vcxproj", "{3C4C3F6B-13CE-4D71-8300-92549A6B38AF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chapter-7-basic_lighting", "chapter-7-basic_lighting\chapter-7-basic_lighting.vcxproj", "{B7CE6804-E0CE-4778-933F-2032081329B6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "freeglut_shared", "..\Deps\src\freeglut_shared\freeglut_shared.vcxproj", "{60AB969E-FB0E-4A20-8815-A1EBE03E7BF0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{B3AFF018-640D-4D7B-88AF-51D56AC9CF42}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glew_shared", "..\Deps\src\glew_shared\glew_shared.vcxproj", "{74219373-92F3-43DF-9D75-4D9FB7A722FC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "basic_lighting", "basic-lighting\basic_lighting.vcxproj", "{B7CE6804-E0CE-4778-933F-2032081329B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,14 +39,6 @@ Global
 		{3C4C3F6B-13CE-4D71-8300-92549A6B38AF}.Release|x64.Build.0 = Release|x64
 		{3C4C3F6B-13CE-4D71-8300-92549A6B38AF}.Release|x86.ActiveCfg = Release|Win32
 		{3C4C3F6B-13CE-4D71-8300-92549A6B38AF}.Release|x86.Build.0 = Release|Win32
-		{B7CE6804-E0CE-4778-933F-2032081329B6}.Debug|x64.ActiveCfg = Debug|x64
-		{B7CE6804-E0CE-4778-933F-2032081329B6}.Debug|x64.Build.0 = Debug|x64
-		{B7CE6804-E0CE-4778-933F-2032081329B6}.Debug|x86.ActiveCfg = Debug|Win32
-		{B7CE6804-E0CE-4778-933F-2032081329B6}.Debug|x86.Build.0 = Debug|Win32
-		{B7CE6804-E0CE-4778-933F-2032081329B6}.Release|x64.ActiveCfg = Release|x64
-		{B7CE6804-E0CE-4778-933F-2032081329B6}.Release|x64.Build.0 = Release|x64
-		{B7CE6804-E0CE-4778-933F-2032081329B6}.Release|x86.ActiveCfg = Release|Win32
-		{B7CE6804-E0CE-4778-933F-2032081329B6}.Release|x86.Build.0 = Release|Win32
 		{60AB969E-FB0E-4A20-8815-A1EBE03E7BF0}.Debug|x64.ActiveCfg = Debug|x64
 		{60AB969E-FB0E-4A20-8815-A1EBE03E7BF0}.Debug|x64.Build.0 = Debug|x64
 		{60AB969E-FB0E-4A20-8815-A1EBE03E7BF0}.Debug|x86.ActiveCfg = Debug|Win32
@@ -63,6 +55,14 @@ Global
 		{74219373-92F3-43DF-9D75-4D9FB7A722FC}.Release|x64.Build.0 = Release|x64
 		{74219373-92F3-43DF-9D75-4D9FB7A722FC}.Release|x86.ActiveCfg = Release|Win32
 		{74219373-92F3-43DF-9D75-4D9FB7A722FC}.Release|x86.Build.0 = Release|Win32
+		{B7CE6804-E0CE-4778-933F-2032081329B6}.Debug|x64.ActiveCfg = Debug|x64
+		{B7CE6804-E0CE-4778-933F-2032081329B6}.Debug|x64.Build.0 = Debug|x64
+		{B7CE6804-E0CE-4778-933F-2032081329B6}.Debug|x86.ActiveCfg = Debug|Win32
+		{B7CE6804-E0CE-4778-933F-2032081329B6}.Debug|x86.Build.0 = Debug|Win32
+		{B7CE6804-E0CE-4778-933F-2032081329B6}.Release|x64.ActiveCfg = Release|x64
+		{B7CE6804-E0CE-4778-933F-2032081329B6}.Release|x64.Build.0 = Release|x64
+		{B7CE6804-E0CE-4778-933F-2032081329B6}.Release|x86.ActiveCfg = Release|Win32
+		{B7CE6804-E0CE-4778-933F-2032081329B6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
