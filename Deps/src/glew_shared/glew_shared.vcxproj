@@ -76,7 +76,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>tmp\$(Configuration)\$(Platform)\</IntDir>
-    <OutDir>$(BIN_DIR)\$(Configuration)\x86\</OutDir>
+    <OutDir>$(SolutionDir)$(Configuration)\x86\</OutDir>
     <TargetName>glew32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

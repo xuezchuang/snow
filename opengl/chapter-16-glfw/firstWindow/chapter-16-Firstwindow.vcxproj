@@ -21,16 +21,17 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{60ab969e-fb0e-4a20-8815-a1ebe03e7bf0}</ProjectGuid>
-    <RootNamespace>freeglutshared</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{3C4C3F6B-13CE-4D71-8300-92549A6B38AF}</ProjectGuid>
+    <RootNamespace>chapter1</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <ProjectName>chapter-16-Firstwindow</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -66,6 +67,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="common.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -73,9 +75,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>freeglut</TargetName>
     <OutDir>$(SolutionDir)$(Configuration)\x86\</OutDir>
-    <IntDir>tmp\$(Configuration)\$(Platform)\</IntDir>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -90,15 +91,21 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_USRDLL;FREEGLUT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_DEBUG;GLFW_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>$(LIB_DIR)\$(Configuration)\x86\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -120,12 +127,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,37 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="freeglut_callbacks.c" />
-    <ClCompile Include="freeglut_cursor.c" />
-    <ClCompile Include="freeglut_display.c" />
-    <ClCompile Include="freeglut_ext.c" />
-    <ClCompile Include="freeglut_font.c" />
-    <ClCompile Include="freeglut_font_data.c" />
-    <ClCompile Include="freeglut_gamemode.c" />
-    <ClCompile Include="freeglut_geometry.c" />
-    <ClCompile Include="freeglut_glutfont_definitions.c" />
-    <ClCompile Include="freeglut_init.c" />
-    <ClCompile Include="freeglut_input_devices.c" />
-    <ClCompile Include="freeglut_joystick.c" />
-    <ClCompile Include="freeglut_main.c" />
-    <ClCompile Include="freeglut_menu.c" />
-    <ClCompile Include="freeglut_misc.c" />
-    <ClCompile Include="freeglut_overlay.c" />
-    <ClCompile Include="freeglut_state.c" />
-    <ClCompile Include="freeglut_stroke_mono_roman.c" />
-    <ClCompile Include="freeglut_stroke_roman.c" />
-    <ClCompile Include="freeglut_structure.c" />
-    <ClCompile Include="freeglut_teapot.c" />
-    <ClCompile Include="freeglut_videoresize.c" />
-    <ClCompile Include="freeglut_window.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Include\GL\freeglut.h" />
-    <ClInclude Include="..\..\Include\GL\freeglut_ext.h" />
-    <ClInclude Include="..\..\Include\GL\freeglut_std.h" />
-    <ClInclude Include="..\..\Include\GL\glut.h" />
-    <ClInclude Include="freeglut_internal.h" />
-    <ClInclude Include="freeglut_teapot_data.h" />
+    <ClCompile Include="..\..\..\Deps\glad_gl.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
