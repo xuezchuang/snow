@@ -1,14 +1,13 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <glad/gl.h>	//要用到OpenGL的函数就要包含这个头文件
 #include <glm/glm.hpp>
 
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include "gl/glew.h"
 class Shader {
 public:
 	//程序ID

@@ -25,7 +25,7 @@
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+//#include <GL/gl.h>
 #endif
 
 #include <string>
@@ -76,6 +76,7 @@ extern PFNGLRENDERBUFFERSTORAGEPROC                 pglRenderbufferStorage;     
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC      pglRenderbufferStorageMultisample;      // renderbuffer memory allocation with multisample
 extern PFNGLGETRENDERBUFFERPARAMETERIVPROC          pglGetRenderbufferParameteriv;          // return various renderbuffer parameters
 extern PFNGLISRENDERBUFFERPROC                      pglIsRenderbuffer;                      // determine renderbuffer object type
+#ifndef __glew_h__
 #define glGenFramebuffers                           pglGenFramebuffers
 #define glDeleteFramebuffers                        pglDeleteFramebuffers
 #define glBindFramebuffer                           pglBindFramebuffer
@@ -376,5 +377,7 @@ extern PFNWGLCREATECONTEXTATTRIBSARBPROC    pwglCreateContextAttribsARB;
 
 
 #endif //======================================================================
+
+#endif
 
 #endif // end of #ifndef

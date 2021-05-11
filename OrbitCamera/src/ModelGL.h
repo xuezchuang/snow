@@ -10,11 +10,12 @@
 
 #ifndef MODEL_GL_H
 #define MODEL_GL_H
-
+#include "Shader.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
+//#include <glad/gl.h>
+#include <GL/glut.h>
 #endif
 
 #ifdef _WIN32
@@ -109,6 +110,7 @@ private:
     void SetViewMatrixInfo();
     TViewMatInfo* GetViewMatrixInfo() { return &m_viewMatInfo; }
 private:
+    Shader* lampShader;
     // member functions
     void initLights();                              // add a white light ti scene
     void initFont();

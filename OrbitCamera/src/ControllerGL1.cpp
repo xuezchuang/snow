@@ -15,6 +15,7 @@
 
 #include <string>
 #include <sstream>
+//#include <gl/glew.h>
 #include "ControllerGL1.h"
 #include "wcharUtil.h"
 #include "Log.h"

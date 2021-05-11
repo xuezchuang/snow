@@ -1,4 +1,7 @@
-#include <glad/gl.h>
+
+
+
+#include "gl/glew.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -80,6 +83,37 @@ float vertices[] = {
 	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 };
 
+//
+void getVertexAttribList(GLint programHandle)
+{
+	GLint numAttribs;
+	glGetProgramInterfaceiv(programHandle, GL_PROGRAM_OUTPUT, GL_ACTIVE_RESOURCES, &numAttribs);
+	//glget
+	GLenum properties[]{ GL_NAME_LENGTH,GL_TYPE,GL_LOCATION };
+	//cout << "Active attributes:" << endl;
+	for (int i = 0; i < numAttribs; ++i)
+	{
+		GLint results[3];
+		glGetProgramResourceiv(programHandle, GL_PROGRAM_OUTPUT, i, 3, properties, 3, nullptr, results);
+		
+		GLint nameBufSize = results[0] + 1;
+		GLchar* name = new char[nameBufSize];
+		glGetProgramResourceName(programHandle, GL_PROGRAM_OUTPUT, i, nameBufSize, nullptr, name);
+
+		GLint nindex = glGetProgramResourceIndex(programHandle, GL_PROGRAM_OUTPUT, name);
+		GLsizei a;
+		GLint b;
+		GLenum c;
+		//glm::vec4* abc =  (glm::vec4*)glGetActiveAttrib(programHandle, nindex, NULL, &a, &b, &c, name);
+
+		//cout << "location:" << results[2] << "    " << name << "(" << getTypeString(results[1]) << ")" << endl;
+		delete[] name;
+	}
+}
+
+
+
+
 int main() {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -96,11 +130,11 @@ int main() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-
-	if (!gladLoadGL(glfwGetProcAddress)) {
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
+	GLenum glewStatus = glewInit();
+	//if (!gladLoadGL(glfwGetProcAddress)) {
+	//	std::cout << "Failed to initialize GLAD" << std::endl;
+	//	return -1;
+	//}
 
 	//开启深度测试
 	glEnable(GL_DEPTH_TEST);
@@ -137,6 +171,16 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	////test
+	//unsigned int testVao;
+	//glGenVertexArrays(1, &testVao);
+	//glBindVertexArray(testVao);
+
+	//int matrix_loc = glGetAttribLocation(lightingShader.ID, "model_matrix");
+	//glBindBuffer(GL_ARRAY_BUFFER, testVao);
+	//glVertexAttribPointer(matrix_loc, 1, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+	//glEnableVertexAttribArray(matrix_loc);
+
 	//主循环
 	while (!glfwWindowShouldClose(window)) {
 		//每一帧的时间逻辑
@@ -168,10 +212,13 @@ int main() {
 		//模型1
 		glm::mat4 model;
 		lightingShader.setMat4("model", glm::value_ptr(model));
-
 		glBindVertexArray(cubeVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		////
+		//glBindBuffer(GL_ARRAY_BUFFER, testVao);
+		//glm::mat4* matrices = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
+		getVertexAttribList(lightingShader.ID);
 		//模型2
 		lampShader.use();
 		lampShader.setMat4("projection", glm::value_ptr(projection));

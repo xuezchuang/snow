@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include "gl/glut.h"
 #include "glExtension.h"
 
 

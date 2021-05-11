@@ -11,10 +11,12 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
+//#include "gl/glew.h"
 #include "ControllerForm.h"
 #include "wcharUtil.h"
 #include "resource.h"
 #include "Log.h"
+
 using namespace Win;
 
 

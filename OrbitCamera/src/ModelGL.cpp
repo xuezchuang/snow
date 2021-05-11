@@ -12,17 +12,24 @@
 #include <windows.h>    // include windows.h to avoid thousands of compile errors even though this class is not depending on Windows
 #endif
 
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "gl/glew.h"
+//#include <GL/gl.h>
+//
+//#include "GL/glut.h"
+
+
+#include "ModelGL.h"
+
+//#include "gl/glew.h"
 #endif
-#include <GL/glut.h>
+//#include <GL/glut.h>
 #include <cmath>
 #include <sstream>
-#include "ModelGL.h"
-#include "glExtension.h"
+
 
 // constants
 const float GRID_SIZE = 10.0f;
@@ -38,6 +45,7 @@ const std::string OBJ_MODEL = "../bin/data/debugger_small_5k.obj";
 const std::string OBJ_CAM = "../bin/data/camera.obj";
 const std::string FONT_FILE = "../bin/data/walkway32_bold.fnt";
 
+#pragma region Shader
 // flat shading ===========================================
 const char* vsSource1 = R"(
 void main()
@@ -60,7 +68,7 @@ varying vec3 esVertex, esNormal;
 void main()
 {
     esVertex = vec3(gl_ModelViewMatrix * gl_Vertex);
-    //esNormal = gl_ModelViewMatrix * gl_Normal;
+    //esNormal = transpose(inverse(gl_ModelViewMatrix)) * gl_Normal;
     esNormal = gl_NormalMatrix * gl_Normal;
     gl_FrontColor = gl_Color;
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
@@ -94,6 +102,66 @@ void main()
 )";
 
 
+//
+const char* vsSource3 = R"(
+#version 330 core
+
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+out vec3 FragPos;
+out vec3 Normal;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+void main()
+{
+	gl_Position = projection * view * model * vec4 (aPos, 1.0f);
+	FragPos = vec3(model * vec4(aPos, 1.0));
+	Normal = aNormal;
+}
+)";
+const char* fsSource3 = R"(
+//片元着色器代码
+#version 330 core
+in vec3 Normal;
+in vec3 FragPos;
+in mat4 model_matrix;
+out vec4 FragColor;
+out mat4 test_matrix;
+uniform vec3 objectColor;
+uniform vec3 lightColor;
+uniform vec3 lightPos;
+uniform vec3 viewPos;
+
+void main()
+{
+    //环境光
+    float ambientStrength = 0.1;
+    vec3 ambient = ambientStrength * lightColor;
+
+    //漫反射光
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(lightPos - FragPos);  
+
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * lightColor;
+
+    //镜面高光
+    float specularStrength = 0.5;
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 specular = specularStrength * spec * lightColor;
+
+    vec3 result = (ambient + diffuse + specular) * objectColor;
+   // vec3 result = (ambient + diffuse) * objectColor;
+    FragColor = vec4(result, 1.0f);
+    test_matrix = model_matrix;
+}
+)";
+
+#pragma endregion
 
 ///////////////////////////////////////////////////////////////////////////////
 // default ctor
@@ -185,6 +253,8 @@ void ModelGL::init()
 	//	std::cout << "Failed to initialize GLAD" << std::endl;
 	//	return -1;
 	//}
+    GLenum glewStatus = glewInit();
+    lampShader = new Shader("Shader.vs", "LampShader.fs");
 }
 
 
@@ -231,10 +301,10 @@ bool ModelGL::initShaders()
 {
     if(!glslReady)
     {
-        // check extensions
-        glExtension& extension = glExtension::getInstance();
-        glslSupported = extension.isSupported("GL_ARB_shader_objects");
-        if(glslSupported)
+		//check extensions
+		glExtension& extension = glExtension::getInstance();
+		glslSupported = extension.isSupported("GL_ARB_shader_objects");
+		if (glslSupported)
             glslReady = createShaderPrograms();
     }
     return glslReady;
@@ -282,7 +352,6 @@ void ModelGL::setViewport(int x, int y, int w, int h)
 void ModelGL::draw(int screenId)
 {
     preFrame();
-
     // clear buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     //glEnable(GL_BLEND);
@@ -291,19 +360,24 @@ void ModelGL::draw(int screenId)
     {
         // set projection matrix to OpenGL
         setFrustum(FOV_Y, (float)windowWidth/windowHeight, nearPlane, farPlane);
-        glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(matrixProjection.get());
-        glMatrixMode(GL_MODELVIEW);
+		//glMatrixMode(GL_PROJECTION);
+		//glLoadMatrixf(matrixProjection.get());
+		//glMatrixMode(GL_MODELVIEW);
+        //glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, value);
+        lampShader->setMat4("projection", matrixProjection.get());
+        
 
 		float mat[16], _mat[16];// get the modelview matrix
-        float normat[16];
+        //float normat[16];
 		glGetFloatv(GL_MODELVIEW_MATRIX, mat);
 		glGetFloatv(GL_PROJECTION_MATRIX, _mat);
-        //glGetFloatv(GL_MATRIX_MODE, normat);
+        //glGetFloatv(GL_MATRIX_MODE, normat);.
         // from 3rd person camera
         Matrix4 matView = cam1.getMatrix();
         glLoadMatrixf(matView.get());
 
+        lampShader->setMat4("view", matView.get());
+        
         // draw grid
         if(gridEnabled)
             drawGridXZ(gridSize, gridStep);
@@ -327,24 +401,27 @@ void ModelGL::draw(int screenId)
         Matrix4 matModelView = matView * matModel;
 
 
-        // draw obj models
-        if(objLoaded)
-        {
-            if(vboReady)
-            {
-                drawObjWithVbo();
-                glLoadMatrixf(matModelView.get());
-                drawCameraWithVbo();
-            }
-            else 
-            {
-                drawObj();
-                glLoadMatrixf(matModelView.get());
-                drawCamera();
-            }
-            if(fovEnabled)
-                drawFov();
-        }
+		
+        
+        //// draw obj models
+        //if(objLoaded)
+        //{
+        //    if(vboReady)
+        //    {
+        //        drawObjWithVbo();
+        //        /*glLoadMatrixf(matModelView.get());*/
+        //        lampShader->setMat4("mode", matModelView.get());
+        //        drawCameraWithVbo();
+        //    }
+        //    else 
+        //    {
+        //        drawObj();
+        //        //glLoadMatrixf(matModelView.get());
+        //        drawCamera();
+        //    }
+        //    if(fovEnabled)
+        //        drawFov();
+        //}
         //showInfo(screenId);
     }
     else if(screenId == 2)
@@ -365,6 +442,8 @@ void ModelGL::draw(int screenId)
 		
 		glGetFloatv(GL_MODELVIEW_MATRIX, mat);
         glGetFloatv(GL_PROJECTION_MATRIX, _mat);
+        float mat_n[16];
+        glGetFloatv(GL_NORMALIZE, mat_n);
   //      glGetIntegerv(GL_VIEWPORT, viewport);
 		//gluLookAt(cameraPosition.x, cameraPosition.y, cameraPosition.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, cam2.getMatrix()[1], cam2.getMatrix()[5], cam2.getMatrix()[9]);
 		//glGetFloatv(GL_MODELVIEW_MATRIX, mat);
@@ -383,6 +462,23 @@ void ModelGL::draw(int screenId)
             else
                 drawObj();
         }
+        Matrix4 matModelView2 = mat;
+		//matView.identity();
+		Vector3 abc = { 1.0,2.0,3.0 };
+        abc.normalize();
+        Vector3 abc2 = abc * matModelView2;
+		matModelView2.invertGeneral().transpose();
+		Matrix3 Temp = { matModelView2[0],matModelView2[1],matModelView2[2],matModelView2[4],matModelView2[5],matModelView2[6],matModelView2[8],matModelView2[9],matModelView2[10] };
+        
+		//Temp.identity();
+		Matrix3 TempV = Temp;
+		Matrix3 TempT = Temp;
+
+		Matrix3 tt = TempV.invert() * TempT.transpose();
+		//Temp.invert().transpose();
+		//Temp.identity();
+		Vector3 abc1 = abc * Temp;
+        int a = 4;
     }
 
      //draw 2D
@@ -877,6 +973,7 @@ bool ModelGL::createShaderPrograms()
     int linkStatus1, linkStatus2;
     glGetObjectParameterivARB(progId1, GL_OBJECT_LINK_STATUS_ARB, &linkStatus1);
     glGetObjectParameterivARB(progId2, GL_OBJECT_LINK_STATUS_ARB, &linkStatus2);
+    
     if(linkStatus1 == GL_TRUE && linkStatus2 == GL_TRUE)
     {
         return true;
@@ -885,6 +982,9 @@ bool ModelGL::createShaderPrograms()
     {
         return false;
     }
+
+    //
+    
 }
 
 
@@ -980,11 +1080,11 @@ void ModelGL::DragScreen(int x,int y)
     //SetViewMatrixInfo();
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
-	float tangent = 0.1 * tanf(50 / 2 * DEG2RAD);
+	float tangent = 0.1f * tanf(50 / 2 * DEG2RAD);
     double dradio = (tangent * 2) / viewport[3];
     
-    dxOff += dradio * (mouseX2 - x);
-    dyOff -= dradio * (mouseY2 - y);
+    dxOff += (float)dradio * (mouseX2 - x);
+    dyOff -= (float)dradio * (mouseY2 - y);
 	mouseX2 = x;
     mouseY2 = y;
 
@@ -1145,7 +1245,7 @@ void ModelGL::createVertexBufferObjects()
     int count = objModel.getGroupCount();
     iboModel.resize(count);
     glGenBuffers(count, &iboModel[0]);
-
+    
     // setup vbos for indices
     for(int i = 0; i < count; ++i)
     {

@@ -10,7 +10,7 @@
 #ifdef _WIN32
 #include <windows.h>    // include windows.h to avoid thousands of compile errors even though this class is not depending on Windows
 #endif
-
+#include <GL/gl.h>
 #include <iostream>
 #include <sstream>
 #include <fstream>

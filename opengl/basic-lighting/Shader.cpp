@@ -1,3 +1,4 @@
+//#include <glad/gl.h>
 #include "Shader.h"
 
 Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {

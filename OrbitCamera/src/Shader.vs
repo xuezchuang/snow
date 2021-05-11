@@ -1,0 +1,26 @@
+//顶点着色器代码
+#version 330 core
+
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+//layout (location = 2) out mat4 model_matrix;
+out vec3 FragPos;
+out vec3 Normal;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+out mat4 model_matrix;
+//out mat3 tt;
+
+void main()
+{
+	gl_Position = projection * view * model * vec4 (aPos, 1.0f);
+	FragPos = vec3(model * vec4(aPos, 1.0));
+	Normal = aNormal;
+	model_matrix = model;
+	//model_matrix = model;
+	//mat4 tetmp = model;
+	//model = mat4();
+	//model = tetmp;
+}

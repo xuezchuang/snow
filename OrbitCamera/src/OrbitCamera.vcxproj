@@ -99,7 +99,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;glu32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;comctl32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;kernel32.lib;user32.lib;glu32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;comctl32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\x86\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -180,6 +180,7 @@
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="OrbitCamera.cpp" />
     <ClCompile Include="procedure.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Tga.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
     <ClCompile Include="ViewForm.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="procedure.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Tga.h" />
     <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="Vectors.h" />
@@ -231,6 +233,10 @@
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="OrbitCamera.exe.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader.fs" />
+    <None Include="Shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
