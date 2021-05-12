@@ -260,3 +260,14 @@ int ControllerGL1::size(int w, int h, WPARAM wParam)
     Win::log(L"Changed OpenGL rendering window size: %dx%d for screen 1.", w, h);
     return 0;
 }
+
+
+int ControllerGL1::keyDown(int key, LPARAM lParam)
+{
+	if (key == 'b' || key == 'B')
+		model->setNewShader(true);
+	else
+		model->setNewShader(false);
+	paint();
+	return 0;
+}

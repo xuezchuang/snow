@@ -1,6 +1,10 @@
 //#include <glad/gl.h>
-#include "gl/glew.h"
 #include "Shader.h"
+#ifdef _WIN32
+#include <tchar.h>
+#include <windows.h>
+#include <atlbase.h>
+#endif
 
 Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 	//！1、读取着色器的代码
@@ -56,6 +60,9 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 	if (!success) {
 		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
 		std::cout << "编译片元着色器失败，错误信息：" << infoLog << std::endl;
+		USES_CONVERSION;
+		std::wstring abc = std::wstring(_T("编译片元着色器失败，错误信息：")) + A2W(infoLog) + A2W("\n");
+		OutputDebugString(abc.c_str());
 	}
 
 	//着色器程序
@@ -93,7 +100,7 @@ void Shader::setMat4(const std::string& name, float value[]) const {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, value);
 }
 
-void Shader::setMat4(const std::string& name, const float* value) const{
+void Shader::setMat4(const std::string& name, const float* value) const {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, value);
 }
 
@@ -102,4 +109,8 @@ void Shader::setVec3(const std::string& name, const glm::vec3& value) const {
 }
 void Shader::setVec3(const std::string& name, float x, float y, float z) const {
 	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+}
+
+void Shader::setVec4(const std::string& name, float x, float y, float z, float w) const {
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
 }

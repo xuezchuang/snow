@@ -10,7 +10,7 @@
 
 #ifndef MODEL_GL_H
 #define MODEL_GL_H
-#include "Shader.h"
+#include "../../opengl/Shader.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
@@ -101,7 +101,8 @@ public:
     // for grid
     void enableGrid()                       { gridEnabled = true; }
     void disableGrid()                      { gridEnabled = false; }
-
+    //set NewShader
+    void setNewShader(bool bnew) { bNewShader = bnew; }
 protected:
 
 private:
@@ -110,6 +111,7 @@ private:
     void SetViewMatrixInfo();
     TViewMatInfo* GetViewMatrixInfo() { return &m_viewMatInfo; }
 private:
+    bool bNewShader;
     Shader* lampShader;
     // member functions
     void initLights();                              // add a white light ti scene
@@ -121,7 +123,9 @@ private:
     void drawObjWithVbo();
     void drawCamera();                              // draw camera in world space
     void drawCameraWithVbo();
+    void InitGridXZ(float size, float step);        // draw a grid on XZ plane
     void drawGridXZ(float size, float step);        // draw a grid on XZ plane
+    void drawGridXZVBO(float size, float step);        // draw a grid on XZ plane
     void drawGridXY(float size, float step);        // draw a grid on XY plane
     void drawFocalLine();
     void drawFocalPoint();
@@ -182,6 +186,10 @@ private:
     // vbo extension
     bool vboSupported;
     bool vboReady;
+    GLuint vaoGridXZ;               // vao for GridXZ
+    //GLuint vboModel;                // vbo for OBJ vertices
+    //GLuint vboModel;                // vbo for OBJ vertices
+
     GLuint vboModel;                // vbo for OBJ vertices
     GLuint vboCam;                  // vbo for camera OBJ
     std::vector<GLuint> iboModel;   // vbo for OBJ indices

@@ -248,13 +248,17 @@ void ModelGL::init()
     initLights();
     initFont();
 
-    
 	//if (!gladLoadGL(glfwGetProcAddress)) {
 	//	std::cout << "Failed to initialize GLAD" << std::endl;
 	//	return -1;
 	//}
     GLenum glewStatus = glewInit();
-    lampShader = new Shader("Shader.vs", "LampShader.fs");
+    lampShader = new Shader("Shader.vs", "Shader.fs");
+    //Init VBO
+    //ÖáÏß
+    {
+        InitGridXZ(gridSize, gridStep);
+    }
 }
 
 
@@ -356,77 +360,123 @@ void ModelGL::draw(int screenId)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     //glEnable(GL_BLEND);
 
-    if(screenId == 1)
+    if (screenId == 1)
     {
-        // set projection matrix to OpenGL
-        setFrustum(FOV_Y, (float)windowWidth/windowHeight, nearPlane, farPlane);
-		//glMatrixMode(GL_PROJECTION);
-		//glLoadMatrixf(matrixProjection.get());
-		//glMatrixMode(GL_MODELVIEW);
-        //glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, value);
-        lampShader->setMat4("projection", matrixProjection.get());
-        
+        if (bNewShader)
+        {
+			// set projection matrix to OpenGL
+			setFrustum(FOV_Y, (float)windowWidth / windowHeight, nearPlane, farPlane);
+			// from 3rd person camera
+			Matrix4 matView = cam1.getMatrix();
+			lampShader->use();
+			lampShader->setMat4("projection", matrixProjection.get());
+			lampShader->setMat4("view", matView.get());
+			Matrix4 matmodel;
+			lampShader->setMat4("model", matmodel.get());
 
-		float mat[16], _mat[16];// get the modelview matrix
-        //float normat[16];
-		glGetFloatv(GL_MODELVIEW_MATRIX, mat);
-		glGetFloatv(GL_PROJECTION_MATRIX, _mat);
-        //glGetFloatv(GL_MATRIX_MODE, normat);.
-        // from 3rd person camera
-        Matrix4 matView = cam1.getMatrix();
-        glLoadMatrixf(matView.get());
+			// draw grid
+			if (gridEnabled)
+			{
+				drawGridXZVBO(gridSize, gridStep);
+			}
+			////draw line from camera to focal
+			//drawFocalLine();
+			//drawFocalPoint();
+			//// matrix for camera model
+			//Matrix4 matModel;
+			//matModel.translate(cameraPosition);
+			//matModel.lookAt(cameraTarget, cam2.getUpAxis());
+			//Matrix4 matModelView = matView * matModel;
+			//// draw obj models
+			//if (objLoaded)
+			//{
+			//	if (vboReady)
+			//	{
+			//		drawObjWithVbo();
+			//		glLoadMatrixf(matModelView.get());
+			//		//lampShader->setMat4("mode", matModelView.get());
+			//		drawCameraWithVbo();
+			//	}
+			//	else
+			//	{
+			//		drawObj();
+			//		//glLoadMatrixf(matModelView.get());
+			//		drawCamera();
+			//	}
+			//	if (fovEnabled)
+			//		drawFov();
+			//}
+        }
+        else
+        {
+            glUseProgramObjectARB(0);
+			setFrustum(FOV_Y, (float)windowWidth / windowHeight, nearPlane, farPlane);
+			glMatrixMode(GL_PROJECTION);
+			glLoadMatrixf(matrixProjection.get());
+			glMatrixMode(GL_MODELVIEW);
 
-        lampShader->setMat4("view", matView.get());
-        
-        // draw grid
-        if(gridEnabled)
-            drawGridXZ(gridSize, gridStep);
-
-        // draw line from camera to focal
-        drawFocalLine();
-        drawFocalPoint();
-
-		Matrix4 matModel2 = cam2.getMatrix();
-        Matrix4 matModel3 = cam2.getMatrix();
-        Matrix4 matModel4 = cam2.getMatrix();
-        Matrix4 matModel5 = cam2.getMatrix();
-		matModel2.invertEuclidean();
-		matModel3.invertAffine();
-        matModel4.invertProjective();
-        matModel5.invertGeneral();
-        // matrix for camera model
-        Matrix4 matModel;
-        matModel.translate(cameraPosition);
-        matModel.lookAt(cameraTarget, cam2.getUpAxis());
-        Matrix4 matModelView = matView * matModel;
+			{
+				float mat[16], _mat[16];// get the modelview matrix
+				//float normat[16];
+				glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+				glGetFloatv(GL_PROJECTION_MATRIX, _mat);
+				//glGetFloatv(GL_MATRIX_MODE, normat);.
+			}
 
 
-		
-        
-        //// draw obj models
-        //if(objLoaded)
-        //{
-        //    if(vboReady)
-        //    {
-        //        drawObjWithVbo();
-        //        /*glLoadMatrixf(matModelView.get());*/
-        //        lampShader->setMat4("mode", matModelView.get());
-        //        drawCameraWithVbo();
-        //    }
-        //    else 
-        //    {
-        //        drawObj();
-        //        //glLoadMatrixf(matModelView.get());
-        //        drawCamera();
-        //    }
-        //    if(fovEnabled)
-        //        drawFov();
-        //}
-        //showInfo(screenId);
+			// from 3rd person camera
+			Matrix4 matView = cam1.getMatrix();
+			glLoadMatrixf(matView.get());
+			// draw grid
+			if (gridEnabled)
+			{
+				//drawGridXZVBO(gridSize, gridStep);
+				drawGridXZ(gridSize, gridStep);
+			}
+			//draw line from camera to focal
+			drawFocalLine();
+			drawFocalPoint();
+			{
+				Matrix4 matModel2 = cam2.getMatrix();
+				Matrix4 matModel3 = cam2.getMatrix();
+				Matrix4 matModel4 = cam2.getMatrix();
+				Matrix4 matModel5 = cam2.getMatrix();
+				matModel2.invertEuclidean();
+				matModel3.invertAffine();
+				matModel4.invertProjective();
+				matModel5.invertGeneral();
+			}
+
+			// matrix for camera model
+			Matrix4 matModel;
+			matModel.translate(cameraPosition);
+			matModel.lookAt(cameraTarget, cam2.getUpAxis());
+			Matrix4 matModelView = matView * matModel;
+			// draw obj models
+			if (objLoaded)
+			{
+				if (vboReady)
+				{
+					drawObjWithVbo();
+					glLoadMatrixf(matModelView.get());
+					//lampShader->setMat4("mode", matModelView.get());
+					drawCameraWithVbo();
+				}
+				else
+				{
+					drawObj();
+					//glLoadMatrixf(matModelView.get());
+					drawCamera();
+				}
+				if (fovEnabled)
+					drawFov();
+			}
+        }
+       
     }
     else if(screenId == 2)
     {
-
+        glUseProgramObjectARB(0);
         float mat[16], _mat[16];// get the modelview matrix
         glGetFloatv(GL_PROJECTION_MATRIX, _mat);
         // set projection matrix to OpenGL
@@ -482,7 +532,7 @@ void ModelGL::draw(int screenId)
     }
 
      //draw 2D
-    draw2D(screenId);
+    //draw2D(screenId);
 
     postFrame();
 }
@@ -788,6 +838,97 @@ void ModelGL::drawFocalPoint()
 
 
 
+void ModelGL::InitGridXZ(float size, float step)
+{
+    GLuint vboGridXZ;
+    glGenVertexArrays(1, &vaoGridXZ);
+    glBindVertexArray(vaoGridXZ);
+    glGenBuffers(1,&vboGridXZ);
+    int n = 0;
+    int ncount = (int)(size / step) * 8 * 3;
+	float* vertices = new float[ncount];
+	for (float i = step; i <= size; i += step)
+	{
+		vertices[n++] = -size;  vertices[n++] = 0; vertices[n++] = i;
+		vertices[n++] = size;   vertices[n++] = 0; vertices[n++] = i;
+		vertices[n++] = -size;  vertices[n++] = 0; vertices[n++] = -i;
+		vertices[n++] = size;   vertices[n++] = 0; vertices[n++] = -i;
+
+		vertices[n++] = i;      vertices[n++] = 0; vertices[n++] = -size;
+		vertices[n++] = i;      vertices[n++] = 0; vertices[n++] = size;
+		vertices[n++] = -i;     vertices[n++] = 0; vertices[n++] = -size;
+		vertices[n++] = -i;     vertices[n++] = 0; vertices[n++] = size;
+
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, vboGridXZ);
+    glBufferData(GL_ARRAY_BUFFER, ncount*sizeof(float), vertices, GL_STATIC_DRAW);
+    
+    lampShader->use();
+	GLuint pos = glGetAttribLocation(lampShader->ID, "aPos");
+    glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, ((const void*)(0)));
+	glEnableVertexAttribArray(pos);
+
+    glBindVertexArray(0);
+	////glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//// disable lighting
+	//glDisable(GL_LIGHTING);
+	////glDisable(GL_DEPTH_TEST);
+	//glLineWidth(0.5f);
+
+	//glBegin(GL_LINES);
+
+	//glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
+	//for (float i = step; i <= size; i += step)
+	//{
+	//	glVertex3f(-size, 0, i);   // lines parallel to X-axis
+	//	glVertex3f(size, 0, i);
+	//	glVertex3f(-size, 0, -i);   // lines parallel to X-axis
+	//	glVertex3f(size, 0, -i);
+
+	//	glVertex3f(i, 0, -size);   // lines parallel to Z-axis
+	//	glVertex3f(i, 0, size);
+	//	glVertex3f(-i, 0, -size);   // lines parallel to Z-axis
+	//	glVertex3f(-i, 0, size);
+	//}
+
+	//// x-axis
+	//glColor4f(1, 0, 0, 1.0f);
+	//glColor3f(1, 0, 0);
+	//glVertex3f(0, 0, 0);
+	//glVertex3f(size, 0, 0);
+
+	//// y-axis
+	//glColor4f(0, 1, 0, 1.0f);
+	//glColor3f(0, 1, 0);
+	//glVertex3f(0, 0, 0);
+	//glVertex3f(0, size, 0);
+
+	//// z-axis
+	//glColor4f(0, 0, 1, 1.0f);
+	//glColor3f(0, 0, 1);
+	//glVertex3f(0, 0, 0);
+	//glVertex3f(0, 0, size);
+
+	//glEnd();
+
+	//// enable lighting back
+	//glLineWidth(1.0f);
+	////glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_LIGHTING);
+}
+
+void ModelGL::drawGridXZVBO(float size, float step)
+{
+	lampShader->use();
+	glBindVertexArray(vaoGridXZ);
+	lampShader->setInt("grid", true);
+	lampShader->setVec4("gridColor", 0.5f, 0.5f, 0.5f, 0.5f);
+	int ncount = (int)(size / step) * 8;
+    glDrawArrays(GL_LINES, 0, ncount);
+    //lampShader->setInt("grid", false);
+    glBindVertexArray(0);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // draw a grid on XZ-plane
 ///////////////////////////////////////////////////////////////////////////////
@@ -817,7 +958,7 @@ void ModelGL::drawGridXZ(float size, float step)
     // x-axis
     glColor4f(1, 0, 0, 1.0f);
     glColor3f(1, 0, 0);
-    glVertex3f(0, 0, 0);
+    glVertex3f(-size, 0, 0);
     glVertex3f( size, 0, 0);
 
 	// y-axis
@@ -829,7 +970,7 @@ void ModelGL::drawGridXZ(float size, float step)
     // z-axis
     glColor4f(0, 0, 1, 1.0f);
     glColor3f(0, 0, 1);
-    glVertex3f(0, 0, 0);
+    glVertex3f(0, 0, -size);
     glVertex3f(0, 0,  size);
 
     glEnd();

@@ -42,6 +42,7 @@ namespace Win
         virtual int mButtonDown(WPARAM state, int x, int y);
 		virtual int lButtonUp(WPARAM state, int x, int y);
         virtual int mouseWheel(int state, int delta, int x, int y); // for WM_MOUSEWHEEL:state, delta, x, y
+        virtual int keyDown(int key, LPARAM lParam);
         void setViewForm(ViewForm* viewForm) { ViewForm = viewForm; }
         void setControllerGL1(ControllerGL1* GL1) { m_ControllerGL1 = GL1; }
     private:

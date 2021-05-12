@@ -42,7 +42,7 @@ namespace Win
         int mouseLeave();                           // for WM_MOUSELEAVE
         int mouseWheel(int state, int delta, int x, int y); // for WM_MOUSEWHEEL:state, delta, x, y
         int size(int w, int h, WPARAM wParam);      // for WM_SIZE: width, height, type(SIZE_MAXIMIZED...)
-
+        virtual int keyDown(int key, LPARAM lParam);
         HGLRC getRC()                               { return view->getRC(); }
         int   getPixelFormat()                      { return ::GetPixelFormat(view->getDC()); }
 

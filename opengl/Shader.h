@@ -7,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-typedef char GLchar;
+#include "gl/glew.h"
 class Shader {
 public:
 	//≥Ã–ÚID
@@ -24,6 +24,7 @@ public:
 	void setMat4(const std::string& name, const float* value) const;
 	void setVec3(const std::string& name, const glm::vec3& value) const;
 	void setVec3(const std::string& name, float x, float y, float z) const;
+	void setVec4(const std::string& name, float x, float y, float z, float w) const;
 };
 
 #endif

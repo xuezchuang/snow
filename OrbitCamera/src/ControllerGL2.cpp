@@ -179,6 +179,16 @@ int ControllerGL2::mButtonDown(WPARAM state, int x, int y)
 	return 0;
 }
 
+int ControllerGL2::keyDown(int key, LPARAM lParam)
+{
+	if(key == 'b')
+		model->setNewShader(true);
+	else
+		model->setNewShader(false);
+	paint();
+	return 0;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // handle Left mouse up
 ///////////////////////////////////////////////////////////////////////////////
