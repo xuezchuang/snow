@@ -121,6 +121,7 @@ private:
     void postFrame();
     void drawObj();
     void drawObjWithVbo();
+    void drawObjWithVbo_NewShader();
     void drawCamera();                              // draw camera in world space
     void drawCameraWithVbo();
     void InitGridXZ(float size, float step);        // draw a grid on XZ plane
@@ -187,7 +188,7 @@ private:
     bool vboSupported;
     bool vboReady;
     GLuint vaoGridXZ;               // vao for GridXZ
-    //GLuint vboModel;                // vbo for OBJ vertices
+    GLuint vaoAxis;
     //GLuint vboModel;                // vbo for OBJ vertices
 
     GLuint vboModel;                // vbo for OBJ vertices

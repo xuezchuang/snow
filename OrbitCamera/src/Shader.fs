@@ -3,6 +3,7 @@
 in vec3 Normal;
 in vec3 FragPos;
 in mat4 model_matrix;
+in vec4 glcolor;
 out vec4 FragColor;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
@@ -10,6 +11,7 @@ uniform vec3 lightPos;
 uniform vec3 viewPos;
 uniform vec4 gridColor;
 uniform bool grid;
+uniform bool bobjectColor;
 void main()
 {
     //»·¾³¹â
@@ -29,13 +31,20 @@ void main()
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * spec * lightColor;
-    vec3 ab;
     if(grid){
         FragColor = gridColor;
     }
     else{
-        // vec3 result = (ambient + diffuse) * objectColor;
-        vec3 result = (ambient + diffuse + specular) * objectColor;
-        FragColor = vec4(result, 1.0f);
+        if(bobjectColor){
+            // vec3 result = (ambient + diffuse) * objectColor;
+            vec3 result = (ambient + diffuse + specular) * objectColor;
+            FragColor = vec4(result, 1.0f);
+        }
+        else{
+            FragColor = glcolor;
+        }
+
+    
+
     }
 }

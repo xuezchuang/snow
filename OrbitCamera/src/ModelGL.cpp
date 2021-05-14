@@ -379,7 +379,7 @@ void ModelGL::draw(int screenId)
 			{
 				drawGridXZVBO(gridSize, gridStep);
 			}
-			////draw line from camera to focal
+			//draw line from camera to focal
 			//drawFocalLine();
 			//drawFocalPoint();
 			//// matrix for camera model
@@ -388,24 +388,24 @@ void ModelGL::draw(int screenId)
 			//matModel.lookAt(cameraTarget, cam2.getUpAxis());
 			//Matrix4 matModelView = matView * matModel;
 			//// draw obj models
-			//if (objLoaded)
-			//{
-			//	if (vboReady)
-			//	{
-			//		drawObjWithVbo();
-			//		glLoadMatrixf(matModelView.get());
-			//		//lampShader->setMat4("mode", matModelView.get());
-			//		drawCameraWithVbo();
-			//	}
-			//	else
-			//	{
-			//		drawObj();
-			//		//glLoadMatrixf(matModelView.get());
-			//		drawCamera();
-			//	}
-			//	if (fovEnabled)
-			//		drawFov();
-			//}
+			if (objLoaded)
+			{
+				if (vboReady)
+				{
+					drawObjWithVbo();
+					glLoadMatrixf(matModelView.get());
+					//lampShader->setMat4("mode", matModelView.get());
+					drawCameraWithVbo();
+				}
+				else
+				{
+					drawObj();
+					//glLoadMatrixf(matModelView.get());
+					drawCamera();
+				}
+				//if (fovEnabled)
+				//	drawFov();
+			}
         }
         else
         {
@@ -837,15 +837,22 @@ void ModelGL::drawFocalPoint()
 }
 
 
-
+typedef  struct {
+	GLuint  count;
+	GLuint  primCount;
+	GLuint  first;
+	GLuint  baseInstance;
+} DrawArraysIndirectCommand;
+DrawArraysIndirectCommand cmd = { 6,1, 0, 0 };
+GLuint cmdbo;
 void ModelGL::InitGridXZ(float size, float step)
 {
-    GLuint vboGridXZ;
-    glGenVertexArrays(1, &vaoGridXZ);
-    glBindVertexArray(vaoGridXZ);
-    glGenBuffers(1,&vboGridXZ);
-    int n = 0;
-    int ncount = (int)(size / step) * 8 * 3;
+	GLuint vboGridXZ;
+	glGenVertexArrays(1, &vaoGridXZ);
+	glBindVertexArray(vaoGridXZ);
+	glGenBuffers(1, &vboGridXZ);
+	int n = 0;
+	int ncount = (int)(size / step) * 8 * 3;
 	float* vertices = new float[ncount];
 	for (float i = step; i <= size; i += step)
 	{
@@ -861,72 +868,75 @@ void ModelGL::InitGridXZ(float size, float step)
 
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, vboGridXZ);
-    glBufferData(GL_ARRAY_BUFFER, ncount*sizeof(float), vertices, GL_STATIC_DRAW);
-    
-    lampShader->use();
+	glBufferData(GL_ARRAY_BUFFER, ncount * sizeof(float), vertices, GL_STATIC_DRAW);
+
+	lampShader->use();
 	GLuint pos = glGetAttribLocation(lampShader->ID, "aPos");
-    glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, ((const void*)(0)));
+	glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, ((const void*)(0)));
 	glEnableVertexAttribArray(pos);
 
+	glBindVertexArray(0);
+    //----------------------------------------
+    lampShader->use();
+    //GLuint pos = glGetAttribLocation(lampShader->ID, "aPos");
+	GLuint vboAxis;
+    
+	glGenVertexArrays(1, &vaoAxis);
+	glBindVertexArray(vaoAxis);
+	glGenBuffers(1, &vboAxis);
+	glBindBuffer(GL_ARRAY_BUFFER, vboAxis);
+	
+
+    //ncount = 3 * 2 * 3 + 3 * 3;
+    //ncount = 3 * 2 * 3 * 2;
+    //int ncount = 3 * 2 * 3;
+    
+
+    GLfloat vertices1[][3] = {
+        {-size, 0,  0},{size, 0, 0},
+        {0,-size,0},{0,     size,  0},
+        {0,0,-size},{0,0,size},
+    };
+
+    GLfloat vertColor[][4] = { {1.0,0,0,1.0}, { 1,0.0,0.0,1.0}, { 0,1.0,0.0,1.0},{0.0,1.0,0,1.0}, { 0,0,1,1.0}, { 0,0,1,1.0} };
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1) + sizeof(vertColor), NULL, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices1), vertices1);
+    glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertices1), sizeof(vertColor), vertColor);
+    GLuint color = glGetAttribLocation(lampShader->ID, "color");
+
+	glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (const void*)(0));
+	glEnableVertexAttribArray(pos);
+
+	//glVertexAttribPointer(color, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3 * 2 * 3, ((const void*)(sizeof(float) * (3 * 2 * 3))));
+    glVertexAttribPointer(color, 4, GL_FLOAT, GL_FALSE, 0, (const void*)(sizeof(vertices1)));
+	glEnableVertexAttribArray(color);
+    //glVertexAttribDivisor(color, 1);
+
+	glGenBuffers(1, &cmdbo);
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, cmdbo);
+	glBufferData(GL_DRAW_INDIRECT_BUFFER, sizeof(cmd), &cmd, GL_STATIC_DRAW);
+
     glBindVertexArray(0);
-	////glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	//// disable lighting
-	//glDisable(GL_LIGHTING);
-	////glDisable(GL_DEPTH_TEST);
-	//glLineWidth(0.5f);
-
-	//glBegin(GL_LINES);
-
-	//glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
-	//for (float i = step; i <= size; i += step)
-	//{
-	//	glVertex3f(-size, 0, i);   // lines parallel to X-axis
-	//	glVertex3f(size, 0, i);
-	//	glVertex3f(-size, 0, -i);   // lines parallel to X-axis
-	//	glVertex3f(size, 0, -i);
-
-	//	glVertex3f(i, 0, -size);   // lines parallel to Z-axis
-	//	glVertex3f(i, 0, size);
-	//	glVertex3f(-i, 0, -size);   // lines parallel to Z-axis
-	//	glVertex3f(-i, 0, size);
-	//}
-
-	//// x-axis
-	//glColor4f(1, 0, 0, 1.0f);
-	//glColor3f(1, 0, 0);
-	//glVertex3f(0, 0, 0);
-	//glVertex3f(size, 0, 0);
-
-	//// y-axis
-	//glColor4f(0, 1, 0, 1.0f);
-	//glColor3f(0, 1, 0);
-	//glVertex3f(0, 0, 0);
-	//glVertex3f(0, size, 0);
-
-	//// z-axis
-	//glColor4f(0, 0, 1, 1.0f);
-	//glColor3f(0, 0, 1);
-	//glVertex3f(0, 0, 0);
-	//glVertex3f(0, 0, size);
-
-	//glEnd();
-
-	//// enable lighting back
-	//glLineWidth(1.0f);
-	////glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_LIGHTING);
 }
 
 void ModelGL::drawGridXZVBO(float size, float step)
 {
 	lampShader->use();
+    glLineWidth(0.5f);
 	glBindVertexArray(vaoGridXZ);
 	lampShader->setInt("grid", true);
 	lampShader->setVec4("gridColor", 0.5f, 0.5f, 0.5f, 0.5f);
 	int ncount = (int)(size / step) * 8;
     glDrawArrays(GL_LINES, 0, ncount);
-    //lampShader->setInt("grid", false);
+    //DrawAxis
+	glBindVertexArray(vaoAxis);
+	lampShader->setInt("grid", false);
+	lampShader->setInt("bobjectColor", false);
+    //lampShader->setVec4("gridColor", 1.0f, 0.0f, 0.0f, 1.0f);
+	glDrawArrays(GL_LINES, 0, 6);
+	//glDrawArraysIndirect(GL_LINES, ((const void*)(0)));
     glBindVertexArray(0);
+    glUseProgram(0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -961,17 +971,18 @@ void ModelGL::drawGridXZ(float size, float step)
     glVertex3f(-size, 0, 0);
     glVertex3f( size, 0, 0);
 
+
 	// y-axis
 	glColor4f(0, 1, 0, 1.0f);
 	glColor3f(0, 1, 0);
-	glVertex3f(0, 0, 0);
+	glVertex3f(0, -size, 0);
 	glVertex3f(0, size, 0);
 
-    // z-axis
-    glColor4f(0, 0, 1, 1.0f);
-    glColor3f(0, 0, 1);
-    glVertex3f(0, 0, -size);
-    glVertex3f(0, 0,  size);
+	// z-axis
+	glColor4f(0, 0, 1, 1.0f);
+	glColor3f(0, 0, 1);
+	glVertex3f(0, 0, -size);
+	glVertex3f(0, 0, size);
 
     glEnd();
 
@@ -1494,6 +1505,46 @@ void ModelGL::drawObjWithVbo()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void ModelGL::drawObjWithVbo_NewShader()
+{
+    
+	if (glslReady)
+		glUseProgramObjectARB(progId2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboModel);
+
+	// before draw, specify vertex and index arrays with their offsets and stride
+	int stride = objModel.getInterleavedStride();
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glNormalPointer(GL_FLOAT, stride, (void*)(sizeof(float) * 3));
+	glVertexPointer(3, GL_FLOAT, stride, 0);
+
+	for (int i = 0; i < (int)iboModel.size(); ++i)
+	{
+		glMaterialfv(GL_FRONT, GL_AMBIENT, defaultAmbient);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, defaultDiffuse);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, defaultSpecular);
+		glMaterialf(GL_FRONT, GL_SHININESS, defaultShininess);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboModel[i]);
+		glDrawElements(GL_TRIANGLES, objModel.getIndexCount(i), GL_UNSIGNED_INT, 0);
+	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	// reset shader
+	if (glslReady)
+		glUseProgramObjectARB(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 
