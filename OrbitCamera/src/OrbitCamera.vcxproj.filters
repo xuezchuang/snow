@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Manifest Include="OrbitCamera.exe.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Deps\Include\GLMathFunc.cpp" />
+    <ClCompile Include="animUtils.cpp" />
+    <ClCompile Include="BitmapFont.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="ControllerForm.cpp" />
+    <ClCompile Include="ControllerGL1.cpp" />
+    <ClCompile Include="ControllerGL2.cpp" />
+    <ClCompile Include="ControllerMain.cpp" />
+    <ClCompile Include="DialogWindow.cpp" />
+    <ClCompile Include="glExtension.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrices.cpp" />
+    <ClCompile Include="ModelGL.cpp" />
+    <ClCompile Include="ObjModel.cpp" />
+    <ClCompile Include="OrbitCamera.cpp" />
+    <ClCompile Include="procedure.cpp" />
+    <ClCompile Include="Tga.cpp" />
+    <ClCompile Include="Tokenizer.cpp" />
+    <ClCompile Include="ViewForm.cpp" />
+    <ClCompile Include="ViewGL.cpp" />
+    <ClCompile Include="wcharUtil.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="..\..\opengl\Shader.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Deps\Include\GLMathFunc.h" />
+    <ClInclude Include="..\..\Deps\Include\GLTypeDef.h" />
+    <ClInclude Include="animUtils.h" />
+    <ClInclude Include="BitmapFont.h" />
+    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="ControllerForm.h" />
+    <ClInclude Include="ControllerGL1.h" />
+    <ClInclude Include="ControllerGL2.h" />
+    <ClInclude Include="ControllerMain.h" />
+    <ClInclude Include="Controls.h" />
+    <ClInclude Include="DialogWindow.h" />
+    <ClInclude Include="glext.h" />
+    <ClInclude Include="glExtension.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="logResource.h" />
+    <ClInclude Include="Matrices.h" />
+    <ClInclude Include="ModelGL.h" />
+    <ClInclude Include="ObjModel.h" />
+    <ClInclude Include="OrbitCamera.h" />
+    <ClInclude Include="procedure.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Tga.h" />
+    <ClInclude Include="Tokenizer.h" />
+    <ClInclude Include="Vectors.h" />
+    <ClInclude Include="Vertices.h" />
+    <ClInclude Include="ViewForm.h" />
+    <ClInclude Include="ViewGL.h" />
+    <ClInclude Include="wcharUtil.h" />
+    <ClInclude Include="wglext.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="..\..\opengl\Shader.h">
+      <Filter>shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="log.rc" />
+    <ResourceCompile Include="OrbitCamera.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="songho.ico" />
+    <Image Include="songho_alpha.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{48158b2c-1109-4cd7-bab3-2400653c582e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader.fs">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Shader.vs">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>
