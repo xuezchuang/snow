@@ -181,11 +181,11 @@ int ControllerGL2::mButtonDown(WPARAM state, int x, int y)
 
 int ControllerGL2::keyDown(int key, LPARAM lParam)
 {
-	if(key == 'b')
-		model->setNewShader(true);
-	else
-		model->setNewShader(false);
-	paint();
+	if (key == 'b' || key == 'B')
+	{
+		model->setNewShader();
+		paint();
+	}
 	return 0;
 }
 

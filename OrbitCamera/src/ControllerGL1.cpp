@@ -265,9 +265,9 @@ int ControllerGL1::size(int w, int h, WPARAM wParam)
 int ControllerGL1::keyDown(int key, LPARAM lParam)
 {
 	if (key == 'b' || key == 'B')
-		model->setNewShader(true);
-	else
-		model->setNewShader(false);
-	paint();
+	{
+		model->setNewShader();
+		paint();
+	}
 	return 0;
 }

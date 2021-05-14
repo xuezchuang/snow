@@ -102,7 +102,7 @@ public:
     void enableGrid()                       { gridEnabled = true; }
     void disableGrid()                      { gridEnabled = false; }
     //set NewShader
-    void setNewShader(bool bnew) { bNewShader = bnew; }
+    void setNewShader() { bNewShader = !bNewShader; }
 protected:
 
 private:

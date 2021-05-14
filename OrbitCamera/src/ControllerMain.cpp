@@ -80,3 +80,10 @@ int ControllerMain::size(int w, int h, WPARAM wParam)
 
     return 0;
 }
+
+
+int ControllerMain::keyDown(int key, LPARAM lParam)
+{
+    Win::Controller* ctrl = (Controller*)::GetWindowLongPtr(glHandle1, GWLP_USERDATA);
+    return ctrl->keyDown(key, lParam);
+}

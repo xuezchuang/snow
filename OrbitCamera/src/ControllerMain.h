@@ -29,7 +29,7 @@ namespace Win
         int create();                               // for WM_CRERATE
         int destroy();                              // for WM_DESTROY
         int size(int w, int h, WPARAM wParam);      // for WM_SIZE: width, height, type(SIZE_MAXIMIZED...)
-
+        virtual int keyDown(int key, LPARAM lParam);
     private:
         HWND glHandle1;                             // handle of gl window #1
         HWND glHandle2;                             // handle of gl window #2

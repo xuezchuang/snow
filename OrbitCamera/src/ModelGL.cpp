@@ -174,6 +174,7 @@ ModelGL::ModelGL() : windowWidth(0), windowHeight(0), mouseLeftDown(false), mous
                      glslSupported(false), glslReady(false), progId1(0), progId2(0),
                      objLoaded(false), fovEnabled(true)
 {
+    bNewShader = true;
     bgColor.set(0, 0, 0, 0);
 
     // init cameras
