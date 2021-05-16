@@ -9,8 +9,8 @@
 
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#include "Camera.h"
+#include "../stb_image.h"
+#include "../Camera.h"
 
 
 

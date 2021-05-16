@@ -1506,8 +1506,8 @@ void ModelGL::drawObjWithVbo_NewShader()
 
 	// before draw, specify vertex and index arrays with their offsets and stride
 
-	GLfloat lightKa[] = { .2f, .2f, .2f };      // ambient light
-	GLfloat lightKd[] = { .8f, .8f, .8f };      // diffuse light
+	GLfloat lightKa[] = { .6f, .6f, .6f };      // ambient light
+	GLfloat lightKd[] = { .4f, .4f, .4f };      // diffuse light
 	GLfloat lightKs[] = { 1, 1, 1};             // specular light
     lampShader->setVec3("ambientlight",lightKa);
     lampShader->setVec3("diffuselight", lightKd);
