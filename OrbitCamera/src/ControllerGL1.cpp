@@ -269,5 +269,15 @@ int ControllerGL1::keyDown(int key, LPARAM lParam)
 		model->setNewShader();
 		paint();
 	}
+	if (key == 's' || key == 'S')
+	{
+		model->setAddSpecular();
+		paint();
+	}
+	if (key == 'm' || key == 'M')
+	{
+		model->setmodelview();
+		paint();
+	}
 	return 0;
 }

@@ -103,6 +103,8 @@ public:
     void disableGrid()                      { gridEnabled = false; }
     //set NewShader
     void setNewShader() { bNewShader = !bNewShader; }
+    void setAddSpecular() { bSpecular = !bSpecular; }
+    void setmodelview() { bModel = !bModel; }
 protected:
 
 private:
@@ -112,6 +114,8 @@ private:
     TViewMatInfo* GetViewMatrixInfo() { return &m_viewMatInfo; }
 private:
     bool bNewShader;
+    bool bSpecular;
+    bool bModel;
     Shader* lampShader;
     // member functions
     void initLights();                              // add a white light ti scene
@@ -138,6 +142,7 @@ private:
     void setOrthoFrustum(float l, float r, float b, float t, float n=-1, float f=1);
     bool createShaderPrograms();
     void createVertexBufferObjects();
+    void createVertexBufferObjectsByNewShader();
     void logShaders();
     void computeFovVertices(float fov);
 
@@ -189,8 +194,11 @@ private:
     bool vboReady;
     GLuint vaoGridXZ;               // vao for GridXZ
     GLuint vaoAxis;
-    //GLuint vboModel;                // vbo for OBJ vertices
+    GLuint vaoNewModel;
+    //GLuint vboNewModel;
+    std::vector<GLuint> eboNewModel;
 
+    //GLuint vboModel;                // vbo for OBJ vertices
     GLuint vboModel;                // vbo for OBJ vertices
     GLuint vboCam;                  // vbo for camera OBJ
     std::vector<GLuint> iboModel;   // vbo for OBJ indices

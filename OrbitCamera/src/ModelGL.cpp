@@ -29,7 +29,7 @@
 //#include <GL/glut.h>
 #include <cmath>
 #include <sstream>
-
+#define BUFFER_OFFSET(x)  ((const void*) (x))
 
 // constants
 const float GRID_SIZE = 10.0f;
@@ -101,66 +101,6 @@ void main()
 }
 )";
 
-
-//
-const char* vsSource3 = R"(
-#version 330 core
-
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aNormal;
-out vec3 FragPos;
-out vec3 Normal;
-
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-void main()
-{
-	gl_Position = projection * view * model * vec4 (aPos, 1.0f);
-	FragPos = vec3(model * vec4(aPos, 1.0));
-	Normal = aNormal;
-}
-)";
-const char* fsSource3 = R"(
-//片元着色器代码
-#version 330 core
-in vec3 Normal;
-in vec3 FragPos;
-in mat4 model_matrix;
-out vec4 FragColor;
-out mat4 test_matrix;
-uniform vec3 objectColor;
-uniform vec3 lightColor;
-uniform vec3 lightPos;
-uniform vec3 viewPos;
-
-void main()
-{
-    //环境光
-    float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * lightColor;
-
-    //漫反射光
-    vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(lightPos - FragPos);  
-
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * lightColor;
-
-    //镜面高光
-    float specularStrength = 0.5;
-    vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = specularStrength * spec * lightColor;
-
-    vec3 result = (ambient + diffuse + specular) * objectColor;
-   // vec3 result = (ambient + diffuse) * objectColor;
-    FragColor = vec4(result, 1.0f);
-    test_matrix = model_matrix;
-}
-)";
-
 #pragma endregion
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -175,6 +115,8 @@ ModelGL::ModelGL() : windowWidth(0), windowHeight(0), mouseLeftDown(false), mous
                      objLoaded(false), fovEnabled(true)
 {
     bNewShader = true;
+    bSpecular = true;
+    bModel = true;
     bgColor.set(0, 0, 0, 0);
 
     // init cameras
@@ -372,40 +314,31 @@ void ModelGL::draw(int screenId)
 			lampShader->use();
 			lampShader->setMat4("projection", matrixProjection.get());
 			lampShader->setMat4("view", matView.get());
-			Matrix4 matmodel;
-			lampShader->setMat4("model", matmodel.get());
+			//Matrix4 matmodel;
+			
+			//draw line from camera to focal
+			//drawFocalLine();
+			//drawFocalPoint();
+			// matrix for camera model
+			Matrix4 matModel;
+			
+            lampShader->setMat4("model", matModel.get());
+			matModel.translate(cameraPosition);
+			matModel.lookAt(cameraTarget, cam2.getUpAxis());
+			Matrix4 matModelView = matView * matModel;
+
 
 			// draw grid
 			if (gridEnabled)
 			{
 				drawGridXZVBO(gridSize, gridStep);
 			}
-			//draw line from camera to focal
-			//drawFocalLine();
-			//drawFocalPoint();
-			//// matrix for camera model
-			//Matrix4 matModel;
-			//matModel.translate(cameraPosition);
-			//matModel.lookAt(cameraTarget, cam2.getUpAxis());
-			//Matrix4 matModelView = matView * matModel;
-			//// draw obj models
+
+			 //draw obj models
 			if (objLoaded)
 			{
-				if (vboReady)
-				{
-					drawObjWithVbo();
-					glLoadMatrixf(matModelView.get());
-					//lampShader->setMat4("mode", matModelView.get());
-					drawCameraWithVbo();
-				}
-				else
-				{
-					drawObj();
-					//glLoadMatrixf(matModelView.get());
-					drawCamera();
-				}
-				//if (fovEnabled)
-				//	drawFov();
+				drawObjWithVbo_NewShader();
+				//drawCameraWithVbo();
 			}
         }
         else
@@ -1370,6 +1303,7 @@ bool ModelGL::loadObjs()
         if(vboSupported)
         {
             createVertexBufferObjects();
+            createVertexBufferObjectsByNewShader();
             vboReady = true;
         }
         else
@@ -1426,7 +1360,62 @@ void ModelGL::createVertexBufferObjects()
     }
 }
 
+void ModelGL::createVertexBufferObjectsByNewShader()
+{
+	// create/setup VBO for model
+	const float* interleavedVertices = objModel.getInterleavedVertices();
+	unsigned int dataSize = objModel.getInterleavedVertexSize();
+    glGenVertexArrays(1, &vaoNewModel);
+    glBindVertexArray(vaoNewModel);
+    
+    GLuint vboNewModel;
+	// create VBO array for indices
+    glGenBuffers(1, &vboNewModel);
+    glBindBuffer(GL_ARRAY_BUFFER,vboNewModel);
+    glBufferData(GL_ARRAY_BUFFER, dataSize, interleavedVertices, GL_STATIC_DRAW);
 
+	int stride = objModel.getInterleavedStride();
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(float)*3));
+	glEnableVertexAttribArray(1);
+
+    
+	// setup vbos for indices
+    eboNewModel.clear();
+	int count = objModel.getGroupCount();
+    eboNewModel.resize(count);
+	glGenBuffers(count, &eboNewModel[0]);
+	for (int i = 0; i < count; ++i)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboNewModel[i]);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, objModel.getIndexCount(i) * sizeof(int), (void*)objModel.getIndices(i), GL_STATIC_DRAW);
+	}
+
+	//glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(dataSize));
+	//glEnableVertexAttribArray(2);
+
+	//// create / setup VBO for camera
+	//interleavedVertices = objCam.getInterleavedVertices();
+	//dataSize = objCam.getInterleavedVertexSize();
+	//glGenBuffers(1, &vboCam);
+	//glBindBuffer(GL_ARRAY_BUFFER, vboCam);
+	//glBufferData(GL_ARRAY_BUFFER, dataSize, interleavedVertices, GL_STATIC_DRAW);
+
+	//// create VBO for camera model indices
+	//iboCam.clear();
+	//count = objCam.getGroupCount();
+	//iboCam.resize(count);
+	//glGenBuffers(count, &iboCam[0]);
+	//for (int i = 0; i < count; ++i)
+	//{
+	//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboCam[i]);
+	//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, objCam.getIndexCount(i) * sizeof(int), (void*)objCam.getIndices(i), GL_STATIC_DRAW);
+	//}
+    //glBindBuffer(GL_ARRAY_BUFFER,0);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // draw obj model
@@ -1510,42 +1499,54 @@ void ModelGL::drawObjWithVbo()
 
 void ModelGL::drawObjWithVbo_NewShader()
 {
-    
-	if (glslReady)
-		glUseProgramObjectARB(progId2);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vboModel);
+    glUseProgram(lampShader->ID);
+    glBindVertexArray(vaoNewModel);
+	lampShader->setInt("grid", false);
+	lampShader->setInt("bobjectColor", true);
 
 	// before draw, specify vertex and index arrays with their offsets and stride
-	int stride = objModel.getInterleavedStride();
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glNormalPointer(GL_FLOAT, stride, (void*)(sizeof(float) * 3));
-	glVertexPointer(3, GL_FLOAT, stride, 0);
 
-	for (int i = 0; i < (int)iboModel.size(); ++i)
+	GLfloat lightKa[] = { .2f, .2f, .2f };      // ambient light
+	GLfloat lightKd[] = { .8f, .8f, .8f };      // diffuse light
+	GLfloat lightKs[] = { 1, 1, 1};             // specular light
+    lampShader->setVec3("ambientlight",lightKa);
+    lampShader->setVec3("diffuselight", lightKd);
+    lampShader->setVec3("specularlight", lightKs);
+    if(bSpecular)
+        lampShader->setInt("bspecular", true);
+    else
+        lampShader->setInt("bspecular", false);
+    if(bModel)
+        lampShader->setInt("bmodel", true);
+    else
+        lampShader->setInt("bmodel", false);
+	// position the light in eye space
+    //Vector3(CAM_DIST * 2, CAM_DIST * 1.5f, CAM_DIST * 2)
+    float lightPos[4] = { CAM_DIST * 2, CAM_DIST * 1.5f, CAM_DIST * 2 };               // directional light
+    //lampShader->setVec3("lightPos", lightPos);
+
+
+	GLfloat ambientmaterial[]   = {defaultAmbient[0],defaultAmbient[1],defaultAmbient[2]};        // ambient material
+    GLfloat diffusematerial[] = { defaultDiffuse[0],defaultDiffuse[1],defaultDiffuse[2] };
+    GLfloat specluarmaterial[] = { defaultSpecular[0],defaultSpecular[1],defaultSpecular[2] };
+    
+    lampShader->setVec3("ambientmaterial", ambientmaterial);
+    lampShader->setVec3("diffusematerial", diffusematerial);
+    lampShader->setVec3("specluarmaterial", specluarmaterial);
+    Vector3 vViewPos = cam1.getPosition();
+    //vViewPos.normalize();
+    float viewPos[3] = { vViewPos.x,vViewPos.y,vViewPos.z };
+    lampShader->setVec3("lightPos", viewPos);
+    lampShader->setVec3("viewPos", viewPos);
+	for (int i = 0; i < (int)eboNewModel.size(); ++i)
 	{
-		glMaterialfv(GL_FRONT, GL_AMBIENT, defaultAmbient);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, defaultDiffuse);
-		glMaterialfv(GL_FRONT, GL_SPECULAR, defaultSpecular);
-		glMaterialf(GL_FRONT, GL_SHININESS, defaultShininess);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboModel[i]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboNewModel[i]);
 		glDrawElements(GL_TRIANGLES, objModel.getIndexCount(i), GL_UNSIGNED_INT, 0);
 	}
 
-	glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
-	glDisableClientState(GL_NORMAL_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	// reset shader
-	if (glslReady)
-		glUseProgramObjectARB(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 

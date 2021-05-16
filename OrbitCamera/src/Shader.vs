@@ -11,7 +11,6 @@ out vec4 glcolor;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-out mat4 model_matrix;
 //out mat3 tt;
 
 void main()
@@ -19,10 +18,5 @@ void main()
 	gl_Position = projection * view * model * vec4 (aPos, 1.0f);
 	FragPos = vec3(model * vec4(aPos, 1.0));
 	Normal = aNormal;
-	model_matrix = model;
 	glcolor = color;
-	//model_matrix = model;
-	//mat4 tetmp = model;
-	//model = mat4();
-	//model = tetmp;
 }
