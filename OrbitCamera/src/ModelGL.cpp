@@ -902,20 +902,20 @@ void ModelGL::drawGridXZ(float size, float step)
     // x-axis
     glColor4f(1, 0, 0, 1.0f);
     glColor3f(1, 0, 0);
-    glVertex3f(-size, 0, 0);
+    glVertex3f( 0, 0, 0);
     glVertex3f( size, 0, 0);
 
 
 	// y-axis
 	glColor4f(0, 1, 0, 1.0f);
 	glColor3f(0, 1, 0);
-	glVertex3f(0, -size, 0);
+	glVertex3f(0, 0, 0);
 	glVertex3f(0, size, 0);
 
 	// z-axis
 	glColor4f(0, 0, 1, 1.0f);
 	glColor3f(0, 0, 1);
-	glVertex3f(0, 0, -size);
+	glVertex3f(0, 0, 0);
 	glVertex3f(0, 0, size);
 
     glEnd();

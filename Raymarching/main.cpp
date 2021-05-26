@@ -10,7 +10,9 @@ using namespace std;
 // Definitions /////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-#define WINDOW_WIDTH  (800)
+
+
+#define WINDOW_WIDTH  (400)
 #define WINDOW_HEIGHT (400)
 #define WINDOW_TITLE  ("RayTracing")
 

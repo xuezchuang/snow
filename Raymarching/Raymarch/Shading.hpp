@@ -20,7 +20,8 @@
 #include "../Image/Texture2D.hpp"
 
 #include "Raymarch.hpp"
-
+#include "Matrices.h"
+const float EPSILON = 0.00001f;
 class RaymarchShading
 {
 public:
@@ -29,7 +30,69 @@ public:
 	{
 		// TODO
 	}
+private:
+	void lookAt(const Vector3& position, const Vector3& target)
+	{
+		Matrix4 matrix;
+		Vector3 angle;
+		// if pos and target are same, only translate camera to position without rotation
+		if (position == target)
+		{
+			matrix.identity();
+			matrix.setColumn(3, -position);
+			// rotation stuff
+			matrixRotation.identity();
+			angle.set(0, 0, 0);
+			//quaternion.set(1, 0, 0, 0);
+			return;
+		}
 
+		Vector3 left, up, forward;  // 3 axis of matrix for scene
+
+		// first, compute the forward vector of rotation matrix
+		// NOTE: the direction is reversed (target to camera pos) because of camera transform
+		forward = position - target;
+		float distance = forward.length();  // remember the distance
+		// normalize
+		forward /= distance;
+
+		// compute temporal up vector based on the forward vector
+		// watch out when look up/down at 90 degree
+		// for example, forward vector is on the Y axis
+		if (fabs(forward.x) < EPSILON && fabs(forward.z) < EPSILON)
+		{
+			// forward vector is pointing +Y axis
+			if (forward.y > 0)
+			{
+				up = Vector3(0, 0, -1);
+			}
+			// forward vector is pointing -Y axis
+			else
+			{
+				up = Vector3(0, 0, 1);
+			}
+		}
+		// in general, up vector is straight up
+		else
+		{
+			up = Vector3(0, 1, 0);
+		}
+
+		// compute the left vector of rotation matrix
+		left = up.cross(forward);   // cross product
+		left.normalize();
+
+		// re-calculate the orthonormal up vector
+		up = forward.cross(left);   // cross product
+
+		// set inverse rotation matrix: M^-1 = M^T for Euclidean transform
+		matrixRotation.identity();
+		matrixRotation.setRow(0, left);
+		matrixRotation.setRow(1, up);
+		matrixRotation.setRow(2, forward);
+
+	}
+	Matrix4 matrixRotation;
 public:
 
 	void Initialize(Texture2D& backbuffer)
@@ -37,6 +100,10 @@ public:
 		// Camera
 		_camera.m_Position = kCameraPosition;
 		_camera.m_Rotation = Quaternion::FromTo(Vector3f::Forward, Vector3f::Normalize(-kCameraPosition));
+		//
+		Vector3 carm;
+		carm.x = _camera.m_Position.x; carm.y = _camera.m_Position.y; carm.z = _camera.m_Position.z;
+		lookAt(carm, Vector3(0, 0, 0));
 
 		// Light
 		_light.m_Color = kLightColor;
@@ -98,7 +165,10 @@ private:
 		Ray ray;
 		ray.m_Origin = _camera.m_Position;
 		ray.m_Direction = Vector3f::Normalize(Quaternion::RotateVector(_camera.m_Rotation, Vector3f(ratioUV.x, ratioUV.y, 1.0f)));
+		
+		Vector3 temp2 = matrixRotation * Vector3(-ratioUV.x, ratioUV.y, -1);
 
+		temp2.normalize();
 		// Raymarching for hit point
 		float raymarchingDistance = Raymarching(ray);
 
