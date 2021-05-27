@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{d8b30bfb-96c4-497d-89cd-ddeb6fcbcc35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raytrace">
+      <UniqueIdentifier>{81aeb348-2ff0-4198-a72b-befc6f7b009f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\raytrace\shader.frag">
+      <Filter>raytrace</Filter>
+    </None>
+    <None Include="shaders\raytrace\shader.vert">
+      <Filter>raytrace</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Shader\loadShaders.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\SwitchShader.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\allShaders\raytrace.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader\SwitchShader.hpp">
+      <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\allShaders\allShaders.hpp">
+      <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\allShaders\raytrace.hpp">
+      <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h" />
+  </ItemGroup>
+</Project>

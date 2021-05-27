@@ -955,12 +955,12 @@ void ModelGL::drawGridXY(float size, float step)
 
     // x-axis
     glColor4f(1.0f, 0, 0, 0.5f);
-    glVertex3f(-size, 0, 0);
+    glVertex3f(0, 0, 0);
     glVertex3f( size, 0, 0);
 
     // y-axis
     glColor4f(0, 0, 1.0f, 0.5f);
-    glVertex3f(0, -size, 0);
+    glVertex3f(0, 0, 0);
     glVertex3f(0,  size, 0);
 
     glEnd();

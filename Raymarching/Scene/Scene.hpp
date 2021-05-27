@@ -41,7 +41,7 @@ public:
 			return -1.0f;
 
 		float distanceToNearestObject = _objectList[0]->Distance(position);
-		for (int i = 1; i < _objectCount; ++i)
+ 		for (int i = 1; i < _objectCount; ++i)
 		{
 			float distanceToObject = _objectList[i]->Distance(position);
 			distanceToNearestObject = fminf(distanceToNearestObject, distanceToObject);

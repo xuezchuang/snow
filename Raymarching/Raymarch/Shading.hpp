@@ -103,7 +103,8 @@ public:
 		//
 		Vector3 carm;
 		carm.x = _camera.m_Position.x; carm.y = _camera.m_Position.y; carm.z = _camera.m_Position.z;
-		lookAt(carm, Vector3(0, 0, 0));
+		lookAt( carm, Vector3(0, 0, 0));
+
 
 		// Light
 		_light.m_Color = kLightColor;
@@ -166,12 +167,12 @@ private:
 		ray.m_Origin = _camera.m_Position;
 		ray.m_Direction = Vector3f::Normalize(Quaternion::RotateVector(_camera.m_Rotation, Vector3f(ratioUV.x, ratioUV.y, 1.0f)));
 		
-		Vector3 temp2 = matrixRotation * Vector3(-ratioUV.x, ratioUV.y, -1);
-
-		temp2.normalize();
+		Vector3 temp1 = matrixRotation * Vector3(-ratioUV.x, ratioUV.y, -1);
+		temp1.normalize();
 		// Raymarching for hit point
 		float raymarchingDistance = Raymarching(ray);
 
+		// 
 		// Final color shading
 		Color3f surfaceColor = Color3f::Black;
 		if (raymarchingDistance < kRaymarchDistanceMax)

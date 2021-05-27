@@ -1,3 +1,10 @@
+/* $URL$
+   $Rev$
+   $Author$
+   $Date$
+   $Id$
+ */
+
 #include "vapp.h"
 #include "vutils.h"
 
@@ -6,16 +13,11 @@
 #include "LoadShaders.h"
 
 #include <stdio.h>
-
-#include "GPU_batch.h"
+#include "interface_intern.h"
 using namespace vmath;
 
 // Define USE_PRIMITIVE_RESTART to 0 to use two separate draw commands
 #define USE_PRIMITIVE_RESTART 1
-
-
-
-
 
 BEGIN_APP_DECLARATION(DrawCommandExample)
 // Override functions from base class
@@ -36,7 +38,6 @@ GLint project_matrix_loc;
 GLint parameters_loc;
 GLint test_loc;
 uiWidgetBaseParameters widgetParam;
-
 END_APP_DECLARATION()
 
 DEFINE_APP(DrawCommandExample, "Drawing Commands Example")
@@ -63,18 +64,18 @@ void DrawCommandExample::Initialize(const char* title)
     modelview_matrix_loc = glGetUniformLocation(render_prog, "model_matrix");
     project_matrix_loc = glGetUniformLocation(render_prog, "projection_matrix");
     parameters_loc = glGetUniformLocation(render_prog, "parameters");
-    
+    test_loc = glGetUniformLocation(render_prog, "btest");
 	// Indices for the triangle strips
 	static const GLushort vertex_indices[] =
 	{
-		0, 1,2,2,1,3
+		0, 1,2,3
 	};
     glGenVertexArrays(1, vao);
     glBindVertexArray(vao[0]);
 	glGenBuffers(1, ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertex_indices), vertex_indices, GL_STATIC_DRAW);
-    glClearColor(0.f, 0.f, 0.f, 1.0f);
+    glClearColor(1.f, 1.f, 1.f, 1.0f);
 
 }
 
@@ -96,6 +97,7 @@ void DrawCommandExample::Display(bool auto_redraw)
     //glEnable(GL_CULL_FACE);
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
+    glEnable(GL_LINE_SMOOTH);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -111,19 +113,15 @@ void DrawCommandExample::Display(bool auto_redraw)
     //// Draw Arrays...
     model_matrix = vmath::translation(-3.0f, 0.0f, -5.0f);
     glUniformMatrix4fv(modelview_matrix_loc, 1, GL_FALSE, model_matrix);
-    widgetParam.recti.xmin = -1.f;
-    widgetParam.recti.xmax = 1.f;
-    widgetParam.recti.ymin = -1.f;
-    widgetParam.recti.ymax = 1.f;
 
-    widgetParam.rect.xmin = -1.4f;
-    widgetParam.rect.xmax = -1.f;
-    widgetParam.rect.ymin = -1.f;
-    widgetParam.rect.ymax = -1.f;
+	widgetParam.rect.xmin = -1.0f;
+	widgetParam.rect.xmax = 1.f;
+	widgetParam.rect.ymin = -1.f;
+	widgetParam.rect.ymax = 1.f;
     glUniform4fv(parameters_loc, MAX_WIDGET_PARAMETERS, (float*)&widgetParam);
 	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     //glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, NULL);
-    glDrawElementsInstancedBaseVertexBaseInstance(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, NULL, 1, 0, 0);
+    glDrawElementsInstancedBaseVertexBaseInstance(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, NULL, 1, 0, 0);
     base::Display();
 }
 
@@ -141,4 +139,3 @@ void DrawCommandExample::Reshape(int width, int height)
 
     aspect = float(height) / float(width);
 }
-

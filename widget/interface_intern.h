@@ -47,7 +47,7 @@ enum {
 
 /* Widget shader parameters, must match the shader layout. */
 typedef struct uiWidgetBaseParameters {
-	rctf rect, recti;
+	rctf recti, rect;
 	float radi, rad;
 	float facxi, facyi;
 	float round_corners[4];
