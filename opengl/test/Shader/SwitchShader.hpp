@@ -37,7 +37,7 @@ class SwitchShader
 	
 	public:
 	
-		int id(){return shader_id;}
+		int id()const{return shader_id;}
 		void bind() const{glUseProgram(shader_id);
 			
 		}

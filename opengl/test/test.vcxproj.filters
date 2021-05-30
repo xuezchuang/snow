@@ -26,6 +26,12 @@
     <ClCompile Include="Shader\allShaders\raytrace.cpp">
       <Filter>shader</Filter>
     </ClCompile>
+    <ClCompile Include="controllerlist.cpp" />
+    <ClCompile Include="Dimension.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="helpful.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="program.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader\SwitchShader.hpp">
@@ -38,5 +44,10 @@
       <Filter>shader</Filter>
     </ClInclude>
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="controllerlist.hpp" />
+    <ClInclude Include="Dimension.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="helpful.hpp" />
+    <ClInclude Include="Matrix.hpp" />
   </ItemGroup>
 </Project>

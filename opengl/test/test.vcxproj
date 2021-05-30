@@ -41,10 +41,6 @@
     <ClCompile Include="Shader\SwitchShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="container2.png" />
-    <Image Include="container2_specular.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="shaders\raytrace\shader.frag" />
     <None Include="shaders\raytrace\shader.vert" />
   </ItemGroup>
@@ -160,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(INCLUDE_DIR);.\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

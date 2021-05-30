@@ -1,6 +1,8 @@
 #include "raytrace.hpp"
 #include "../helpful.hpp"
 
+
+#include "../Math/Quaternion.hpp"
 Shader_raytrace::Shader_raytrace()
 {
 
@@ -51,6 +53,11 @@ Shader_raytrace::Shader_raytrace()
 
 
     glUniformBlockBinding(shader_id, sphereIndex, uniforms.sphereBinding);
+
+	Quaternion abc;
+	abc.FromTo(Vector3f(0, 0, 1), Vector3f(0, 0, 0));
+    glUniform1i(glGetUniformLocation(shader_id, "bnew"), 0);
+
 
     checkGlError("Error after shader setup");
 }

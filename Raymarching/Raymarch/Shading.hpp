@@ -38,11 +38,11 @@ private:
 		// if pos and target are same, only translate camera to position without rotation
 		if (position == target)
 		{
-			matrix.identity();
-			matrix.setColumn(3, -position);
+			//matrix.identity();
+			//matrix.setColumn(3, -position);
 			// rotation stuff
 			matrixRotation.identity();
-			angle.set(0, 0, 0);
+			//angle.set(0, 0, 0);
 			//quaternion.set(1, 0, 0, 0);
 			return;
 		}
@@ -161,14 +161,17 @@ private:
 	Color3f FragmentFunc(const Vector2f& uv, float ratio)
 	{
 		Vector2f ratioUV = (uv * 2.0f - 1.0f) * Vector2f(ratio, 1.0f);
-		
+
 		// Create ray
 		Ray ray;
 		ray.m_Origin = _camera.m_Position;
 		ray.m_Direction = Vector3f::Normalize(Quaternion::RotateVector(_camera.m_Rotation, Vector3f(ratioUV.x, ratioUV.y, 1.0f)));
-		
-		Vector3 temp1 = matrixRotation * Vector3(-ratioUV.x, ratioUV.y, -1);
-		temp1.normalize();
+		{
+			Vector3 temp1 = matrixRotation * Vector3(-ratioUV.x, ratioUV.y, -1);
+			temp1.normalize();
+			Vector3f temp2 = Quaternion::RotateVector(Quaternion(0, 0, 0, 1), ray.m_Direction);
+			int a = 3;
+		}
 		// Raymarching for hit point
 		float raymarchingDistance = Raymarching(ray);
 

@@ -9,6 +9,9 @@
 #include "Shader/SwitchShader.hpp"
 #include "helpful.hpp"
 
+void processInput(GLFWwindow* window);
+
+
 int main(int args, char* argv[])
 {
     glfwInit();
@@ -32,8 +35,7 @@ int main(int args, char* argv[])
     std::cout << "GL context created" << std::endl;
 
     checkGlError("Context error");
-
-
+    glfwSetKeyCallback(window, Game::keyCallback);
 
 
     glEnable(GL_MULTISAMPLE);
@@ -65,4 +67,13 @@ int main(int args, char* argv[])
         Game::update();
     }
 
+}
+
+void processInput(GLFWwindow* window)
+{
+    int key = 0;
+    int scancode = 0;
+    int action = 0;
+    int mods = 0;
+    Game::keyCallback(window, key, scancode, action, mods);
 }

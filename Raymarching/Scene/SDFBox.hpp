@@ -25,7 +25,7 @@ public:
 
 	virtual float Distance(const Vector3f& position)
 	{
-		Vector3f transformedPosition = Quaternion::RotateVector(Quaternion::Conjugate(m_Rotation), position - m_Position);
+		Vector3f transformedPosition = Quaternion::RotateVector(m_Rotation, position - m_Position);
 		Vector3f q = Vector3f::Abs(transformedPosition) - m_Size;
 		return Vector3f::Length(Vector3f::Max(q, Vector3f::Zero)) + MathUtility::Min(MathUtility::Max(q.x, q.y, q.z), 0.0f);
 	}

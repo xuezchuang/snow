@@ -578,10 +578,10 @@ void ModelGL::rotateCamera(int x, int y)
     mouseY = y;
 
     // constrain x angle -89 < x < 89
-    if(angle.x < -89.0f)
-        angle.x = -89.0f;
-    else if(angle.x > 89.0f)
-        angle.x = 89.0f;
+    //if(angle.x < -89.0f)
+    //    angle.x = -89.0f;
+    //else if(angle.x > 89.0f)
+    //    angle.x = 89.0f;
 
     cam1.rotateTo(angle);
 }
