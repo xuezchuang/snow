@@ -76,4 +76,3 @@ public:
 	static const float PI;
 };
 
-const float MathUtility::PI = 3.141592653f;

@@ -128,12 +128,3 @@ public:
 	float x, y, z;
 };
 
-const Vector3f Vector3f::Zero = Vector3f(0.0f, 0.0f, 0.0f);
-
-const Vector3f Vector3f::One = Vector3f(1.0f, 1.0f, 1.0f);
-
-const Vector3f Vector3f::Up = Vector3f(0.0f, 1.0f, 0.0f);
-
-const Vector3f Vector3f::Right = Vector3f(1.0f, 0.0f, 0.0f);
-
-const Vector3f Vector3f::Forward = Vector3f(0.0f, 0.0f, 1.0f);

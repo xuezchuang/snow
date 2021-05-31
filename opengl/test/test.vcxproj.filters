@@ -7,6 +7,9 @@
     <Filter Include="raytrace">
       <UniqueIdentifier>{81aeb348-2ff0-4198-a72b-befc6f7b009f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{55b65227-b73c-4b85-b87f-1ebca791eb4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\raytrace\shader.frag">
@@ -32,6 +35,15 @@
     <ClCompile Include="helpful.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="program.cpp" />
+    <ClCompile Include="OrbitCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="animUtils.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Matrices.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader\SwitchShader.hpp">
@@ -49,5 +61,11 @@
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="helpful.hpp" />
     <ClInclude Include="Matrix.hpp" />
+    <ClInclude Include="OrbitCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="animUtils.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -231,4 +231,3 @@ public:
 	Vector3f c2;
 };
 
-const Matrix3x3 Matrix3x3::Identity = Matrix3x3(Vector3f::Right, Vector3f::Up, Vector3f::Forward);

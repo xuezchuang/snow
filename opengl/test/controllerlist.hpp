@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "Controller.h"
-
+#include "OrbitCamera.h"
 
 class SceneController:	public Controller
 {
@@ -24,9 +24,7 @@ class SceneController:	public Controller
 		
 		void update();
 		SceneController();
-				
-
-		
+		OrbitCamera m_camera;
 };
 
 #endif

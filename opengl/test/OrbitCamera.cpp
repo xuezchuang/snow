@@ -96,9 +96,6 @@ void OrbitCamera::updateMove(float frameTime)
     }
     else
     {
-        Vector3 p = Gil::interpolate(movingFrom, movingTo,
-                                     movingTime/movingDuration, movingMode);
-        setPosition(p);
     }
 }
 
@@ -121,17 +118,11 @@ void OrbitCamera::updateShift(float frameTime)
         }
         else
         {
-            Vector3 p = Gil::interpolate(shiftingFrom, shiftingTo,
-                                         shiftingTime/shiftingDuration, shiftingMode);
-            setTarget(p);
         }
     }
     // shift with acceleration
     else
     {
-        shiftingSpeed = Gil::accelerate(shifting, shiftingSpeed,
-                                        shiftingMaxSpeed, shiftingAccel, frameTime);
-        setTarget(target + (shiftingVector * shiftingSpeed * frameTime));
     }
 }
 
@@ -154,18 +145,12 @@ void OrbitCamera::updateForward(float frameTime)
         }
         else
         {
-            float d = Gil::interpolate(forwardingFrom, forwardingTo,
-                                       forwardingTime/forwardingDuration, forwardingMode);
-            setDistance(d);
         }
     }
 
     // move forward with acceleration
     else
     {
-        forwardingSpeed = Gil::accelerate(forwarding, forwardingSpeed,
-                                          forwardingMaxSpeed, forwardingAccel, frameTime);
-        setDistance(distance - forwardingSpeed * frameTime);
     }
 }
 
@@ -189,15 +174,9 @@ void OrbitCamera::updateTurn(float frameTime)
     {
         if(quaternionUsed)
         {
-            Quaternion q = Gil::slerp(turningQuaternionFrom, turningQuaternionTo,
-                                      turningTime/turningDuration, turningMode);
-            setRotation(q);
         }
         else
         {
-            Vector3 p = Gil::interpolate(turningAngleFrom, turningAngleTo,
-                                         turningTime/turningDuration, turningMode);
-            setRotation(p);
         }
     }
 }
@@ -464,7 +443,7 @@ void OrbitCamera::setRotation(const Vector3& angle)
     // NOTE: yaw must be negated again for quaternion
     Vector3 reversedAngle(angle.x, -angle.y, angle.z);
     this->quaternion = Quaternion::getQuaternion(position,target);
-    abc::Quaternion qu = abc::Quaternion::FromTo(Vector3f(position.x, position.y, position.z), Vector3f(target.x, target.y, target.z));
+    Quaternion qu = Quaternion::FromTo(Vector3f(position.x, position.y, position.z), Vector3f(target.x, target.y, target.z));
 
     // compute rotation matrix from angle
     matrixRotation = angleToMatrix(angle);
@@ -562,7 +541,7 @@ Vector3 OrbitCamera::getForwardAxis() const
 ///////////////////////////////////////////////////////////////////////////////
 // move the camera position with the given duration
 ///////////////////////////////////////////////////////////////////////////////
-void OrbitCamera::moveTo(const Vector3& to, float duration, Gil::AnimationMode mode)
+void OrbitCamera::moveTo(const Vector3& to, float duration)
 {
     if(duration <= 0.0f)
     {
@@ -570,14 +549,7 @@ void OrbitCamera::moveTo(const Vector3& to, float duration, Gil::AnimationMode m
     }
     else
     {
-        movingFrom = position;
-        movingTo = to;
-        movingVector = movingTo - movingFrom;
-        movingVector.normalize();
-        movingTime = 0;
-        movingDuration = duration;
-        movingMode = mode;
-        moving = true;
+        
     }
 }
 
@@ -587,7 +559,7 @@ void OrbitCamera::moveTo(const Vector3& to, float duration, Gil::AnimationMode m
 // pan the camera target left/right/up/down with the given duration
 // the camera position will be shifted after transform
 ///////////////////////////////////////////////////////////////////////////////
-void OrbitCamera::shiftTo(const Vector3& to, float duration, Gil::AnimationMode mode)
+void OrbitCamera::shiftTo(const Vector3& to, float duration)
 {
     if(duration <= 0.0f)
     {
@@ -595,14 +567,6 @@ void OrbitCamera::shiftTo(const Vector3& to, float duration, Gil::AnimationMode 
     }
     else
     {
-        shiftingFrom = target;
-        shiftingTo = to;
-        shiftingVector = shiftingTo - shiftingFrom;
-        shiftingVector.normalize();
-        shiftingTime = 0;
-        shiftingDuration = duration;
-        shiftingMode = mode;
-        shifting = true;
     }
 }
 
@@ -611,7 +575,7 @@ void OrbitCamera::shiftTo(const Vector3& to, float duration, Gil::AnimationMode 
 ///////////////////////////////////////////////////////////////////////////////
 // shift the camera position and target left/right/up/down
 ///////////////////////////////////////////////////////////////////////////////
-void OrbitCamera::shift(const Vector2& delta, float duration, Gil::AnimationMode mode)
+void OrbitCamera::shift(const Vector2& delta, float duration)
 {
     // get left & up vectors of camera
     Vector3 cameraLeft(-matrix[0], -matrix[4], -matrix[8]);
@@ -624,7 +588,7 @@ void OrbitCamera::shift(const Vector2& delta, float duration, Gil::AnimationMode
     // find new target position
     Vector3 newTarget = target + deltaMovement;
 
-    shiftTo(newTarget, duration, mode);
+    //shiftTo(newTarget, duration, mode);
 }
 
 
@@ -666,7 +630,7 @@ void OrbitCamera::stopShift()
 // it actually moves the camera forward or backward.
 // positive delta means moving forward (decreasing distance)
 ///////////////////////////////////////////////////////////////////////////////
-void OrbitCamera::moveForward(float delta, float duration, Gil::AnimationMode mode)
+void OrbitCamera::moveForward(float delta, float duration)
 {
     if(duration <= 0.0f)
     {
@@ -678,7 +642,6 @@ void OrbitCamera::moveForward(float delta, float duration, Gil::AnimationMode mo
         forwardingTo = distance - delta;
         forwardingTime = 0;
         forwardingDuration = duration;
-        forwardingMode = mode;
         forwarding = true;
     }
 }
@@ -711,7 +674,7 @@ void OrbitCamera::stopForward()
 ///////////////////////////////////////////////////////////////////////////////
 // rotate camera to the given angle with duration
 ///////////////////////////////////////////////////////////////////////////////
-void OrbitCamera::rotateTo(const Vector3& angle, float duration, Gil::AnimationMode mode)
+void OrbitCamera::rotateTo(const Vector3& angle, float duration)
 {
     quaternionUsed = false;
     if(duration <= 0.0f)
@@ -724,7 +687,6 @@ void OrbitCamera::rotateTo(const Vector3& angle, float duration, Gil::AnimationM
         turningAngleTo = angle;
         turningTime = 0;
         turningDuration = duration;
-        turningMode = mode;
         turning = true;
     }
 }
@@ -734,7 +696,7 @@ void OrbitCamera::rotateTo(const Vector3& angle, float duration, Gil::AnimationM
 ///////////////////////////////////////////////////////////////////////////////
 // rotate camera to the given quaternion with duration
 ///////////////////////////////////////////////////////////////////////////////
-void OrbitCamera::rotateTo(const Quaternion& q, float duration, Gil::AnimationMode mode)
+void OrbitCamera::rotateTo(const Quaternion& q, float duration)
 {
     quaternionUsed = true;
     if(duration <= 0.0f)
@@ -747,7 +709,6 @@ void OrbitCamera::rotateTo(const Quaternion& q, float duration, Gil::AnimationMo
         turningQuaternionTo = q;
         turningTime = 0;
         turningDuration = duration;
-        turningMode = mode;
         turning = true;
     }
 }
@@ -758,9 +719,9 @@ void OrbitCamera::rotateTo(const Quaternion& q, float duration, Gil::AnimationMo
 // rotate camera with delta angle
 // NOTE: delta angle must be negated already
 ///////////////////////////////////////////////////////////////////////////////
-void OrbitCamera::rotate(const Vector3& delta, float duration, Gil::AnimationMode mode)
+void OrbitCamera::rotate(const Vector3& delta, float duration)
 {
-    rotateTo(angle + delta, duration, mode);
+    rotateTo(angle + delta, duration);
 }
 
 
@@ -829,7 +790,7 @@ Matrix4 OrbitCamera::angleToMatrix(const Vector3& angle)
 		matrix3(0, 0) = left.x;   matrix3(0, 1) = up.x;   matrix3(0, 2) = forward.x;
 		matrix3(1, 0) = left.y;   matrix3(1, 1) = up.y;   matrix3(1, 2) = forward.y;
 		matrix3(2, 0) = left.z;   matrix3(2, 1) = up.z;   matrix3(2, 2) = forward.z;
-		abc::Quaternion qu = abc::Quaternion::MatrixToQuaternion(matrix3);
+		Quaternion qu = Quaternion::MatrixToQuaternion(matrix3);
 
         Quaternion qua1(qu.w, qu.x, qu.y, qu.z);
 		Matrix4 pp1 = qua1.getMatrix();

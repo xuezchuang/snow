@@ -1,8 +1,23 @@
 #include "raytrace.hpp"
 #include "../helpful.hpp"
-
-
 #include "../Math/Quaternion.hpp"
+
+const Vector3f Vector3f::Zero = Vector3f(0.0f, 0.0f, 0.0f);
+
+const Vector3f Vector3f::One = Vector3f(1.0f, 1.0f, 1.0f);
+
+const Vector3f Vector3f::Up = Vector3f(0.0f, 1.0f, 0.0f);
+
+const Vector3f Vector3f::Right = Vector3f(1.0f, 0.0f, 0.0f);
+
+const Vector3f Vector3f::Forward = Vector3f(0.0f, 0.0f, 1.0f);
+
+const float MathUtility::PI = 3.141592653f;
+
+const Quaternion Quaternion::Identity = Quaternion(0.0f, 0.0f, 1.0f, 0.0f);
+
+const Matrix3x3 Matrix3x3::Identity = Matrix3x3(Vector3f::Right, Vector3f::Up, Vector3f::Forward);
+
 Shader_raytrace::Shader_raytrace()
 {
 

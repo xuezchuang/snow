@@ -11,106 +11,108 @@
 ////////////////////////////////////////////////////////////
 // Classes /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-
-class Quaternion
+namespace abc
 {
-public:
-
-	Quaternion() : x(0.0f), y(0.0f), z(0.0f), w(0.0f)
+	class Quaternion
 	{
-		// DO NOTHING
-	}
+	public:
 
-	Quaternion(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w)
-	{
-		// DO NOTHING
-	}
+		Quaternion() : x(0.0f), y(0.0f), z(0.0f), w(0.0f)
+		{
+			// DO NOTHING
+		}
 
-	Quaternion(const Vector3f& axis, float radian)
-	{
-		float theta = radian * 0.5f;
-		float sinTheta = sin(theta);
-		float cosTheta = cos(theta);
+		Quaternion(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w)
+		{
+			// DO NOTHING
+		}
 
-		x = axis.x * sinTheta;
-		y = axis.y * sinTheta;
-		z = axis.z * sinTheta;
-		w = cosTheta;
-	}
+		Quaternion(const Vector3f& axis, float radian)
+		{
+			float theta = radian * 0.5f;
+			float sinTheta = sin(theta);
+			float cosTheta = cos(theta);
 
-	Quaternion(const Vector3f& from, const Vector3f& to)
-	{
-		(*this) = FromTo(from, to);
-	}
+			x = axis.x * sinTheta;
+			y = axis.y * sinTheta;
+			z = axis.z * sinTheta;
+			w = cosTheta;
+		}
 
-	~Quaternion()
-	{
-		// DO NOTHING
-	}
+		Quaternion(const Vector3f& from, const Vector3f& to)
+		{
+			(*this) = FromTo(from, to);
+		}
 
-public:
+		~Quaternion()
+		{
+			// DO NOTHING
+		}
 
-	inline Quaternion& operator=(const Quaternion& other) { x = other.x; y = other.y; z = other.z; w = other.w; return *this; }
+	public:
 
-	inline Quaternion operator*(const Quaternion& other) const { return Quaternion::Multiply(*this, other); }
+		inline Quaternion& operator=(const Quaternion& other) { x = other.x; y = other.y; z = other.z; w = other.w; return *this; }
 
-	inline bool operator==(const Quaternion& other) const { return (x == other.x && y == other.y && z == other.z && w == other.w); }
-	inline bool operator!=(const Quaternion& other) const { return (x != other.x || y != other.y || z != other.z || w != other.w); }
+		inline Quaternion operator*(const Quaternion& other) const { return Quaternion::Multiply(*this, other); }
 
-public:
+		inline bool operator==(const Quaternion& other) const { return (x == other.x && y == other.y && z == other.z && w == other.w); }
+		inline bool operator!=(const Quaternion& other) const { return (x != other.x || y != other.y || z != other.z || w != other.w); }
 
-	static Quaternion Multiply(const Quaternion& q1, const Quaternion& q2)
-	{
-		return Quaternion
-		(
-			(q1.w * q2.x) + (q1.x * q2.w) + (q1.y * q2.z) - (q1.z * q2.y),
-			(q1.w * q2.y) - (q1.x * q2.z) + (q1.y * q2.w) + (q1.z * q2.x),
-			(q1.w * q2.z) + (q1.x * q2.y) - (q1.y * q2.x) + (q1.z * q2.w),
-			(q1.w * q2.w) - (q1.x * q2.x) - (q1.y * q2.y) - (q1.z * q2.z)
-		);
-	}
+	public:
 
-	static Quaternion FromTo(const Vector3f& from, const Vector3f& to)
-	{
-		Matrix3x3 matrixFromTo = Matrix3x3::FromTo(from, to);
-		return MatrixToQuaternion(matrixFromTo);
-	}
+		static Quaternion Multiply(const Quaternion& q1, const Quaternion& q2)
+		{
+			return Quaternion
+			(
+				(q1.w * q2.x) + (q1.x * q2.w) + (q1.y * q2.z) - (q1.z * q2.y),
+				(q1.w * q2.y) - (q1.x * q2.z) + (q1.y * q2.w) + (q1.z * q2.x),
+				(q1.w * q2.z) + (q1.x * q2.y) - (q1.y * q2.x) + (q1.z * q2.w),
+				(q1.w * q2.w) - (q1.x * q2.x) - (q1.y * q2.y) - (q1.z * q2.z)
+			);
+		}
 
-	static Quaternion AxisRadian(const Vector3f& axis, float radian)
-	{
-		return Quaternion(axis, radian);
-	}
+		static Quaternion FromTo(const Vector3f& from, const Vector3f& to)
+		{
+			Matrix3x3 matrixFromTo = Matrix3x3::FromTo(from, to);
+			return MatrixToQuaternion(matrixFromTo);
+		}
 
-	static Quaternion Conjugate(const Quaternion& q)
-	{
-		return Quaternion(-q.x, -q.y, -q.z, q.w);
-	}
+		static Quaternion AxisRadian(const Vector3f& axis, float radian)
+		{
+			return Quaternion(axis, radian);
+		}
 
-	static Quaternion MatrixToQuaternion(Matrix3x3& m)
-	{
-		float w = sqrt(1.0f + m(0, 0) + m(1, 1) + m(2, 2)) * 0.5f;
-		float scaler = 1.0f / (w * 4.0f);
-		float x = (m(2, 1) - m(1, 2)) * scaler;
-		float y = (m(0, 2) - m(2, 0)) * scaler;
-		float z = (m(1, 0) - m(0, 1)) * scaler;
-		return Quaternion(x, y, z, w);
-	}
+		static Quaternion Conjugate(const Quaternion& q)
+		{
+			return Quaternion(-q.x, -q.y, -q.z, q.w);
+		}
 
-	static Vector3f RotateVector(const Quaternion& quat, const Vector3f& pos)
-	{
-		Quaternion quatPos = Quaternion(pos.x, pos.y, pos.z, 0.0f);
-		Quaternion quatRotated = quat * quatPos * Quaternion::Conjugate(quat);
-		return Vector3f(quatRotated.x, quatRotated.y, quatRotated.z);
-	}
+		static Quaternion MatrixToQuaternion(Matrix3x3& m)
+		{
+			float w = sqrt(1.0f + m(0, 0) + m(1, 1) + m(2, 2)) * 0.5f;
+			float scaler = 1.0f / (w * 4.0f);
+			float x = (m(2, 1) - m(1, 2)) * scaler;
+			float y = (m(0, 2) - m(2, 0)) * scaler;
+			float z = (m(1, 0) - m(0, 1)) * scaler;
+			return Quaternion(x, y, z, w);
+		}
 
-public:
+		static Vector3f RotateVector(const Quaternion& quat, const Vector3f& pos)
+		{
+			Quaternion quatPos = Quaternion(pos.x, pos.y, pos.z, 0.0f);
+			Quaternion quatRotated = quat * quatPos * Quaternion::Conjugate(quat);
+			return Vector3f(quatRotated.x, quatRotated.y, quatRotated.z);
+		}
 
-	float x, y, z, w;
+	public:
 
-public:
+		float x, y, z, w;
 
-	static const Quaternion Identity;
+	public:
 
-};
+		static const Quaternion Identity;
 
-const Quaternion Quaternion::Identity = Quaternion(0.0f, 0.0f, 1.0f, 0.0f);
+	};
+
+	const Quaternion Quaternion::Identity = Quaternion(0.0f, 0.0f, 1.0f, 0.0f);
+}

@@ -202,7 +202,7 @@ public:
     friend Vector3 operator*(const Vector3& vec, const Matrix4& m); // pre-multiplication
     friend Vector4 operator*(const Vector4& vec, const Matrix4& m); // pre-multiplication
     friend std::ostream& operator<<(std::ostream& os, const Matrix4& m);
-
+    float m[16];
 protected:
 
 private:
@@ -210,7 +210,7 @@ private:
                             float m3, float m4, float m5,
                             float m6, float m7, float m8);
 
-    float m[16];
+    
     float tm[16];                                       // transpose m
 
 };

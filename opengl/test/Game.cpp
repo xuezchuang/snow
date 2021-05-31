@@ -49,7 +49,7 @@ void Game::mouseClickCallback(GLFWwindow* w, int b, int a, int modifiers)
 	float fy = 2*(Dimension::getHeight()/2 - y)/Dimension::getHeight();
 
 
-	controller->mouse(b, a);//, fx, fy);
+	//controller->mouse(b, a);//, fx, fy);
 }
 
 void Game::keyCallback(GLFWwindow* w, int key, int scancode, int action, int mods)

@@ -36,7 +36,8 @@ int main(int args, char* argv[])
 
     checkGlError("Context error");
     glfwSetKeyCallback(window, Game::keyCallback);
-
+    glfwSetMouseButtonCallback(window, Game::mouseClickCallback);
+    
 
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_BLEND);

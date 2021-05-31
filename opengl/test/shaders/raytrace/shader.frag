@@ -8,6 +8,7 @@ layout (std140) uniform settings {
 };
 
 uniform bool bnew;
+uniform float kBoxSphereRotation_Radio;
 
 vec3 col[4] = vec3[](
 	vec3(1,1,1),
@@ -116,13 +117,15 @@ vec3	light_m_Direction  = normalize(kLightPosition);
 vec3	kCameraPosition = vec3(0f, 0.1f, -6.0f);
 vec4	kCameraRotation = FromTo(vec3(0.0f, 0.0f, 1.0f),normalize(-kCameraPosition));
 
+
 float	kSphereRadius = 1.0f;
 vec3	kSpherePosition = vec3(0.0f, 0.0f, 0.0f);
 vec4	kSphereRotation = Identity;
 vec3	kBoxPosition = vec3(0.0f, 0.0f, 0.0f);
 vec3	kBoxSize = vec3(0.8f, 0.8f, 0.8f);
 vec4	kBoxRotation = Identity;
-vec4	kBoxSphereRotation = AxisRadian(vec3(0,1,0),PI*0.15f);
+//vec4	kBoxSphereRotation = AxisRadian(vec3(0,1,0),PI*0.15f);
+vec4	kBoxSphereRotation = AxisRadian(vec3(0,1,0),kBoxSphereRotation_Radio);
 
 vec3	kPlanePosition = vec3(0.0f, -0.8f, 0.0f);
 vec3	kPlaneNormal = vec3(0.0f, 1.0f, 0.0f);

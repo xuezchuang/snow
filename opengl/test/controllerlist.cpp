@@ -14,6 +14,8 @@
 
 SceneController::SceneController()
 {
+    m_camera.lookAt(0, 0.1f, -6.0f, 0, 0, 0);
+
     glDisable(GL_DEPTH_TEST);
 
 
@@ -126,7 +128,8 @@ void SceneController::update()
     checkGlError("Error at end of frame");
 }
 bool bnew = 0;
-
+float kBoxSphereRotation_Radio = 0.1f;
+const float ANGLE_SCALE = 0.2f;
 void SceneController::keyboard(int key, int action)
 {
     if (action == 0)
@@ -141,6 +144,16 @@ void SceneController::keyboard(int key, int action)
     {
         bnew = !bnew;
 		glUniform1i(glGetUniformLocation(3, "bnew"),bnew);
+    }
+    else if(key == 82)
+	{
+		kBoxSphereRotation_Radio += 0.1f;
+		glUniform1f(glGetUniformLocation(3, "kBoxSphereRotation_Radio"), kBoxSphereRotation_Radio);
+	}
+    else if (key == 84)
+    {
+		kBoxSphereRotation_Radio -= 0.1f;
+		glUniform1f(glGetUniformLocation(3, "kBoxSphereRotation_Radio"), kBoxSphereRotation_Radio);
     }
     else
     {
