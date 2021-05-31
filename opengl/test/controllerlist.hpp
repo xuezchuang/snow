@@ -22,6 +22,7 @@ class SceneController:	public Controller
 		
 		virtual void keyboard(int, int);
 		
+		virtual void mouse(int _x, int _y);
 		void update();
 		SceneController();
 		OrbitCamera m_camera;

@@ -440,7 +440,6 @@ void OrbitCamera::lookAt(float px, float py, float pz,
 
 
 
-#include "Math/Quaternion.hpp"
 ///////////////////////////////////////////////////////////////////////////////
 // set transform matrix with rotation angles (degree)
 // NOTE: the angle is for camera, so yaw value must be negated for computation.
@@ -464,7 +463,6 @@ void OrbitCamera::setRotation(const Vector3& angle)
     // NOTE: yaw must be negated again for quaternion
     Vector3 reversedAngle(angle.x, -angle.y, angle.z);
     this->quaternion = Quaternion::getQuaternion(position,target);
-    abc::Quaternion qu = abc::Quaternion::FromTo(Vector3f(position.x, position.y, position.z), Vector3f(target.x, target.y, target.z));
 
     // compute rotation matrix from angle
     matrixRotation = angleToMatrix(angle);
@@ -823,34 +821,34 @@ Matrix4 OrbitCamera::angleToMatrix(const Vector3& angle)
     matrix.setColumn(2, forward);
 
     {
-        
-		float sx, sy, cx, cy, theta;
-		Matrix3x3 matrix3;
-		matrix3(0, 0) = left.x;   matrix3(0, 1) = up.x;   matrix3(0, 2) = forward.x;
-		matrix3(1, 0) = left.y;   matrix3(1, 1) = up.y;   matrix3(1, 2) = forward.y;
-		matrix3(2, 0) = left.z;   matrix3(2, 1) = up.z;   matrix3(2, 2) = forward.z;
-		abc::Quaternion qu = abc::Quaternion::MatrixToQuaternion(matrix3);
+  //      
+		//float sx, sy, cx, cy, theta;
+		//Matrix3x3 matrix3;
+		//matrix3(0, 0) = left.x;   matrix3(0, 1) = up.x;   matrix3(0, 2) = forward.x;
+		//matrix3(1, 0) = left.y;   matrix3(1, 1) = up.y;   matrix3(1, 2) = forward.y;
+		//matrix3(2, 0) = left.z;   matrix3(2, 1) = up.z;   matrix3(2, 2) = forward.z;
+		//abc::Quaternion qu = abc::Quaternion::MatrixToQuaternion(matrix3);
 
-        Quaternion qua1(qu.w, qu.x, qu.y, qu.z);
-		Matrix4 pp1 = qua1.getMatrix();
+  //      Quaternion qua1(qu.w, qu.x, qu.y, qu.z);
+		//Matrix4 pp1 = qua1.getMatrix();
 
-		Vector4 ttt;
-		theta = angle.x * DEG2RAD;
-		sx = sinf(theta / 2);
-		cx = cosf(theta / 2);
-		// rotation angle about Y-axis (yaw)
-		theta = -angle.y * DEG2RAD;
-		//theta = angle.y * DEG2RAD;
-		sy = sinf(theta / 2);
-		cy = cosf(theta / 2);
-        ttt[0] = cx * cy;
-		ttt[1] = sx * cy;
-		ttt[2] = cx * sy;
-		ttt[3] = sx * sy;//判断出这样算的四元数和矩阵转换过来的是一致的,查阅的资料中此处应该为-sx*sy 2021.5.31 
-		
-		Quaternion qua(ttt[0], ttt[1], ttt[2], ttt[3]);
-		Matrix4 pp = qua.getMatrix();
-        int a = 3;
+		//Vector4 ttt;
+		//theta = angle.x * DEG2RAD;
+		//sx = sinf(theta / 2);
+		//cx = cosf(theta / 2);
+		//// rotation angle about Y-axis (yaw)
+		//theta = -angle.y * DEG2RAD;
+		////theta = angle.y * DEG2RAD;
+		//sy = sinf(theta / 2);
+		//cy = cosf(theta / 2);
+  //      ttt[0] = cx * cy;
+		//ttt[1] = sx * cy;
+		//ttt[2] = cx * sy;
+		//ttt[3] = sx * sy;//判断出这样算的四元数和矩阵转换过来的是一致的,查阅的资料中此处应该为-sx*sy 2021.5.31 
+		//
+		//Quaternion qua(ttt[0], ttt[1], ttt[2], ttt[3]);
+		//Matrix4 pp = qua.getMatrix();
+  //      int a = 3;
     }
     return matrix;
 }

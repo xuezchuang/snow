@@ -45,6 +45,7 @@ class Game
 		
 		static void mouseClickCallback(GLFWwindow* w, int b, int a, int modifiers);
 		static void keyCallback(GLFWwindow* w, int key, int scancode, int action, int mods);
+		static void mousemove(GLFWwindow* w, double xpos, double ypos);
 		
 		
 };

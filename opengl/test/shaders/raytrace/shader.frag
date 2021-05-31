@@ -114,7 +114,8 @@ vec3	kLightPosition = vec3(20.0f, 20.0f, -5.0f);
 vec3	light_m_Direction  = normalize(kLightPosition);
 
 
-vec3	kCameraPosition = vec3(0f, 0.1f, -6.0f);
+//vec3	kCameraPosition = vec3(0f, 0.1f, -6.0f);
+uniform vec3 kCameraPosition;
 vec4	kCameraRotation = FromTo(vec3(0.0f, 0.0f, 1.0f),normalize(-kCameraPosition));
 
 

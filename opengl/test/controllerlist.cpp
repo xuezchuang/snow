@@ -38,6 +38,7 @@ SceneController::SceneController()
 	GLuint bindPoint = ShaderManager::getBoundUniform<Shader_raytrace>().sphereBinding;
 	glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, ubo);
 
+    glUniform3f(glGetUniformLocation(3, "kCameraPosition"), m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
     
 
     float bounds = Dimension::getRight();
@@ -130,6 +131,7 @@ void SceneController::update()
 bool bnew = 0;
 float kBoxSphereRotation_Radio = 0.1f;
 const float ANGLE_SCALE = 0.2f;
+float abc = 0;
 void SceneController::keyboard(int key, int action)
 {
     if (action == 0)
@@ -147,13 +149,17 @@ void SceneController::keyboard(int key, int action)
     }
     else if(key == 82)
 	{
-		kBoxSphereRotation_Radio += 0.1f;
-		glUniform1f(glGetUniformLocation(3, "kBoxSphereRotation_Radio"), kBoxSphereRotation_Radio);
+		//kBoxSphereRotation_Radio += 0.1f;
+		//glUniform1f(glGetUniformLocation(3, "kBoxSphereRotation_Radio"), kBoxSphereRotation_Radio);
+        abc += 0.1;
+        Vector3 v(abc, 0, 0);
+		m_camera.rotate(v);
+		glUniform3f(glGetUniformLocation(3, "kCameraPosition"), m_camera.getPosition().x, m_camera.getPosition().y, -m_camera.getPosition().z);
 	}
     else if (key == 84)
     {
-		kBoxSphereRotation_Radio -= 0.1f;
-		glUniform1f(glGetUniformLocation(3, "kBoxSphereRotation_Radio"), kBoxSphereRotation_Radio);
+		//kBoxSphereRotation_Radio -= 0.1f;
+		//glUniform1f(glGetUniformLocation(3, "kBoxSphereRotation_Radio"), kBoxSphereRotation_Radio);
     }
     else
     {
@@ -162,4 +168,12 @@ void SceneController::keyboard(int key, int action)
             //spheres[i][0] -= 1;
     }
 
+}
+void SceneController::mouse(int _x, int _y)
+{
+    int offx = x - _x;
+    int offy = y - _y;
+    Vector3 v(offx*0.1, offy*0.1, 0);
+    m_camera.rotate(v);
+    glUniform3f(glGetUniformLocation(3, "kCameraPosition"), m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
 }

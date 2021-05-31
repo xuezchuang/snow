@@ -36,11 +36,12 @@ void Game::flip()
 {
 	glfwSwapBuffers(window);
 }
-
+double x, y;
+bool bfirst = false;
 void Game::mouseClickCallback(GLFWwindow* w, int b, int a, int modifiers)
 {
+	bfirst = !bfirst;
 	
-	double x, y;
 	glfwGetCursorPos(w, &x, &y);
 	
 	std::cout << "M: " << x << " " << y << std::endl;
@@ -48,8 +49,16 @@ void Game::mouseClickCallback(GLFWwindow* w, int b, int a, int modifiers)
 	float fx = 2*(x - Dimension::getWidth()/2)/Dimension::getHeight();
 	float fy = 2*(Dimension::getHeight()/2 - y)/Dimension::getHeight();
 
-
+	controller->startmouse(x, y);
 	//controller->mouse(b, a);//, fx, fy);
+}
+
+void Game::mousemove(GLFWwindow* w, double xpos, double ypos)
+{
+	if (bfirst)
+	{
+		controller->mouse((int)xpos, (int)ypos);
+	}
 }
 
 void Game::keyCallback(GLFWwindow* w, int key, int scancode, int action, int mods)

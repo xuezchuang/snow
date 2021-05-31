@@ -14,7 +14,6 @@
 
 #include <cmath>
 #include "Vectors.h"
-#include "Vectors.h"
 #include "Matrices.h"
 #include "Quaternion.hpp"
 
