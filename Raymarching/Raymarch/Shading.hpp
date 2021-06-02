@@ -88,21 +88,24 @@ private:
 		// set inverse rotation matrix: M^-1 = M^T for Euclidean transform
 		matrixRotation.identity();
 
-		if (forward.z < 0)
-		{
-			left.x = -left.x; up.x = -up.x; forward.x = -forward.x;
-			left.z = -left.z; up.z = -up.z; forward.z = -forward.z;
-			matrixRotation.setRow(0, left);
-			matrixRotation.setRow(1, up);
-			matrixRotation.setRow(2, forward);
-		}
-		else
-		{
-			matrixRotation.setRow(0, -left);
-			matrixRotation.setRow(1, up);
-			matrixRotation.setRow(2, -forward);
-		}
-
+		//if (forward.z < 0)
+		//{
+		//	left.x = -left.x; up.x = -up.x; forward.x = -forward.x;
+		//	left.z = -left.z; up.z = -up.z; forward.z = -forward.z;
+		//	matrixRotation.setRow(0, left);
+		//	matrixRotation.setRow(1, up);
+		//	matrixRotation.setRow(2, forward);
+		//}
+		//else
+		//{
+		//	matrixRotation.setRow(0, -left);
+		//	matrixRotation.setRow(1, up);
+		//	matrixRotation.setRow(2, -forward);
+		//}
+		matrixRotation.setRow(0, left);
+		matrixRotation.setRow(1, up);
+		matrixRotation.setRow(2, forward);
+		matrixRotation.invert();
 	}
 	Matrix4 matrixRotation;
 public:
@@ -178,28 +181,28 @@ private:
 		// Create ray
 		Ray ray;
 
-		
+		Matrix3x3 abc = Matrix3x3::Identity;
 		{
-			Matrix3x3 abc = Matrix3x3::Identity;
+			
 			const float* tt = matrixRotation.get();
-			abc.c0[0] = -tt[0]; abc.c0[1] = -tt[1]; abc.c0[2] = -tt[2];
-			abc.c1[0] = -tt[4]; abc.c1[1] = -tt[5]; abc.c1[2] = -tt[6];
+			abc.c0[0] = tt[0]; abc.c0[1] = tt[1]; abc.c0[2] = tt[2];
+			abc.c1[0] = tt[4]; abc.c1[1] = tt[5]; abc.c1[2] = tt[6];
 			abc.c2[0] = tt[8]; abc.c2[1] = tt[9]; abc.c2[2] = tt[10];
-			_camera.m_Rotation = Quaternion::MatrixToQuaternion(abc);
+			//_camera.m_Rotation = Quaternion::MatrixToQuaternion(abc);
 			int a = 3;
 		}
 
 		ray.m_Origin = _camera.m_Position;
 		ray.m_Direction = Vector3f::Normalize(Quaternion::RotateVector(_camera.m_Rotation, Vector3f(ratioUV.x, ratioUV.y, 1.0f)));
 		
-		Vector3 temp2 = matrixRotation * Vector3(ratioUV.x, ratioUV.y, 1);
+		Vector3 temp2 = matrixRotation * Vector3(-ratioUV.x, ratioUV.y, -1);
 		temp2.normalize();
 
 		if (fabs(temp2.x - ray.m_Direction.x) > 1e-3 || fabs(temp2.z - ray.m_Direction.z) > 1e-3 || fabs(temp2.y - ray.m_Direction.y) > 1e-3)
 		{
 			int a = 3;
 		}
-		//ray.m_Direction = Vector3f(temp2.x, temp2.y, temp2.z);
+		ray.m_Direction = Vector3f(temp2.x, temp2.y, temp2.z);
 
 		
 		// Raymarching for hit point
@@ -296,15 +299,15 @@ private:
 	const Color3f  kLightColor = Color3f::White;
 	const Vector3f kLightPosition = Vector3f(20.0f, 20.0f, -5.0f);
 
-	const Vector3f kCameraPosition = Vector3f(0.0f, 1.5f, -4.0f);
+	const Vector3f kCameraPosition = Vector3f(2.0f, 1.5f, 4.0f);
 
 	const float      kSphereRadius = 1.0f;
 	const Vector3f   kSpherePosition = Vector3f(0.0f, 0.0f, 0.0f);
-	const Quaternion kSphereRotation = Quaternion::Identity;
+	const Quaternion kSphereRotation = Quaternion(Vector3f::Normalize(kCameraPosition), 0); ////Quaternion::Identity;
 	const Vector3f   kBoxPosition = Vector3f(0.0f, 0.0f, 0.0f);
 	const Vector3f   kBoxSize = Vector3f(0.8f, 0.8f, 0.8f);
-	const Quaternion kBoxRotation = Quaternion::Identity;
-	const Quaternion kBoxSphereRotation = Quaternion::AxisRadian(Vector3f::Up, MathUtility::PI * 0.15f);
+	const Quaternion kBoxRotation = Quaternion(Vector3f::Normalize(kCameraPosition), 0); //Quaternion::Identity;
+	const Quaternion kBoxSphereRotation = Quaternion(Vector3f::Normalize(kCameraPosition),0); //Quaternion::AxisRadian(Vector3f::Up, MathUtility::PI * 0.15f);
 
 	const Vector3f   kPlanePosition = Vector3f(0.0f, -0.8f, 0.0f);
 	const Vector3f   kPlaneNormal = Vector3f(0.0f, 1.0f, 0.0f);
