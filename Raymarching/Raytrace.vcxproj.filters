@@ -24,12 +24,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shader\shader.vert">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="shader\shader.frag">
-      <Filter>源文件</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Matrices.h">

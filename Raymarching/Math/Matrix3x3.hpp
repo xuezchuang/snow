@@ -194,11 +194,51 @@ public:
 		Vector3f v = Vector3f::Cross(vec1, vec2);
 		float c = Vector3f::Dot(vec1, vec2);
 		float k = 1.0f / (c + 1.0f);
-		return Matrix3x3
+		Matrix3x3 abc
 		(
 			Vector3f(v.x * v.x * k + c, v.x * v.y * k + v.z, v.x * v.z * k - v.y),
 			Vector3f(v.y * v.x * k - v.z, v.y * v.y * k + c, v.y * v.z * k + v.x),
 			Vector3f(v.z * v.x * k + v.y, v.z * v.y * k - v.x, v.z * v.z * k + c)
+		);
+
+		return abc;
+	}
+
+	static Matrix3x3 FromTo_Up(const Vector3f& from, const Vector3f& to)
+	{
+		const float kEpsilon = 0.00001f;
+
+		Vector3f forward = Vector3f::Normalize(from - to);
+		Vector3f up, left;
+		if (fabs(forward.x) < kEpsilon && fabs(forward.z) < kEpsilon)
+		{
+			// forward vector is pointing +Y axis
+			if (forward.y > 0)
+			{
+				up = Vector3f(0, 0, -1);
+			}
+			// forward vector is pointing -Y axis
+			else
+			{
+				up = Vector3f(0, 0, 1);
+			}
+		}
+		// in general, up vector is straight up
+		else
+		{
+			up = Vector3f(0, 1, 0);
+		}
+
+		// compute the left vector of rotation matrix
+		left = Vector3f::Normalize(Vector3f::Cross(up, forward));
+		
+		up = Vector3f::Normalize(Vector3f::Cross(forward, left));
+
+		return Matrix3x3
+		(
+			Vector3f(left.x,up.x,forward.x),
+			Vector3f(left.y,up.y,forward.y),
+			Vector3f(left.z,up.z,forward.z)
 		);
 	}
 
@@ -231,3 +271,4 @@ public:
 	Vector3f c2;
 };
 
+const Matrix3x3 Matrix3x3::Identity = Matrix3x3(Vector3f::Right, Vector3f::Up, Vector3f::Forward);

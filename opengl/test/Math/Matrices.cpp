@@ -791,10 +791,13 @@ Vector3 Matrix4::getAngle() const
     // NOTE: asin() returns -90~+90, so correct the angle range -180~+180
     // using z value of forward vector
     yaw = RAD2DEG * asinf(m[8]);
-    if(m[10] < 0)
+    if (m[10] < 0)
     {
-        if(yaw >= 0) yaw = 180.0f - yaw;
-        else         yaw =-180.0f - yaw;
+        if (yaw >= 0) yaw = 180.0f - yaw;
+        else
+        {
+            yaw = -180.0f - yaw;
+        }
     }
 
     // find roll (around z-axis) and pitch (around x-axis)
@@ -808,6 +811,11 @@ Vector3 Matrix4::getAngle() const
     {
         roll = RAD2DEG * atan2f(-m[4], m[0]);
         pitch = RAD2DEG * atan2f(-m[9], m[10]);
+		if (m[10] < 0)
+		{
+			roll += 180.f;
+			pitch += 180.f;
+		}
     }
 
     return Vector3(pitch, yaw, roll);

@@ -94,7 +94,7 @@ private:
     void computeMatrix();
 
     // static functions
-    static Matrix4 angleToMatrix(const Vector3& angles);
+    static Matrix4 angleToMatrix(const Vector3& paramangles);
     static Vector3 matrixToAngle(const Matrix4& matrix);
     //static Vector3 lookAtToAngle(const Vector3& position, const Vector3& target);
 

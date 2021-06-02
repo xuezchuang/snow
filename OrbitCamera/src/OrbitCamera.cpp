@@ -336,11 +336,11 @@ void OrbitCamera::lookAt(const Vector3& position, const Vector3& target)
     matrix.setRow(2, forward);
 
     // set translation part
-    Vector3 trans;
-    trans.x = matrix[0]*-position.x + matrix[4]*-position.y + matrix[8]*-position.z;
-    trans.y = matrix[1]*-position.x + matrix[5]*-position.y + matrix[9]*-position.z;
-    trans.z = matrix[2]*-position.x + matrix[6]*-position.y + matrix[10]*-position.z;
-    matrix.setColumn(3, trans);
+	Vector3 trans;
+	trans.x = matrix[0] * -position.x + matrix[4] * -position.y + matrix[8] * -position.z;
+	trans.y = matrix[1] * -position.x + matrix[5] * -position.y + matrix[9] * -position.z;
+	trans.z = matrix[2] * -position.x + matrix[6] * -position.y + matrix[10] * -position.z;
+	matrix.setColumn(3, trans);
 
     // set Euler angles
     angle = matrixToAngle(matrixRotation);
@@ -406,12 +406,19 @@ void OrbitCamera::lookAt(const Vector3& position, const Vector3& target, const V
     matrix.setRow(2, forward);
 
     // set translation
-    Vector3 trans;
-    trans.x = matrix[0]*-position.x + matrix[4]*-position.y + matrix[8]*-position.z;
-    trans.y = matrix[1]*-position.x + matrix[5]*-position.y + matrix[9]*-position.z;
-    trans.z = matrix[2]*-position.x + matrix[6]*-position.y + matrix[10]*-position.z;
-    matrix.setColumn(3, trans);
+	Vector3 trans;
+	trans.x = matrix[0] * -position.x + matrix[4] * -position.y + matrix[8] * -position.z;
+	trans.y = matrix[1] * -position.x + matrix[5] * -position.y + matrix[9] * -position.z;
+	trans.z = matrix[2] * -position.x + matrix[6] * -position.y + matrix[10] * -position.z;
+	matrix.setColumn(3, trans);
 
+	//Vector3 trans;
+	//trans.x = matrix[0] * position.x + matrix[4] * position.y + matrix[8] * position.z;
+	//trans.y = matrix[1] * position.x + matrix[5] * position.y + matrix[9] * position.z;
+	//trans.z = matrix[2] * position.x + matrix[6] * position.y + matrix[10] * position.z;
+	//matrix.setColumn(3, trans);
+
+	matrix.setColumn(3, trans);
     // set Euler angles
     angle = matrixToAngle(matrixRotation);
 
@@ -457,6 +464,9 @@ void OrbitCamera::setRotation(const Vector3& angle)
 {
     // remember angles
     // NOTE: assume all angles are already reversed for camera
+    
+
+    //Vector3 paramangles = angle - this->angle;
     this->angle = angle;
 
     // remember quaternion value
@@ -778,24 +788,24 @@ void OrbitCamera::rotate(const Vector3& delta, float duration, Gil::AnimationMod
 // |0 Cx -Sx|*|  0  1  0|*|Sz  Cz 0| = | SxSyCz+CxSz -SxSySz+CxCz -SxCy|
 // |0 Sx  Cx| |-Sy  0 Cy| | 0   0 1|   |-CxSyCz+SxSz  CxSySz+SxCz  CxCy|
 ///////////////////////////////////////////////////////////////////////////////
-Matrix4 OrbitCamera::angleToMatrix(const Vector3& angle)
+Matrix4 OrbitCamera::angleToMatrix(const Vector3& paramangles)
 {
     float sx, sy, sz, cx, cy, cz, theta;
     Vector3 left, up, forward;
 
     // rotation angle about X-axis (pitch)
-    theta = angle.x * DEG2RAD;
+    theta = paramangles.x * DEG2RAD;
     sx = sinf(theta);
     cx = cosf(theta);
 
     // rotation angle about Y-axis (yaw)
-    theta = -angle.y * DEG2RAD;
+    theta = -paramangles.y * DEG2RAD;
     //theta = angle.y * DEG2RAD;
     sy = sinf(theta);
     cy = cosf(theta);
 
     // rotation angle about Z-axis (roll)
-    theta = angle.z * DEG2RAD;
+    theta = paramangles.z * DEG2RAD;
     sz = sinf(theta);
     cz = cosf(theta);
 
@@ -874,6 +884,7 @@ Vector3 OrbitCamera::matrixToAngle(const Matrix4& matrix)
     Vector3 angle = matrix.getAngle();
 
     // reverse yaw
+    //angle.y = -angle.y;
     angle.y = -angle.y;
     angle.z = angle.z;
     return angle;

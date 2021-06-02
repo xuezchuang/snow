@@ -21,8 +21,8 @@ int main(int args, char* argv[])
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    int width = 800;
-    int height = 600;
+    int width = 400;
+    int height = 400;
     GLFWwindow* window = glfwCreateWindow(width, height, "", NULL, NULL);
 
     glfwMakeContextCurrent(window);

@@ -14,7 +14,7 @@
 
 SceneController::SceneController()
 {
-    m_camera.lookAt(0, 0.1f, -6.0f, 0, 0, 0);
+    m_camera.lookAt(0, 1.5f, -4.0f, 0, 0, 0);
 
     glDisable(GL_DEPTH_TEST);
 
@@ -151,10 +151,10 @@ void SceneController::keyboard(int key, int action)
 	{
 		//kBoxSphereRotation_Radio += 0.1f;
 		//glUniform1f(glGetUniformLocation(3, "kBoxSphereRotation_Radio"), kBoxSphereRotation_Radio);
-        abc += 0.1;
-        Vector3 v(abc, 0, 0);
+        abc += 0.1f;
+        Vector3 v(0, abc, 0);
 		m_camera.rotate(v);
-		glUniform3f(glGetUniformLocation(3, "kCameraPosition"), m_camera.getPosition().x, m_camera.getPosition().y, -m_camera.getPosition().z);
+		glUniform3f(glGetUniformLocation(3, "kCameraPosition"), m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
 	}
     else if (key == 84)
     {
@@ -171,9 +171,13 @@ void SceneController::keyboard(int key, int action)
 }
 void SceneController::mouse(int _x, int _y)
 {
-    int offx = x - _x;
-    int offy = y - _y;
-    Vector3 v(offx*0.1, offy*0.1, 0);
-    m_camera.rotate(v);
+    const float ANGLE_SCALE = 0.2f;
+    Vector3 angle = m_camera.getAngle();
+	angle.y += (_x - mouseX2) * ANGLE_SCALE;
+	angle.x += (_y - mouseY2) * ANGLE_SCALE;
+	mouseX2 = _x;
+	mouseY2 = _y;
+    std::cout << "angle: " << angle.x << " " << angle.y << "  " << angle.z << std::endl;
+    m_camera.rotateTo(angle);
     glUniform3f(glGetUniformLocation(3, "kCameraPosition"), m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
 }

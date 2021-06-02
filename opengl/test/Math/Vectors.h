@@ -379,10 +379,10 @@ inline float Vector3::angle(const Vector3& vec) const {
 }
 
 inline Vector3& Vector3::normalize() {
-    //@@const float EPSILON = 0.000001f;
+    const float EPSILON = 0.000001f;
     float xxyyzz = x*x + y*y + z*z;
-    //@@if(xxyyzz < EPSILON)
-    //@@    return *this; // do nothing if it is ~zero vector
+    if(xxyyzz < EPSILON)
+     return *this; // do nothing if it is ~zero vector
 
     //float invLength = invSqrt(xxyyzz);
     float invLength = 1.0f / sqrtf(xxyyzz);
@@ -391,6 +391,7 @@ inline Vector3& Vector3::normalize() {
     z *= invLength;
     return *this;
 }
+
 
 inline float Vector3::dot(const Vector3& rhs) const {
     return (x*rhs.x + y*rhs.y + z*rhs.z);

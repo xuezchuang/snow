@@ -26,6 +26,7 @@ class SceneController:	public Controller
 		void update();
 		SceneController();
 		OrbitCamera m_camera;
+
 };
 
 #endif

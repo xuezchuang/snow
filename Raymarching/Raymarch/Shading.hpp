@@ -38,11 +38,11 @@ private:
 		// if pos and target are same, only translate camera to position without rotation
 		if (position == target)
 		{
-			//matrix.identity();
-			//matrix.setColumn(3, -position);
+			matrix.identity();
+			matrix.setColumn(3, -position);
 			// rotation stuff
 			matrixRotation.identity();
-			//angle.set(0, 0, 0);
+			angle.set(0, 0, 0);
 			//quaternion.set(1, 0, 0, 0);
 			return;
 		}
@@ -87,9 +87,21 @@ private:
 
 		// set inverse rotation matrix: M^-1 = M^T for Euclidean transform
 		matrixRotation.identity();
-		matrixRotation.setRow(0, left);
-		matrixRotation.setRow(1, up);
-		matrixRotation.setRow(2, forward);
+
+		if (forward.z < 0)
+		{
+			left.x = -left.x; up.x = -up.x; forward.x = -forward.x;
+			left.z = -left.z; up.z = -up.z; forward.z = -forward.z;
+			matrixRotation.setRow(0, left);
+			matrixRotation.setRow(1, up);
+			matrixRotation.setRow(2, forward);
+		}
+		else
+		{
+			matrixRotation.setRow(0, -left);
+			matrixRotation.setRow(1, up);
+			matrixRotation.setRow(2, -forward);
+		}
 
 	}
 	Matrix4 matrixRotation;
@@ -100,11 +112,12 @@ public:
 		// Camera
 		_camera.m_Position = kCameraPosition;
 		_camera.m_Rotation = Quaternion::FromTo(Vector3f::Forward, Vector3f::Normalize(-kCameraPosition));
+		//_camera.m_Rotation = Quaternion::FromTo_Up(Vector3f::Forward, Vector3f::Normalize(-kCameraPosition));
+		
 		//
 		Vector3 carm;
 		carm.x = _camera.m_Position.x; carm.y = _camera.m_Position.y; carm.z = _camera.m_Position.z;
-		lookAt( carm, Vector3(0, 0, 0));
-
+		lookAt(carm, Vector3(0, 0, 0));
 
 		// Light
 		_light.m_Color = kLightColor;
@@ -161,21 +174,37 @@ private:
 	Color3f FragmentFunc(const Vector2f& uv, float ratio)
 	{
 		Vector2f ratioUV = (uv * 2.0f - 1.0f) * Vector2f(ratio, 1.0f);
-
+		
 		// Create ray
 		Ray ray;
-		ray.m_Origin = _camera.m_Position;
-		ray.m_Direction = Vector3f::Normalize(Quaternion::RotateVector(_camera.m_Rotation, Vector3f(ratioUV.x, ratioUV.y, 1.0f)));
+
+		
 		{
-			Vector3 temp1 = matrixRotation * Vector3(-ratioUV.x, ratioUV.y, -1);
-			temp1.normalize();
-			Vector3f temp2 = Quaternion::RotateVector(Quaternion(0, 0, 0, 1), ray.m_Direction);
+			Matrix3x3 abc = Matrix3x3::Identity;
+			const float* tt = matrixRotation.get();
+			abc.c0[0] = -tt[0]; abc.c0[1] = -tt[1]; abc.c0[2] = -tt[2];
+			abc.c1[0] = -tt[4]; abc.c1[1] = -tt[5]; abc.c1[2] = -tt[6];
+			abc.c2[0] = tt[8]; abc.c2[1] = tt[9]; abc.c2[2] = tt[10];
+			_camera.m_Rotation = Quaternion::MatrixToQuaternion(abc);
 			int a = 3;
 		}
+
+		ray.m_Origin = _camera.m_Position;
+		ray.m_Direction = Vector3f::Normalize(Quaternion::RotateVector(_camera.m_Rotation, Vector3f(ratioUV.x, ratioUV.y, 1.0f)));
+		
+		Vector3 temp2 = matrixRotation * Vector3(ratioUV.x, ratioUV.y, 1);
+		temp2.normalize();
+
+		if (fabs(temp2.x - ray.m_Direction.x) > 1e-3 || fabs(temp2.z - ray.m_Direction.z) > 1e-3 || fabs(temp2.y - ray.m_Direction.y) > 1e-3)
+		{
+			int a = 3;
+		}
+		//ray.m_Direction = Vector3f(temp2.x, temp2.y, temp2.z);
+
+		
 		// Raymarching for hit point
 		float raymarchingDistance = Raymarching(ray);
 
-		// 
 		// Final color shading
 		Color3f surfaceColor = Color3f::Black;
 		if (raymarchingDistance < kRaymarchDistanceMax)

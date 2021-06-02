@@ -808,6 +808,11 @@ Vector3 Matrix4::getAngle() const
     {
         roll = RAD2DEG * atan2f(-m[4], m[0]);
         pitch = RAD2DEG * atan2f(-m[9], m[10]);
+        if (m[10] < 0)
+        {
+            roll += 180.f;
+            pitch += 180.f;
+        }
     }
 
     return Vector3(pitch, yaw, roll);

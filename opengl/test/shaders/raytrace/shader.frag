@@ -95,9 +95,9 @@ vec4 FromTo(vec3 from, vec3 to)
 	
 	float w = sqrt(1.0f + m[0][0] + m[1][1] + m[2][2]) * 0.5f;
 	float scaler = 1.0f / (w * 4.0f);
-	float x = (m[2][1] - m[1][2]) * scaler;
-	float y = (m[0][2] - m[2][0]) * scaler;
-	float z = (m[1][0] - m[0][1]) * scaler;
+	float x = (m[1][2] - m[2][1]) * scaler;
+	float y = (m[2][0] - m[0][2]) * scaler;
+	float z = (m[0][1] - m[1][0]) * scaler;
 	return vec4(x, y, z, w);
 }
 
@@ -116,17 +116,21 @@ vec3	light_m_Direction  = normalize(kLightPosition);
 
 //vec3	kCameraPosition = vec3(0f, 0.1f, -6.0f);
 uniform vec3 kCameraPosition;
-vec4	kCameraRotation = FromTo(vec3(0.0f, 0.0f, 1.0f),normalize(-kCameraPosition));
+
 
 
 float	kSphereRadius = 1.0f;
 vec3	kSpherePosition = vec3(0.0f, 0.0f, 0.0f);
 vec4	kSphereRotation = Identity;
+//vec4	kSphereRotation =vec4(normalize(-kCameraPosition),0);
 vec3	kBoxPosition = vec3(0.0f, 0.0f, 0.0f);
 vec3	kBoxSize = vec3(0.8f, 0.8f, 0.8f);
 vec4	kBoxRotation = Identity;
-//vec4	kBoxSphereRotation = AxisRadian(vec3(0,1,0),PI*0.15f);
-vec4	kBoxSphereRotation = AxisRadian(vec3(0,1,0),kBoxSphereRotation_Radio);
+vec4	kBoxSphereRotation = AxisRadian(vec3(0,1,0),PI*0.15f);
+//vec4	kBoxSphereRotation = AxisRadian(vec3(0,1,0),kBoxSphereRotation_Radio);
+//vec4	kBoxSphereRotation = AxisRadian(vec3(0,1,0),0);
+//vec4	kBoxSphereRotation = AxisRadian(normalize(-kCameraPosition),0);
+
 
 vec3	kPlanePosition = vec3(0.0f, -0.8f, 0.0f);
 vec3	kPlaneNormal = vec3(0.0f, 1.0f, 0.0f);
@@ -153,6 +157,16 @@ float SphereDistance(vec3 position)
 	return length(transformedSpherePosition) - kSphereRadius;
 }
 
+float floorDistance(vec3 position)
+{
+	return (position - kPlanePosition).y;//∞Âæ‡¿Î
+//			vec4 quatWorldToLocal(m_Normal, Vector3f::Up);
+//		Vector3f transformedPosition = Quaternion::RotateVector(Quaternion::Conjugate(m_Rotation), position - m_Position);
+//		Vector3f localPosition = Quaternion::RotateVector(quatWorldToLocal, transformedPosition);
+//		return localPosition.y;
+}
+
+
 
 float ObjectDistance(vec3 position)
 {
@@ -164,7 +178,7 @@ float ObjectDistance(vec3 position)
 
 float GetMinDistance(vec3 position)
 {
-	float distanceToNearestObject = (position - kPlanePosition).y;//∞Âæ‡¿Î
+	float distanceToNearestObject = floorDistance(position);
 	float distanceToObject = ObjectDistance(position);
 	distanceToNearestObject = min(distanceToNearestObject, distanceToObject);
 	return distanceToNearestObject;
@@ -374,10 +388,16 @@ void main(void)
 	vec3 p = getsdfPoint(origin, ray, -1, low);
 	if(bnew)
 	{
+		vec4 kCameraRotation = FromTo(vec3(0.0f, 0.0f, 1.0f),normalize(-kCameraPosition));
 		vec3 m_Direction = RotateVector(kCameraRotation,vec3(pass_UV.xy,1));
 		m_Direction = normalize(m_Direction);
 		float raymarchingDistance = Raymarching(kCameraPosition,m_Direction);
 		out_Scene = vec4(0,0,0,1);
+		//if(pass_UV.x < 0.05 && pass_UV.x > -0.05 && pass_UV.y < 0.05 && pass_UV.y > -0.05)
+		//{
+		//	out_Scene = vec4(1,1,1,1);
+		//	return;
+		//}
 		if (raymarchingDistance < kRaymarchDistanceMax)
 		{
 			vec3 surfacePosition = kCameraPosition + m_Direction * raymarchingDistance;

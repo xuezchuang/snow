@@ -330,6 +330,57 @@ void OrbitCamera::lookAt(const Vector3& position, const Vector3& target)
 
     //DEBUG
     //std::cout << matrixRotation << std::endl;
+    //return;
+    {
+        Matrix3 m_mat3;
+		const float kEpsilon = 0.00001f;
+
+        Vector3 vec1 = Vector3(0,0,1);
+        Vector3 vec2 = position;
+        vec2.normalize();// Vector3::normalize(target);
+        vec1.normalize();// Vector3::normalize(position);
+        float cosTheta = vec1.dot(vec2);// Vector3::dot(vec1, vec2);
+
+		// When "from" almost equals to "to"
+		if (cosTheta > 1.0f - kEpsilon)
+		{
+            m_mat3.identity();// = Matrix3::identity();
+		}
+        else
+        {
+			// When "from" almost equals to negative "to"
+			if (cosTheta < -1.0f + kEpsilon)
+			{
+				Vector3 vecRef = Vector3(1, 0, 0);
+				if (vec1.dot(vecRef) > 1.0f - kEpsilon)
+					vecRef = Vector3(0, 0, 1);
+
+				Vector3 vecUp = vec1.cross(vecRef);
+                vecUp.normalize();
+				Vector3 vecRight = vecUp.cross(vec1);
+                vecRight.normalize();
+				Vector3 vecForward = vec1;
+                Matrix3 matrixCoordinateFrom = Matrix3(vecRight.x, vecRight.y, vecRight.z, vecUp.x, vecUp.y, vecUp.z, vecForward.x, vecForward.y, vecForward.z);
+				Matrix3 matrixCoordinateTo = Matrix3(-vecRight.x, -vecRight.y, -vecRight.z, vecUp.x, vecUp.y, vecUp.z, -vecForward.x, -vecForward.y, -vecForward.z);
+                m_mat3 = matrixCoordinateFrom.transpose() * matrixCoordinateTo;
+			}
+            else
+            {
+				// When "from" not parallax to "to"
+                Vector3 v = vec1.cross(vec2);
+				float c = vec1.dot(vec2);
+				float k = 1.0f / (c + 1.0f);
+				m_mat3 = Matrix3
+				(
+                    v.x * v.x * k + c, v.x * v.y * k + v.z, v.x * v.z * k - v.y,
+                    v.y * v.x * k - v.z, v.y * v.y * k + c, v.y * v.z * k + v.x,
+                    v.z * v.x * k + v.y, v.z * v.y * k - v.x, v.z * v.z * k + c
+				);
+            }
+
+        }
+        int a = 3;
+    }
 }
 
 
@@ -782,7 +833,7 @@ Matrix4 OrbitCamera::angleToMatrix(const Vector3& angle)
     matrix.setColumn(0, left);
     matrix.setColumn(1, up);
     matrix.setColumn(2, forward);
-
+    return matrix;
     {
         
 		float sx, sy, cx, cy, theta;
@@ -813,7 +864,6 @@ Matrix4 OrbitCamera::angleToMatrix(const Vector3& angle)
 		Matrix4 pp = qua.getMatrix();
         int a = 3;
     }
-    return matrix;
 }
 
 

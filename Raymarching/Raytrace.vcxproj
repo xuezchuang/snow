@@ -128,8 +128,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shader\shader.frag" />
-    <None Include="shader\shader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Matrices.h" />

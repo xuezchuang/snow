@@ -41,15 +41,18 @@ bool bfirst = false;
 void Game::mouseClickCallback(GLFWwindow* w, int b, int a, int modifiers)
 {
 	bfirst = !bfirst;
-	
-	glfwGetCursorPos(w, &x, &y);
-	
-	std::cout << "M: " << x << " " << y << std::endl;
-	
-	float fx = 2*(x - Dimension::getWidth()/2)/Dimension::getHeight();
-	float fy = 2*(Dimension::getHeight()/2 - y)/Dimension::getHeight();
+	if (bfirst)
+	{
+		glfwGetCursorPos(w, &x, &y);
 
-	controller->startmouse(x, y);
+		std::cout << "M: " << x << " " << y << std::endl;
+
+		float fx = 2 * (x - Dimension::getWidth() / 2) / Dimension::getHeight();
+		float fy = 2 * (Dimension::getHeight() / 2 - y) / Dimension::getHeight();
+
+		controller->startmouse(x, y);
+	}
+
 	//controller->mouse(b, a);//, fx, fy);
 }
 

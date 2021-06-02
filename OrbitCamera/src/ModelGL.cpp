@@ -123,7 +123,7 @@ ModelGL::ModelGL() : windowWidth(0), windowHeight(0), mouseLeftDown(false), mous
     Vector3 camPosition = Vector3(CAM_DIST*2, CAM_DIST*1.5f, CAM_DIST*2);
     Vector3 camTarget = Vector3(0, 0, 0);
     cam1.lookAt(camPosition, camTarget);
-    cam2.lookAt(Vector3(0, 0, CAM_DIST), Vector3(0, 0, 0));
+    cam2.lookAt(Vector3(0,0, -CAM_DIST), Vector3(0, 0, 0));
     cameraAngle = cam2.getAngle();
     cameraPosition = cam2.getPosition();
     cameraTarget = cam2.getTarget();
@@ -981,7 +981,7 @@ void ModelGL::resetCamera()
     cam1.lookAt(Vector3(CAM_DIST*2, CAM_DIST*1.5f, CAM_DIST*2), Vector3(0, 0, 0));
 
     // camera object
-    cam2.lookAt(Vector3(0, 0, CAM_DIST), Vector3(0, 0, 0));
+    cam2.lookAt(Vector3(0 ,0 ,-CAM_DIST), Vector3(0, 0, 0));
     cameraAngle = cam2.getAngle();
     cameraPosition = cam2.getPosition();
     cameraTarget = cam2.getTarget();
