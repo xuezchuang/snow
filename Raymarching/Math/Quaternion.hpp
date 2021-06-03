@@ -94,11 +94,79 @@ public:
 
 	static Quaternion MatrixToQuaternion(Matrix3x3& m)
 	{
-		float w = sqrt(1.0f + m(0, 0) + m(1, 1) + m(2, 2)) * 0.5f;
-		float scaler = 1.0f / (w * 4.0f);
-		float x = (m(2, 1) - m(1, 2)) * scaler;
-		float y = (m(0, 2) - m(2, 0)) * scaler;
-		float z = (m(1, 0) - m(0, 1)) * scaler;
+
+		float m11 = m(0, 0);
+		float m12 = m(0, 1);
+		float m13 = m(0, 2);
+		//
+		float m21 = m(1, 0);
+		float m22 = m(1, 1);
+		float m23 = m(1, 2);
+		//
+		float m31 = m(2, 0);
+		float m32 = m(2, 1);
+		float m33 = m(2, 2);
+
+		float w, x, y, z;
+
+
+		//探测四元数中最大的项 
+		float fourWSquaredMinusl = m11 + m22 + m33;
+		float fourXSquaredMinusl = m11 - m22 - m33;
+		float fourYSquaredMinusl = m22 - m11 - m33;
+		float fourZSquaredMinusl = m33 - m11 - m22;
+
+		int biggestIndex = 0;
+		float fourBiggestSqureMinus1 = fourWSquaredMinusl;
+		if (fourXSquaredMinusl > fourBiggestSqureMinus1) {
+			fourBiggestSqureMinus1 = fourXSquaredMinusl;
+			biggestIndex = 1;
+		}
+		if (fourYSquaredMinusl > fourBiggestSqureMinus1) {
+			fourBiggestSqureMinus1 = fourYSquaredMinusl;
+			biggestIndex = 2;
+		}
+		if (fourZSquaredMinusl > fourBiggestSqureMinus1) {
+			fourBiggestSqureMinus1 = fourZSquaredMinusl;
+			biggestIndex = 3;
+		}
+
+		//计算平方根和除法 
+		float biggestVal = sqrt(fourBiggestSqureMinus1 + 1.0f) * 0.5f;
+		float mult = 0.25f / biggestVal;
+
+		//计算四元数的值
+		switch (biggestIndex) {
+		case 0:
+			w = biggestVal;
+			x = (m23 - m32) * mult;
+			y = (m31 - m13) * mult;
+			z = (m12 - m21) * mult;
+			break;
+		case 1:
+			x = biggestVal;
+			w = (m23 - m32) * mult;
+			y = (m12 + m21) * mult;
+			z = (m31 + m13) * mult;
+			break;
+		case 2:
+			y = biggestVal;
+			w = (m31 - m13) * mult;
+			x = (m12 + m21) * mult;
+			z = (m23 + m32) * mult;
+			break;
+		case 3:
+			z = biggestVal;
+			w = (m12 - m21) * mult;
+			x = (m31 + m13) * mult;
+			y = (m23 + m32) * mult;
+			break;
+		}
+		//float w = sqrt(1.0f + m(0, 0) + m(1, 1) + m(2, 2)) * 0.5f;
+		//float scaler = 1.0f / (w * 4.0f);
+		//float x = (m(2, 1) - m(1, 2)) * scaler;
+		//float y = (m(0, 2) - m(2, 0)) * scaler;
+		//float z = (m(1, 0) - m(0, 1)) * scaler;
 		return Quaternion(x, y, z, w);
 	}
 

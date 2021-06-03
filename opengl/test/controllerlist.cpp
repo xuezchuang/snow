@@ -14,7 +14,7 @@
 
 SceneController::SceneController()
 {
-    m_camera.lookAt(0, 1.5f, -4.0f, 0, 0, 0);
+    m_camera.lookAt(0, 1.5f, 4.0f, 0, 0, 0);
 
     glDisable(GL_DEPTH_TEST);
 

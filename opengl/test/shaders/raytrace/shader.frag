@@ -89,15 +89,133 @@ mat3 FromTo_mat3(vec3 from, vec3 to)
 				);
 }
 
+
+mat3 lookat(vec3 position, vec3 target)
+{
+	const float EPSILON = 0.00001f;
+	vec3 left, up, forward;  // 3 axis of matrix for scene
+	// first, compute the forward vector of rotation matrix
+	// NOTE: the direction is reversed (target to camera pos) because of camera transform
+	forward = normalize(position - target);
+
+	// compute temporal up vector based on the forward vector
+	// watch out when look up/down at 90 degree
+	// for example, forward vector is on the Y axis
+	if (abs(forward.x) < EPSILON && abs(forward.z) < EPSILON)
+	{
+		// forward vector is pointing +Y axis
+		if (forward.y > 0)
+		{
+			up = vec3(0, 0, -1);
+		}
+		// forward vector is pointing -Y axis
+		else
+		{
+			up = vec3(0, 0, 1);
+		}
+	}
+	// in general, up vector is straight up
+	else
+	{
+		up = vec3(0, 1, 0);
+	}
+
+	// compute the left vector of rotation matrix
+	left = normalize(cross(up,forward));   // cross product
+	
+	// re-calculate the orthonormal up vector
+	up = cross(forward,left);   // cross product
+	
+	// set inverse rotation matrix: M^-1 = M^T for Euclidean transform
+	mat3 m = inverse(mat3(left.x,up.x,forward.x,left.y,up.y,forward.y,left.z,up.z,forward.z));
+	
+	//matrixRotation.identity();
+
+	//matrixRotation.setRow(0, left);
+	//matrixRotation.setRow(1, up);
+	//matrixRotation.setRow(2, forward);
+	//matrixRotation.invert();
+	return m;
+}
+
 vec4 FromTo(vec3 from, vec3 to)
 {
-	mat3 m = FromTo_mat3(from, to);
+	//mat3 m = FromTo_mat3(from, to);
+	mat3 m = lookat(from, to);
 	
-	float w = sqrt(1.0f + m[0][0] + m[1][1] + m[2][2]) * 0.5f;
-	float scaler = 1.0f / (w * 4.0f);
-	float x = (m[1][2] - m[2][1]) * scaler;
-	float y = (m[2][0] - m[0][2]) * scaler;
-	float z = (m[0][1] - m[1][0]) * scaler;
+	float m11 = m[0][0];
+	float m12 = m[0][1];
+	float m13 = m[0][2];
+	//
+	float m21 = m[1][0];
+	float m22 = m[1][1];
+	float m23 = m[1][2];
+	//
+	float m31 = m[2][0];
+	float m32 = m[2][1];
+	float m33 = m[2][2];
+
+	float w, x, y, z;
+
+
+	//探测四元数中最大的项 
+	float fourWSquaredMinusl = m11 + m22 + m33;
+	float fourXSquaredMinusl = m11 - m22 - m33;
+	float fourYSquaredMinusl = m22 - m11 - m33;
+	float fourZSquaredMinusl = m33 - m11 - m22;
+
+	int biggestIndex = 0;
+	float fourBiggestSqureMinus1 = fourWSquaredMinusl;
+	if (fourXSquaredMinusl > fourBiggestSqureMinus1) {
+		fourBiggestSqureMinus1 = fourXSquaredMinusl;
+		biggestIndex = 1;
+	}
+	if (fourYSquaredMinusl > fourBiggestSqureMinus1) {
+		fourBiggestSqureMinus1 = fourYSquaredMinusl;
+		biggestIndex = 2;
+	}
+	if (fourZSquaredMinusl > fourBiggestSqureMinus1) {
+		fourBiggestSqureMinus1 = fourZSquaredMinusl;
+		biggestIndex = 3;
+	}
+
+	//计算平方根和除法 
+	float biggestVal = sqrt(fourBiggestSqureMinus1 + 1.0f) * 0.5f;
+	float mult = 0.25f / biggestVal;
+
+	//计算四元数的值
+	switch (biggestIndex) {
+	case 0:
+		w = biggestVal;
+		x = (m23 - m32) * mult;
+		y = (m31 - m13) * mult;
+		z = (m12 - m21) * mult;
+		break;
+	case 1:
+		x = biggestVal;
+		w = (m23 - m32) * mult;
+		y = (m12 + m21) * mult;
+		z = (m31 + m13) * mult;
+		break;
+	case 2:
+		y = biggestVal;
+		w = (m31 - m13) * mult;
+		x = (m12 + m21) * mult;
+		z = (m23 + m32) * mult;
+		break;
+	case 3:
+		z = biggestVal;
+		w = (m12 - m21) * mult;
+		x = (m31 + m13) * mult;
+		y = (m23 + m32) * mult;
+		break;
+	}
+
+	//float w = sqrt(1.0f + m[0][0] + m[1][1] + m[2][2]) * 0.5f;
+	//float scaler = 1.0f / (w * 4.0f);
+	//float x = (m[1][2] - m[2][1]) * scaler;
+	//float y = (m[2][0] - m[0][2]) * scaler;
+	//float z = (m[0][1] - m[1][0]) * scaler;
 	return vec4(x, y, z, w);
 }
 
@@ -388,8 +506,8 @@ void main(void)
 	vec3 p = getsdfPoint(origin, ray, -1, low);
 	if(bnew)
 	{
-		vec4 kCameraRotation = FromTo(vec3(0.0f, 0.0f, 1.0f),normalize(-kCameraPosition));
-		vec3 m_Direction = RotateVector(kCameraRotation,vec3(pass_UV.xy,1));
+		vec4 kCameraRotation = FromTo(kCameraPosition,vec3(0.0));// vec3(0.0f, 0.0f, 1.0f),normalize(-kCameraPosition));
+		vec3 m_Direction = RotateVector(kCameraRotation,vec3(-pass_UV.x,pass_UV.y,-1));
 		m_Direction = normalize(m_Direction);
 		float raymarchingDistance = Raymarching(kCameraPosition,m_Direction);
 		out_Scene = vec4(0,0,0,1);
