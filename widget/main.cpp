@@ -126,6 +126,8 @@ GLint render_projection_matrix_loc;
 	void ui_hsvcircle_vals_from_pos(const rctf* rect, const float mx, const float my, float* r_val_rad, float* r_val_dist);
 	void hsv_to_rgb_v(const float hsv[3], float r_rgb[3]);
 	void hsv_to_rgb(float h, float s, float v, float* r_r, float* r_g, float* r_b);
+	void ui_hsv_cursor(float x, float y);
+	void imm_draw_circle(GLuint prim_type, const uint shdr_pos, float x, float y, float rad_x, float rad_y, int nsegments);
 #pragma endregion hsvcircle
 //
 END_APP_DECLARATION()
@@ -241,10 +243,11 @@ void DrawCommandExample::Display(bool auto_redraw)
 
 	//return;
 	rctf cirrect;
-	cirrect.xmin = 0.8f;
+	cirrect.xmin = -0.8f;
 	cirrect.xmax = 0.8f;
-	cirrect.ymin = 0.8f;
+	cirrect.ymin = -0.8f;
 	cirrect.ymax = 0.8f;
+	glEnable(GL_LINE_SMOOTH);
 	DrawHSVCIRCLE(&cirrect);
 
     base::Display();
@@ -275,48 +278,40 @@ void DrawCommandExample::DrawHSVCIRCLE(const rctf* rect)
 	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
 	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3);
 	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
-	immBegin(GL_TRIANGLES, 3);// tot + 2);
+	immBegin(GL_TRIANGLE_FAN, tot + 2);
+    float/* rgb[3],*/ hsv[3], rgb_center[3];
+    const float centx = 0.0f;
+    const float centy = 0.0f;
+	hsv[0] = 0.6f; hsv[1] = 0.4f; hsv[2] = 0.9f;
+	rgb_center[0] = 1; rgb_center[1] = 1; rgb_center[2] = 1;
 
-	//immAttr3f(color, rgb_center[0], rgb_center[1],rgb_center[2]);
-	immAttr3f(color, 1, 0, 0);
-	immVertex2f(pos, -1, -1);
-	immAttr3f(color, 0, 1, 0);
-	immVertex2f(pos, -1, 1);
-	immAttr3f(color, 0, 0, 1);
-	immVertex2f(pos, 1, 1);
-	
+	immAttr3f(color, rgb_center[0], rgb_center[1],rgb_center[2]);
+	immVertex2f(pos, centx, centy);
+    
+	float ang = 0.0f;
+	const float radstep = 2.0f * (float)M_PI / (float)tot;
+	const float radius = (float)min(rect->xmax - rect->xmin, rect->ymax - rect->ymin) / 2.0f;
+	for (int a = 0; a <= tot; a++, ang += radstep) {
+		float si = sinf(ang);
+		float co = cosf(ang);
+		float hsv_ang[3];
+		float rgb_ang[3];
 
+		ui_hsvcircle_vals_from_pos(rect, centx + co * radius, centy + si * radius, hsv_ang, hsv_ang + 1);
+		hsv_ang[2] = hsv[2];
 
- //   float/* rgb[3],*/ hsv[3], rgb_center[3];
- //   const float centx = 0.0f;
- //   const float centy = 0.0f;
- //   
-	//immAttr3f(color, rgb_center[0], rgb_center[1],rgb_center[2]);
-	//immVertex2f(pos, centx, centy);
- //   
-	//float ang = 0.0f;
-	//const float radstep = 2.0f * (float)M_PI / (float)tot;
-	//const float radius = (float)min(rect->xmax - rect->xmin, rect->ymax - rect->ymin) / 2.0f;
-	//for (int a = 0; a <= tot; a++, ang += radstep) {
-	//	float si = sinf(ang);
-	//	float co = cosf(ang);
-	//	float hsv_ang[3];
-	//	float rgb_ang[3];
+		hsv_to_rgb_v(hsv_ang, rgb_ang);
+		//ui_color_picker_to_scene_linear_space(but, rgb_ang);
 
-	//	ui_hsvcircle_vals_from_pos(rect, centx + co * radius, centy + si * radius, hsv_ang, hsv_ang + 1);
-	//	hsv_ang[2] = hsv[2];
+		//if (!is_color_gamma) {
+		//	ui_block_cm_to_display_space_v3(but->block, rgb_ang);
+		//}
 
-	//	hsv_to_rgb_v(hsv_ang, rgb_ang);
-	//	//ui_color_picker_to_scene_linear_space(but, rgb_ang);
-
-	//	//if (!is_color_gamma) {
-	//	//	ui_block_cm_to_display_space_v3(but->block, rgb_ang);
-	//	//}
-
-	//	immAttr3f(color, rgb_ang[0],rgb_ang[1],rgb_ang[2]);
-	//	immVertex2f(pos, centx + co * radius, centy + si * radius);
-	//}
+		immAttr3f(color, rgb_ang[0],rgb_ang[1],rgb_ang[2]);
+		immVertex2f(pos, centx + co * radius, centy + si * radius);
+	}
 	immEnd();
+	ui_hsv_cursor(0.3f, 0.3f);
     glUseProgram(0);
 }
 
@@ -535,6 +530,35 @@ void DrawCommandExample::hsv_to_rgb(float h, float s, float v, float* r_r, float
 	*r_r = ((nr - 1.0f) * s + 1.0f) * v;
 	*r_g = ((ng - 1.0f) * s + 1.0f) * v;
 	*r_b = ((nb - 1.0f) * s + 1.0f) * v;
+}
+
+void DrawCommandExample::ui_hsv_cursor(float x, float y)
+{
+	glEnable(GL_BLEND);
+	glEnable(GL_LINE_SMOOTH);
+	//GPU_line_smooth(true);
+	//immUniformColor3f(0.0f, 0.0f, 0.0f);
+	//imm_draw_circle_wire_2d(pos, x, y, 3.0f * U.pixelsize, 12);
+	//GPU_blend(false);
+	//GPU_line_smooth(false);
+
+	//immUnbindProgram();
+	GPUVertFormat* format = immVertexFormat();
+	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
+	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
+	imm_draw_circle(GL_TRIANGLE_FAN, pos, x,y, 0.03f, 0.03f, 8);
+	
+}
+
+void DrawCommandExample::imm_draw_circle(GLuint prim_type,const uint shdr_pos,float x,float y,float rad_x,float rad_y,int nsegments)
+{
+	immBegin(prim_type, nsegments);
+	for (int i = 0; i < nsegments; i++) {
+		const float angle = (float)(2 * M_PI) * ((float)i / (float)nsegments);
+		immAttr3f(1, 1, 1, 1);
+		immVertex2f(shdr_pos, x + (rad_x * cosf(angle)), y + (rad_y * sinf(angle)));
+	}
+	immEnd();
 }
 
 #pragma endregion DrawHSVCIRCLE
