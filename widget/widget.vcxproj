@@ -149,25 +149,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GPU_batch.c" />
-    <ClCompile Include="GPU_vertex_buffer.c" />
-    <ClCompile Include="GPU_vertex_format.c" />
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="interface_widgets.c" />
-    <ClCompile Include="rect.c" />
-    <ClCompile Include="userdef_default.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BLI_sys_types.h" />
     <ClInclude Include="GPU_batch.h" />
     <ClInclude Include="GPU_common.h" />
-    <ClInclude Include="GPU_vertex_buffer.h" />
     <ClInclude Include="GPU_vertex_format.h" />
     <ClInclude Include="interface_intern.h" />
     <ClInclude Include="vapp.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shader\gpu_shader_2D_smooth_color_frag.glsl" />
+    <None Include="Shader\gpu_shader_2D_smooth_color_vert.glsl" />
     <None Include="Shader\gpu_shader_2D_widget_base_frag.glsl" />
     <None Include="Shader\gpu_shader_2D_widget_base_vert.glsl" />
     <None Include="Shader\primitive_restart.fs.glsl" />
