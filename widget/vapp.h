@@ -13,7 +13,7 @@ protected:
 
     static void DisplayFunc(void);
     static void ReshapeFunc(int width, int height);
-
+    static void keyboardCBFunc(unsigned char key, int x, int y);
 #ifdef _DEBUG
     static void APIENTRY DebugOutputCallback(GLenum source,
                                              GLenum type,
@@ -46,7 +46,7 @@ public:
         glutCreateWindow( title ? title : "OpenGL Application" );
         glutDisplayFunc(DisplayFunc);
         glutReshapeFunc(ReshapeFunc);
-
+        glutKeyboardFunc(keyboardCBFunc);
 #ifdef USE_GL3W
         gl3wInit();
 #else
@@ -73,7 +73,10 @@ public:
     {
 
     }
+    virtual void keyboardCB(unsigned char key, int x, int y)
+    {
 
+    }
     virtual void Reshape(int width, int height)
     {
         glViewport(0, 0, width, height);
@@ -122,6 +125,11 @@ void VermillionApplication::ReshapeFunc(int width,          \
                                         int height)         \
 {                                                           \
     s_app->Reshape(width, height);                          \
+}                                                           \
+void VermillionApplication::keyboardCBFunc(unsigned char key,   \
+                                        int x, int y)       \
+{                                                           \
+    s_app->keyboardCB(key,x, y);                   \
 }                                                           \
                                                             \
 void VermillionApplication::MainLoop(void)                  \

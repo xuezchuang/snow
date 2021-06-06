@@ -165,6 +165,8 @@
     <None Include="Shader\gpu_shader_2D_smooth_color_vert.glsl" />
     <None Include="Shader\gpu_shader_2D_widget_base_frag.glsl" />
     <None Include="Shader\gpu_shader_2D_widget_base_vert.glsl" />
+    <None Include="shader\gpu_shader_uniform_color_frag.glsl" />
+    <None Include="shader\gpu_shader_uniform_color_vert.glsl" />
     <None Include="Shader\primitive_restart.fs.glsl" />
     <None Include="Shader\primitive_restart.vs.glsl" />
   </ItemGroup>

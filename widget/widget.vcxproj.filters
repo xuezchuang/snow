@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="LoadShaders.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BLI_sys_types.h" />
+    <ClInclude Include="GPU_batch.h" />
+    <ClInclude Include="GPU_common.h" />
+    <ClInclude Include="GPU_vertex_format.h" />
+    <ClInclude Include="interface_intern.h" />
+    <ClInclude Include="vapp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\gpu_shader_2D_smooth_color_frag.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Shader\gpu_shader_2D_smooth_color_vert.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Shader\gpu_shader_2D_widget_base_frag.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Shader\gpu_shader_2D_widget_base_vert.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Shader\primitive_restart.fs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Shader\primitive_restart.vs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\gpu_shader_uniform_color_frag.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\gpu_shader_uniform_color_vert.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{0f6a7bcf-9ca1-4723-bbf1-5916d9bbaaf2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
