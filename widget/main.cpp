@@ -16,7 +16,7 @@
 #include "interface_intern.h"
 #include <assert.h>
 using namespace vmath;
-
+UserDef U;
 // Define USE_PRIMITIVE_RESTART to 0 to use two separate draw commands
 #define USE_PRIMITIVE_RESTART 1
 #pragma region gpuvertattr
@@ -214,11 +214,15 @@ void DrawCommandExample::Initialize(const char* title)
 		//glVertexAttribPointer(color, 4, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)sizeof(vertex_positions));
 		glEnableVertexAttribArray(pos);
 		glEnableVertexAttribArray(color);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
     buffer_size = 0;
     buffer_offset = 0;
     //glClearColor(1.f, 1.f, 1.f, 1.0f);
 	glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+	{
+		U.pixelsize = 0.01f;
+	}
 
 }
 
@@ -318,13 +322,12 @@ void DrawCommandExample::keyboardCB(unsigned char key, int x, int y)
 	case 'b':
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//DrawRect();
+		DrawRect();
 		rctf cirrect;
 		cirrect.xmin = -0.8f;
 		cirrect.xmax = 0.8f;
 		cirrect.ymin = -0.8f;
 		cirrect.ymax = 0.8f;
-		glEnable(GL_LINE_SMOOTH);
 		DrawHSVCIRCLE(&cirrect);
 		//base::Display();
 		glutSwapBuffers();
@@ -374,10 +377,13 @@ void DrawCommandExample::DrawHSVCIRCLE(const rctf* rect)
     GPUVertFormat* format = immVertexFormat();
 	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
 	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3);
-	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
+	//glEnableVertexAttribArray(1);
+	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
+	
+
+	//glEnable(GL_DEPTH_TEST);
 	immBegin(GL_TRIANGLE_FAN, tot + 2);
 	float/* rgb[3],*/ hsv[3], rgb_center[3];
     const float centx = 0.0f;
@@ -410,20 +416,20 @@ void DrawCommandExample::DrawHSVCIRCLE(const rctf* rect)
 		immAttr3f(color, rgb_ang[0],rgb_ang[1],rgb_ang[2]);
 		immVertex2f(pos, centx + co * radius, centy + si * radius);
 	}
+	
 	immEnd();
+	
 	glUseProgram(0);
-	//{
-	//	glDisableVertexAttribArray(1);
-	//	immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
-	//	
-	//	glEnable(GL_BLEND);
-	//	glEnable(GL_LINE_SMOOTH);
-	//	//glDisable(GL_LINE_SMOOTH);
-	//	// 
-	//	immUniformColor3f(0.1f, 0.1, 0.2f);
-	//	//immUniformColor3f(1.0f, 1.0f, 1.0f);
-	//	imm_draw_circle(GL_LINE_LOOP, pos, centx, centy, radius, radius, tot);
-	//}
+	{
+		GPUVertFormat* format = immVertexFormat();
+		uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
+		//glDisableVertexAttribArray(1);
+		immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
+		glEnable(GL_BLEND);
+		glEnable(GL_LINE_SMOOTH);
+		immUniformColor3f(0.1f, 0.1f, 0.2f);
+		imm_draw_circle(GL_LINE_LOOP, pos, centx, centy, radius, radius, 200);
+	}
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
 	// 
@@ -431,6 +437,7 @@ void DrawCommandExample::DrawHSVCIRCLE(const rctf* rect)
 	ui_hsvcircle_pos_from_vals(rect, hsv, &x, &y);
 	ui_hsv_cursor(x, y);
 	glUseProgram(0);
+	
 }
 
 uint DrawCommandExample::GPU_vertformat_attr_add(GPUVertFormat* format, const char* name, GPUVertCompType comp_type, uint comp_len)
@@ -565,7 +572,10 @@ void DrawCommandExample::immDrawSetup(void)
 	/* set up VAO -- can be done during Begin or End really */
 	glBindVertexArray(imm.vao_id);
 
-
+	if(imm.vertex_format.attr_len > 1)
+		glEnableVertexAttribArray(1);
+	else
+		glDisableVertexAttribArray(1);
 	const uint stride = imm.vertex_format.stride;
 
 	for (uint a_idx = 0; a_idx < imm.vertex_format.attr_len; a_idx++) {
@@ -662,22 +672,20 @@ void DrawCommandExample::hsv_to_rgb(float h, float s, float v, float* r_r, float
 
 void DrawCommandExample::ui_hsv_cursor(float x, float y)
 {
-	glEnable(GL_BLEND);
-	glEnable(GL_LINE_SMOOTH);
-	//GPU_line_smooth(true);
-	//immUniformColor3f(0.0f, 0.0f, 0.0f);
-	//imm_draw_circle_wire_2d(pos, x, y, 3.0f * U.pixelsize, 12);
-	//GPU_blend(false);
-	//GPU_line_smooth(false);
-
-	//immUnbindProgram();
 	GPUVertFormat* format = immVertexFormat();
 	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
 	immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
 	immUniformColor3f(1, 1, 1);
+	imm_draw_circle(GL_TRIANGLE_FAN, pos, x, y, 3 * U.pixelsize, 3 * U.pixelsize, 8);
+
+	//immUnbindProgram();
+	glEnable(GL_BLEND);
+	glEnable(GL_LINE_SMOOTH);
+	immUniformColor3f(0, 0, 0);
 	//imm_draw_circle(GL_TRIANGLE_FAN, pos, x,y, 0.03f, 0.03f, 8);
-	imm_draw_circle(GL_LINE_LOOP, pos, x, y, 0.03f, 0.03f, 8);
-	
+	imm_draw_circle(GL_LINE_LOOP, pos, x, y, 3 * U.pixelsize, 3 * U.pixelsize, 12);
+	glDisable(GL_BLEND);
+	glDisable(GL_LINE_SMOOTH);
 }
 
 void DrawCommandExample::immUniformColor3f(float r, float g, float b)
