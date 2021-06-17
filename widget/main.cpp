@@ -195,6 +195,7 @@ void DrawCommandExample::Initialize(const char* title)
 
 		
 
+		//glUseProgram(GPU_SHADER_2D_UNIFORM_COLOR);
 		glUseProgram(GPU_SHADER_2D_SMOOTH_COLOR);
 		// Set up the vertex attributes
 		glGenVertexArrays(1, &imm.vao_id);
@@ -204,6 +205,8 @@ void DrawCommandExample::Initialize(const char* title)
 		glBindBuffer(GL_ARRAY_BUFFER, Imm_buffer_vbo_id);
 		glBufferData(GL_ARRAY_BUFFER, 4 * 1024 * 1024, NULL, GL_DYNAMIC_DRAW);
 
+		
+		//GLuint pos = glGetAttribLocation(GPU_SHADER_2D_UNIFORM_COLOR, "position");
 		GLuint pos = glGetAttribLocation(GPU_SHADER_2D_SMOOTH_COLOR, "pos");
 		GLuint color = glGetAttribLocation(GPU_SHADER_2D_SMOOTH_COLOR, "color");
 
@@ -314,7 +317,8 @@ void DrawCommandExample::keyboardCB(unsigned char key, int x, int y)
 	{
 	case 'b':
 	{
-		DrawRect();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//DrawRect();
 		rctf cirrect;
 		cirrect.xmin = -0.8f;
 		cirrect.xmax = 0.8f;
@@ -369,54 +373,63 @@ void DrawCommandExample::DrawHSVCIRCLE(const rctf* rect)
     const int tot = 64;
     GPUVertFormat* format = immVertexFormat();
 	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
-	//uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3);
-	//immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
-	//immBegin(GL_TRIANGLE_FAN, tot + 2);
-    float/* rgb[3],*/ hsv[3], rgb_center[3];
+	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3);
+	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
+	glDisable(GL_BLEND);
+	glDisable(GL_LINE_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	immBegin(GL_TRIANGLE_FAN, tot + 2);
+	float/* rgb[3],*/ hsv[3], rgb_center[3];
     const float centx = 0.0f;
     const float centy = 0.0f;
 	hsv[0] = 0.08f; hsv[1] = 1.0f; hsv[2] = 1.0f;
 	rgb_center[0] = 1; rgb_center[1] = 1; rgb_center[2] = 1;
 
-	//immAttr3f(color, rgb_center[0], rgb_center[1],rgb_center[2]);
-	//immVertex2f(pos, centx, centy);
- //   
-	//float ang = 0.0f;
-	//const float radstep = 2.0f * (float)M_PI / (float)tot;
+	immAttr3f(color, rgb_center[0], rgb_center[1],rgb_center[2]);
+	immVertex2f(pos, centx, centy);
+    
+	float ang = 0.0f;
+	const float radstep = 2.0f * (float)M_PI / (float)tot;
 	const float radius = (float)min(rect->xmax - rect->xmin, rect->ymax - rect->ymin) / 2.0f;
-	//for (int a = 0; a <= tot; a++, ang += radstep) {
-	//	float si = sinf(ang);
-	//	float co = cosf(ang);
-	//	float hsv_ang[3];
-	//	float rgb_ang[3];
+	for (int a = 0; a <= tot; a++, ang += radstep) {
+		float si = sinf(ang);
+		float co = cosf(ang);
+		float hsv_ang[3];
+		float rgb_ang[3];
 
-	//	ui_hsvcircle_vals_from_pos(rect, centx + co * radius, centy + si * radius, hsv_ang, hsv_ang + 1);
-	//	hsv_ang[2] = hsv[2];
+		ui_hsvcircle_vals_from_pos(rect, centx + co * radius, centy + si * radius, hsv_ang, hsv_ang + 1);
+		hsv_ang[2] = hsv[2];
 
-	//	hsv_to_rgb_v(hsv_ang, rgb_ang);
-	//	//ui_color_picker_to_scene_linear_space(but, rgb_ang);
+		hsv_to_rgb_v(hsv_ang, rgb_ang);
+		//ui_color_picker_to_scene_linear_space(but, rgb_ang);
 
-	//	//if (!is_color_gamma) {
-	//	//	ui_block_cm_to_display_space_v3(but->block, rgb_ang);
-	//	//}
+		//if (!is_color_gamma) {
+		//	ui_block_cm_to_display_space_v3(but->block, rgb_ang);
+		//}
 
-	//	immAttr3f(color, rgb_ang[0],rgb_ang[1],rgb_ang[2]);
-	//	immVertex2f(pos, centx + co * radius, centy + si * radius);
-	//}
-	//immEnd();
-	{
-		immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
-
-		glEnable(GL_BLEND);
-		glEnable(GL_LINE_SMOOTH);
-
-		immUniformColor3f(55/255.f, 55 / 255.f, 55 / 255.f);
-		imm_draw_circle(GL_TRIANGLE_FAN, pos, centx, centy, radius, radius, tot);
+		immAttr3f(color, rgb_ang[0],rgb_ang[1],rgb_ang[2]);
+		immVertex2f(pos, centx + co * radius, centy + si * radius);
 	}
+	immEnd();
+	glUseProgram(0);
+	//{
+	//	glDisableVertexAttribArray(1);
+	//	immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
+	//	
+	//	glEnable(GL_BLEND);
+	//	glEnable(GL_LINE_SMOOTH);
+	//	//glDisable(GL_LINE_SMOOTH);
+	//	// 
+	//	immUniformColor3f(0.1f, 0.1, 0.2f);
+	//	//immUniformColor3f(1.0f, 1.0f, 1.0f);
+	//	imm_draw_circle(GL_LINE_LOOP, pos, centx, centy, radius, radius, tot);
+	//}
+	glDisable(GL_BLEND);
+	glDisable(GL_LINE_SMOOTH);
+	// 
 	float x, y;
 	ui_hsvcircle_pos_from_vals(rect, hsv, &x, &y);
 	ui_hsv_cursor(x, y);
-	imm_draw_circle(GL_LINE_LOOP, pos, x, y, 0.03f, 0.03f, 8);
 	glUseProgram(0);
 }
 
@@ -662,7 +675,8 @@ void DrawCommandExample::ui_hsv_cursor(float x, float y)
 	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
 	immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
 	immUniformColor3f(1, 1, 1);
-	imm_draw_circle(GL_TRIANGLE_FAN, pos, x,y, 0.03f, 0.03f, 8);
+	//imm_draw_circle(GL_TRIANGLE_FAN, pos, x,y, 0.03f, 0.03f, 8);
+	imm_draw_circle(GL_LINE_LOOP, pos, x, y, 0.03f, 0.03f, 8);
 	
 }
 
