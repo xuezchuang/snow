@@ -23,6 +23,7 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Deps\glad_gl.cpp" />
     <ClCompile Include="..\Shader.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

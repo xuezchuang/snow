@@ -78,7 +78,18 @@ int main() {
 
 	//开启深度测试
 	glEnable(GL_DEPTH_TEST);
-
+	{
+		glDepthMask(GL_TRUE);
+		GLboolean bdepth;
+		{
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+			glDepthMask(GL_FALSE);
+			glGetBooleanv(GL_DEPTH_WRITEMASK, &bdepth);
+			glPopAttrib();
+		}
+		glGetBooleanv(GL_DEPTH_WRITEMASK, &bdepth);
+		int a = 0;
+	}
 	//！创建着色器
 	Shader shader("shader.vs", "shader.fs");
 
