@@ -19,20 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <None Include="5.1.framebuffers.fs" />
+    <None Include="5.1.framebuffers.vs" />
+    <None Include="5.1.framebuffers_screen.fs" />
+    <None Include="5.1.framebuffers_screen.vs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LampShader.fs" />
-    <None Include="Shader.fs" />
-    <None Include="Shader.vs" />
+    <ClCompile Include="framebuffers.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{B7CE6804-E0CE-4778-933F-2032081329B6}</ProjectGuid>
+    <ProjectGuid>{4F1F4A1F-67E6-4F90-B51E-8F997AEA420A}</ProjectGuid>
     <RootNamespace>chapter1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
-    <ProjectName>basic_lighting</ProjectName>
+    <ProjectName>framebuffers</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -99,7 +100,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_MBCS;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_DEBUG;GLFW_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>

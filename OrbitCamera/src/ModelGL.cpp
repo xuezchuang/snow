@@ -30,7 +30,7 @@
 #include <cmath>
 #include <sstream>
 #define BUFFER_OFFSET(x)  ((const void*) (x))
-
+#include "Shader.h"
 // constants
 const float GRID_SIZE = 10.0f;
 const float GRID_STEP = 1.0f;
@@ -298,6 +298,16 @@ void ModelGL::setViewport(int x, int y, int w, int h)
 ///////////////////////////////////////////////////////////////////////////////
 void ModelGL::draw(int screenId)
 {
+	glDepthMask(GL_TRUE);
+	GLboolean bdepth;
+	{
+		glPushAttrib(GL_ALL_ATTRIB_BITS);
+		glDepthMask(GL_FALSE);
+		glGetBooleanv(GL_DEPTH_WRITEMASK, &bdepth);
+		glPopAttrib();
+	}
+	glGetBooleanv(GL_DEPTH_WRITEMASK, &bdepth);
+
     preFrame();
     // clear buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -344,23 +354,22 @@ void ModelGL::draw(int screenId)
         else
         {
             glUseProgramObjectARB(0);
+            glMatrixMode(GL_PROJECTION);
 			setFrustum(FOV_Y, (float)windowWidth / windowHeight, nearPlane, farPlane);
-			glMatrixMode(GL_PROJECTION);
+			
 			glLoadMatrixf(matrixProjection.get());
 			glMatrixMode(GL_MODELVIEW);
-
+			// from 3rd person camera
+			Matrix4 matView = cam1.getMatrix();
+			glLoadMatrixf(matView.get());
 			{
 				float mat[16], _mat[16];// get the modelview matrix
 				//float normat[16];
 				glGetFloatv(GL_MODELVIEW_MATRIX, mat);
 				glGetFloatv(GL_PROJECTION_MATRIX, _mat);
 				//glGetFloatv(GL_MATRIX_MODE, normat);.
+				int a = 3;
 			}
-
-
-			// from 3rd person camera
-			Matrix4 matView = cam1.getMatrix();
-			glLoadMatrixf(matView.get());
 			// draw grid
 			if (gridEnabled)
 			{
@@ -550,7 +559,8 @@ void ModelGL::preFrame()
 {
     if(windowSizeChanged)
     {
-        setViewport(0, 0, windowWidth, windowHeight);
+        //setViewport(0, 0, windowWidth, windowHeight);
+        glViewport((GLsizei)0, (GLsizei)0, (GLsizei)windowWidth, (GLsizei)windowHeight);
         windowSizeChanged = false;
     }
 }
@@ -664,6 +674,15 @@ void ModelGL::setFrustum(float l, float r, float b, float t, float n, float f)
     matrixProjection[11] = -1;
     matrixProjection[14] = -(2 * f * n) / (f - n);
     matrixProjection[15] =  0;
+    //Test glFrustum
+    if (0)
+    {
+		glLoadIdentity();
+		glFrustum(l, r, b, t, n, f);
+		float mat[16];// get the modelview matrix
+		glGetFloatv(GL_PROJECTION_MATRIX, mat);
+    }
+    int a = 3;
 }
 
 

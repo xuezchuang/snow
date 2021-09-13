@@ -19,6 +19,7 @@
 #include "wglext.h"             // for wgl extensions after glext.h
 #include "glExtension.h"
 #include "Log.h"
+#include <assert.h>
 using namespace Win;
 
 
@@ -130,7 +131,7 @@ bool ViewGL::setContext(HWND handle, HGLRC rc, int pixelFormat)
 ///////////////////////////////////////////////////////////////////////////////
 void ViewGL::activateContext()
 {
-    ::wglMakeCurrent(hdc, hglrc);
+    assert(::wglMakeCurrent(hdc, hglrc));
 }
 
 

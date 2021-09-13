@@ -193,7 +193,7 @@ static void drawFBO(void)
 	m_pFBO->Bind();
 	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	//BackGroundrender();
+	BackGroundrender();
 	glPushMatrix();
 	glRotatef(view_rotx, 1.0, 0.0, 0.0);
 	glRotatef(view_roty, 0.0, 1.0, 0.0);
@@ -355,10 +355,12 @@ static void draw(void)
 		glColor4f(0.0, 0.0, 0.0, 1.0);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		drawcube(30, 0, 0, 0, 0);
-		//if (bDetpthMask)
-		//{
-		//	glDepthMask(1);
-		//}
+		if (bDetpthMask)
+		{
+		// GLboolean  bDepthMask;
+		// glGetBooleanv(GL_DEPTH_WRITEMASK,&bDepthMask);
+			glDepthMask(GL_FALSE);
+		}
 		glPopAttrib();
 		{
 			glPushAttrib(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -1,18 +1,13 @@
-#include "../../Shader.h"
+#include "Shader.h"
 #include <GLFW/glfw3.h>
-#include "../../stb_image.h"
-#include "../../Camera.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-//#include <learnopengl/filesystem.h>
-//#include <learnopengl/shader.h>
-//#include <learnopengl/camera.h>
-//#include <learnopengl/model.h>
-
 #include <iostream>
+#include "stb_image.h"
+#include "Camera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -41,7 +36,11 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+    glfwWindowHint(GLFW_SAMPLES, 8);
+    //glut下是 glutSetOption(GLUT_MULTISAMPLE, 1);
+    //wgl下比较复杂
+    //简单解释:wglChoosePixelFormatARB()下的第二个参数数组里设置WGL_SAMPLES_ARB msaanum
+    //得到像素后用DescribePixelFormat和SetPixelFormat把dc和rc关联
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
@@ -76,7 +75,9 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE); // enabled by default on some drivers, but not all so always enable to make sure
-
+	GLint  iNumSamples;
+	glGetIntegerv(GL_SAMPLES, &iNumSamples);
+	glGetIntegerv(GL_SAMPLE_BUFFERS, &iNumSamples);
     // build and compile shaders
     // -------------------------
     Shader shader("11.1.anti_aliasing.vs", "11.1.anti_aliasing.fs");

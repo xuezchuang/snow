@@ -67,6 +67,8 @@ int ControllerGL1::create()
     // set the current RC in this thread
     view->activateContext();
 
+	GLint  iNumSamples;
+	glGetIntegerv(GL_SAMPLES, &iNumSamples);
     // initialize OpenGL states
     model->init();
     Win::log(L"Initialized OpenGL states. for screen 1.");

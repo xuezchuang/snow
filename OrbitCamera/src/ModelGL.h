@@ -10,7 +10,7 @@
 
 #ifndef MODEL_GL_H
 #define MODEL_GL_H
-#include "../../opengl/Shader.h"
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
@@ -33,6 +33,7 @@
 #include "OrbitCamera.h"
 #include "Vertices.h"
 #include "GLMathFunc.h"
+class Shader;
 
 class ModelGL
 {

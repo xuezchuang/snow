@@ -1,5 +1,35 @@
-//#include <glad/gl.h>
-#include "Shader.h"
+#ifndef SHADER_H
+#define SHADER_H
+
+#pragma once
+#include <glm/glm.hpp>
+
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include "gl/glew.h"
+class Shader {
+public:
+	//程序ID
+	unsigned int ID;
+
+	Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
+	//使用着色器
+	void use();
+	//设置uniform变量
+	void setBool(const std::string& name, bool value) const;
+	void setInt(const std::string& name, int value) const;
+	void setFloat(const std::string& name, float value) const;
+	void setMat4(const std::string& name, float value[]) const;
+	void setMat4(const std::string& name, const float* value) const;
+	void setMat4(const std::string& name, const glm::mat4& value) const;
+	void setVec3(const std::string& name, const glm::vec3& value) const;
+	void setVec3(const std::string& name, float x, float y, float z) const;
+	void setVec3(const std::string& name, float value[])const;
+	void setVec4(const std::string& name, float x, float y, float z, float w) const;
+};
+
 #ifdef _WIN32
 #include <tchar.h>
 #include <windows.h>
@@ -104,6 +134,10 @@ void Shader::setMat4(const std::string& name, const float* value) const {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, value);
 }
 
+void Shader::setMat4(const std::string& name, const glm::mat4& value) const {
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &(value[0].x));
+}
+
 void Shader::setVec3(const std::string& name, const glm::vec3& value) const {
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
@@ -111,10 +145,12 @@ void Shader::setVec3(const std::string& name, float x, float y, float z) const {
 	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
 }
 
-void Shader::setVec3(const std::string& name, float value[])const{
+void Shader::setVec3(const std::string& name, float value[])const {
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, value);
 }
 
 void Shader::setVec4(const std::string& name, float x, float y, float z, float w) const {
 	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+
 }
+#endif

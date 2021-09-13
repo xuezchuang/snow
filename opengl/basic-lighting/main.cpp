@@ -1,16 +1,11 @@
-
-
-
-#include "gl/glew.h"
+#include "Shader.h"
 #include <GLFW/glfw3.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
-
-#include "Shader.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "Camera.h"
 
@@ -101,9 +96,6 @@ void getVertexAttribList(GLint programHandle)
 		glGetProgramResourceName(programHandle, GL_PROGRAM_OUTPUT, i, nameBufSize, nullptr, name);
 
 		GLint nindex = glGetProgramResourceIndex(programHandle, GL_PROGRAM_OUTPUT, name);
-		GLsizei a;
-		GLint b;
-		GLenum c;
 		//glm::vec4* abc =  (glm::vec4*)glGetActiveAttrib(programHandle, nindex, NULL, &a, &b, &c, name);
 
 		//cout << "location:" << results[2] << "    " << name << "(" << getTypeString(results[1]) << ")" << endl;

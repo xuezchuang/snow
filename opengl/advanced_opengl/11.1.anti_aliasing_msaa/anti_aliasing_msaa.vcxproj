@@ -19,28 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Shader.h" />
-    <ClInclude Include="stb_image.h" />
+    <None Include="11.1.anti_aliasing.fs" />
+    <None Include="11.1.anti_aliasing.vs" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Deps\glad_gl.cpp" />
-    <ClCompile Include="..\Shader.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shader.fs" />
-    <None Include="shader.vs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="wood.png" />
+    <ClCompile Include="anti_aliasing_msaa.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{775C4B7A-4FFA-43AF-B193-CB548C2A48B1}</ProjectGuid>
+    <ProjectGuid>{121F86A7-BAD5-4E34-B79D-3971436491F5}</ProjectGuid>
     <RootNamespace>chapter1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
-    <ProjectName>advance_lighting</ProjectName>
+    <ProjectName>anti_aliasing_msaa</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\opengl\Shader.cpp">
-      <Filter>shader</Filter>
-    </ClCompile>
     <ClCompile Include="ModelGL.cpp">
       <Filter>Model</Filter>
     </ClCompile>
@@ -25,9 +22,6 @@
     <ClCompile Include="BitmapFont.cpp">
       <Filter>Frame</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
-      <Filter>Frame</Filter>
-    </ClCompile>
     <ClCompile Include="ControllerForm.cpp">
       <Filter>Frame</Filter>
     </ClCompile>
@@ -40,9 +34,6 @@
     <ClCompile Include="Matrices.cpp">
       <Filter>Frame</Filter>
     </ClCompile>
-    <ClCompile Include="procedure.cpp">
-      <Filter>Frame</Filter>
-    </ClCompile>
     <ClCompile Include="Tga.cpp">
       <Filter>Frame</Filter>
     </ClCompile>
@@ -52,13 +43,7 @@
     <ClCompile Include="ViewForm.cpp">
       <Filter>Frame</Filter>
     </ClCompile>
-    <ClCompile Include="ViewGL.cpp">
-      <Filter>Frame</Filter>
-    </ClCompile>
     <ClCompile Include="wcharUtil.cpp">
-      <Filter>Frame</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
       <Filter>Frame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -73,11 +58,20 @@
     <ClCompile Include="ControllerMain.cpp">
       <Filter>Frame\Frame</Filter>
     </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Frame\Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Frame\wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="procedure.cpp">
+      <Filter>Frame\wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewGL.cpp">
+      <Filter>Frame\view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\opengl\Shader.h">
-      <Filter>shader</Filter>
-    </ClInclude>
     <ClInclude Include="ModelGL.h">
       <Filter>Model</Filter>
     </ClInclude>
@@ -108,9 +102,6 @@
     <ClInclude Include="BoundingBox.h">
       <Filter>Frame</Filter>
     </ClInclude>
-    <ClInclude Include="Controller.h">
-      <Filter>Frame</Filter>
-    </ClInclude>
     <ClInclude Include="ControllerForm.h">
       <Filter>Frame</Filter>
     </ClInclude>
@@ -124,9 +115,6 @@
       <Filter>Frame</Filter>
     </ClInclude>
     <ClInclude Include="Matrices.h">
-      <Filter>Frame</Filter>
-    </ClInclude>
-    <ClInclude Include="procedure.h">
       <Filter>Frame</Filter>
     </ClInclude>
     <ClInclude Include="Quaternion.h">
@@ -150,16 +138,10 @@
     <ClInclude Include="ViewForm.h">
       <Filter>Frame</Filter>
     </ClInclude>
-    <ClInclude Include="ViewGL.h">
-      <Filter>Frame</Filter>
-    </ClInclude>
     <ClInclude Include="wcharUtil.h">
       <Filter>Frame</Filter>
     </ClInclude>
     <ClInclude Include="wglext.h">
-      <Filter>Frame</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
       <Filter>Frame</Filter>
     </ClInclude>
     <ClInclude Include="Controls.h">
@@ -173,6 +155,18 @@
     </ClInclude>
     <ClInclude Include="ControllerMain.h">
       <Filter>Frame\Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Frame\Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Frame\wnd</Filter>
+    </ClInclude>
+    <ClInclude Include="procedure.h">
+      <Filter>Frame\wnd</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewGL.h">
+      <Filter>Frame\view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +200,12 @@
     </Filter>
     <Filter Include="Frame\Frame">
       <UniqueIdentifier>{931b1603-12fd-41fb-a933-14209d52eecc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frame\wnd">
+      <UniqueIdentifier>{8e292a56-9440-43e6-b8a7-8b2ac50ee247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frame\view">
+      <UniqueIdentifier>{6d6149b7-7c10-4578-a454-16e23179764c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

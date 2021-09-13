@@ -1,4 +1,4 @@
-#include "../Shader.h"
+#include "Shader.h"
 //#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -9,8 +9,8 @@
 
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../stb_image.h"
-#include "../Camera.h"
+#include "stb_image.h"
+#include "Camera.h"
 
 
 
@@ -78,18 +78,6 @@ int main() {
 
 	//开启深度测试
 	glEnable(GL_DEPTH_TEST);
-	{
-		glDepthMask(GL_TRUE);
-		GLboolean bdepth;
-		{
-			glPushAttrib(GL_ALL_ATTRIB_BITS);
-			glDepthMask(GL_FALSE);
-			glGetBooleanv(GL_DEPTH_WRITEMASK, &bdepth);
-			glPopAttrib();
-		}
-		glGetBooleanv(GL_DEPTH_WRITEMASK, &bdepth);
-		int a = 0;
-	}
 	//！创建着色器
 	Shader shader("shader.vs", "shader.fs");
 
@@ -173,7 +161,7 @@ void processInput(GLFWwindow *window) {
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		camera.ProcessKeyboard(UP, deltaTime); 
+		camera.ProcessKeyboard(UP, deltaTime);
 
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		camera.ProcessKeyboard(DOWN, deltaTime);
