@@ -10,6 +10,7 @@ uniform vec3 lightColor;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
+void main()
 {
     //»·¾³¹â
     float ambientStrength = 0.1;
