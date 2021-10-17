@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrices.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BLI_sys_types.h" />
@@ -11,6 +12,7 @@
     <ClInclude Include="GPU_vertex_format.h" />
     <ClInclude Include="interface_intern.h" />
     <ClInclude Include="vapp.h" />
+    <ClInclude Include="Matrices.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\gpu_shader_2D_smooth_color_frag.glsl">

@@ -14,6 +14,8 @@ protected:
     static void DisplayFunc(void);
     static void ReshapeFunc(int width, int height);
     static void keyboardCBFunc(unsigned char key, int x, int y);
+    static void mouseFunc(int, int, int, int);
+    static void motionFunc(int, int);
 #ifdef _DEBUG
     static void APIENTRY DebugOutputCallback(GLenum source,
                                              GLenum type,
@@ -38,7 +40,7 @@ public:
          //glutInitContextProfile(GLUT_CORE_PROFILE);
          glutInitContextVersion(4, 3);
 
-        glutInitWindowSize(824, 568);
+        glutInitWindowSize(800, 560);
         glutInitWindowPosition (140, 140);
         glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
         glutInit(&one, &name);
@@ -47,6 +49,8 @@ public:
         glutDisplayFunc(DisplayFunc);
         glutReshapeFunc(ReshapeFunc);
         glutKeyboardFunc(keyboardCBFunc);
+        glutMouseFunc(mouseFunc);
+        glutMotionFunc(motionFunc);
 #ifdef USE_GL3W
         gl3wInit();
 #else
@@ -77,6 +81,14 @@ public:
     {
 
     }
+	virtual void mouse(int,int,int,int)
+	{
+
+	}
+	virtual void motion(int,int)
+	{
+
+	}
     virtual void Reshape(int width, int height)
     {
         glViewport(0, 0, width, height);
@@ -132,6 +144,15 @@ void VermillionApplication::keyboardCBFunc(unsigned char key,   \
     s_app->keyboardCB(key,x, y);                   \
 }                                                           \
                                                             \
+void VermillionApplication::mouseFunc(int p1,int p2,int p3,int p4)\
+{                                                           \
+    s_app->mouse(p1,p2,p3,p4);\
+}                                                           \
+                                                            \
+void VermillionApplication::motionFunc(int p1,int p2)\
+{                                                           \
+    s_app->motion(p1,p2);\
+}                                                           \
 void VermillionApplication::MainLoop(void)                  \
 {                                                           \
     for (;;)                                                \

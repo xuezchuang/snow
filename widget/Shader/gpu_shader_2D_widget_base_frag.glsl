@@ -4,6 +4,7 @@ in vec4 vs_fs_color;
 
 layout (location = 0) out vec4 color;
 flat in vec2 outRectSize;
+uniform vec4 vcolor;
 noperspective in vec2 uvInterp;
 /**
 * 长方形 box：  1. 原点位于长方形的中心点，形状是轴对称的
@@ -38,6 +39,6 @@ void main(void)
     float sdf = sdBox_f(uvInterp,outRectSize,0.5);
     if(sdf < 0)
     {
-       color = vec4(1.0,0.0,0.0,1.0);
+       color = vcolor;//vec4(1.0,0.0,0.0,1.0);
     }
 }

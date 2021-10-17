@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "interface_intern.h"
 #include <assert.h>
+#include "Matrices.h"
 using namespace vmath;
 UserDef U;
 // Define USE_PRIMITIVE_RESTART to 0 to use two separate draw commands
@@ -82,7 +83,10 @@ virtual void Display(bool auto_redraw);
 virtual void Finalize(void);
 virtual void Reshape(int width, int height);
 virtual void keyboardCB(unsigned char key, int x, int y);
+virtual void mouse(int button, int state, int x, int y);
+//virtual void motion(int x, int y);
 void DrawRect();
+bool bttt = false;
 // Member variables
 float aspect;
 GLuint render_prog;
@@ -95,6 +99,10 @@ GLint modelview_matrix_loc;
 GLint project_matrix_loc;
 GLint parameters_loc;
 GLint test_loc;
+GLint vcolor_loc;
+int _ttx, _tty;
+rctf m_CrupRect;
+bool mouseLeftDown = false;
 uiWidgetBaseParameters widgetParam;
 //
 GLint render_model_matrix_loc;
@@ -160,6 +168,7 @@ void DrawCommandExample::Initialize(const char* title)
     modelview_matrix_loc = glGetUniformLocation(render_prog, "model_matrix");
     project_matrix_loc = glGetUniformLocation(render_prog, "projection_matrix");
     parameters_loc = glGetUniformLocation(render_prog, "parameters");
+	vcolor_loc = glGetUniformLocation(render_prog, "vcolor");
     test_loc = glGetUniformLocation(render_prog, "btest");
 	 //Indices for the triangle strips
 	static const GLushort vertex_indices[] =
@@ -284,60 +293,230 @@ void DrawCommandExample::Reshape(int width, int height)
     aspect = float(height) / float(width);
 }
 
+BLI_INLINE float BLI_rctf_size_x(const struct rctf* rct)
+{
+	return (rct->xmax - rct->xmin);
+}
+BLI_INLINE float BLI_rctf_size_y(const struct rctf* rct)
+{
+	return (rct->ymax - rct->ymin);
+}
+
 void DrawCommandExample::DrawRect()
 {
 	mat4 model_matrix;
 
 	//   // Setup
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_CULL_FACE);
+	//glDisable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Activate simple shading program
 	glUseProgram(render_prog);
 
 	// Set up the model and projection matrix
-	vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0f));
+	//vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0));
+	rctf viewplane;
+	viewplane.xmin = -1.0f;		viewplane.xmax = 1.0f;
+	viewplane.ymin = -aspect;	viewplane.ymax = aspect;
+	double dscale = 5.0;
+	{
+		viewplane.xmin *= dscale;
+		viewplane.xmax *= dscale;
+		viewplane.ymin *= dscale;
+		viewplane.ymax *= dscale;
+	}
+	vmath::mat4 projection_matrix(vmath::frustum(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 1.0f, 400.0));
+	//projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, -500.0f, 500.0f);
+	GLuint QueryIDs;
+	glUniform4fv(vcolor_loc, 1, vec4(1.0f,0.0f,0.0f,1.0f));
+	if(bttt)
+		glUniform4fv(vcolor_loc, 1, vec4(0.0f, 0.0f, 1.0f, 1.0f));
+	if (mouseLeftDown)
+	{
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_SCISSOR_TEST);
+		glGenQueries(1, &QueryIDs);
+		glBeginQuery(GL_SAMPLES_PASSED, QueryIDs);
+		
+		//ViewPort(800, 560);
+		//m_CrupRect.xmin = 80.0f;		m_CrupRect.xmax = 240.0f;
+		//m_CrupRect.ymin = 300.0f;		m_CrupRect.ymax = 400.0f;
+		//
+		m_CrupRect.xmin = viewplane.xmin + (BLI_rctf_size_x(&viewplane) * (m_CrupRect.xmin / 800.0f));
+		m_CrupRect.ymin = viewplane.ymin + (BLI_rctf_size_y(&viewplane) * (m_CrupRect.ymin / 560.0f));
+		m_CrupRect.xmax = viewplane.xmin + (BLI_rctf_size_x(&viewplane) * (m_CrupRect.xmax / 800.0f));
+		m_CrupRect.ymax = viewplane.ymin + (BLI_rctf_size_y(&viewplane) * (m_CrupRect.ymax / 560.0f));
+
+		projection_matrix = vmath::Orthogonal(m_CrupRect.xmin, m_CrupRect.xmax, m_CrupRect.ymin, m_CrupRect.ymax, -400.0f, 400.0f);
+		//计算出projection_matrix 后计算6个面对所有构件CPU剔除(简单快速)后,进行使用GPU裁剪
+	}
+	
 	glUniformMatrix4fv(project_matrix_loc, 1, GL_FALSE, projection_matrix);
 	// Set up for a glDrawElements call
 	glBindVertexArray(vao[0]);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
 	//// Draw Arrays...
-	model_matrix = vmath::translation(-3.0f, 0.0f, -5.0f);
+	//model_matrix = vmath::translation(0.0f, 0.0f, -5.0f);// -5.0f);
+	//model_matrix = vmath::scale(0.2f, 0.2f, 0.2f);
+	model_matrix = mat4::identity();
+	model_matrix *= vmath::translation(-3.0f, 0.0f, -1.0f);
 	glUniformMatrix4fv(modelview_matrix_loc, 1, GL_FALSE, model_matrix);
+	Matrix4 pm, mm;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{ 
+			pm[i * 4+j] = projection_matrix[i][j];
+			mm[i * 4+j] = model_matrix[i][j];
+		}
+			
+	}
+	//float view[4];
+	//glViewport(view);
+	
+	//Vector4 vv(824.0f, 568.0f,0.0f,1.0f);
+	//vv = pm * vv;
+
+	Vector4 vec(-1.f, 1.0f, 0.0f, 1.0);
+	Vector4 vec2 = pm * (mm * vec);
+	Vector3 v(vec2.x / vec2.w, vec2.y / vec2.w, vec2.z / vec2.w);
+
 
 	widgetParam.rect.xmin = -1.0f;
 	widgetParam.rect.xmax = 1.f;
 	widgetParam.rect.ymin = -1.f;
 	widgetParam.rect.ymax = 1.f;
+
 	glUniform4fv(parameters_loc, MAX_WIDGET_PARAMETERS, (float*)&widgetParam);
 	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, NULL);
 	glDrawElementsInstancedBaseVertexBaseInstance(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, NULL, 1, 0, 0);
 	//base::Display();
+	if (mouseLeftDown)
+	{
+		bool bb = glIsEnabled(GL_SCISSOR_TEST);
+		glEndQuery(GL_SAMPLES_PASSED);
+		uint result = 0;
+		glGetQueryObjectuiv(QueryIDs, GL_QUERY_RESULT, &result);
+		bttt = result;
+		glDeleteQueries(1, &result);
+		mouseLeftDown = false;
+			DrawRect();
+	}
 }
+void DrawCommandExample::mouse(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON)
+	{
+		if (state == GLUT_DOWN)
+		{
+			mouseLeftDown = false;
+			_ttx = x;
+			_tty = y;
+		}
+		else if (state == GLUT_UP)
+		{
+			mouseLeftDown = true;
+			m_CrupRect.xmin = double(min(x, _ttx));
+			m_CrupRect.xmax = double(max(x, _ttx));
+			m_CrupRect.ymin = double(min(y, _tty));
+			m_CrupRect.ymax = double(max(y, _tty));
+
+		}
+		
+		
+	}
+	DrawRect();
+	glutSwapBuffers();
+}
+
+
+
+
+/* ELEM#(v, ...): is the first arg equal any others? */
+/* internal helpers. */
+#define _VA_ELEM2(v, a) ((v) == (a))
+#define _VA_ELEM3(v, a, b) \
+  (_VA_ELEM2(v, a) || _VA_ELEM2(v, b))
+#define _VA_ELEM4(v, a, b, c) \
+  (_VA_ELEM3(v, a, b) || _VA_ELEM2(v, c))
+#define _VA_ELEM5(v, a, b, c, d) \
+  (_VA_ELEM4(v, a, b, c) || _VA_ELEM2(v, d))
+#define _VA_ELEM6(v, a, b, c, d, e) \
+  (_VA_ELEM5(v, a, b, c, d) || _VA_ELEM2(v, e))
+#define _VA_ELEM7(v, a, b, c, d, e, f) \
+  (_VA_ELEM6(v, a, b, c, d, e) || _VA_ELEM2(v, f))
+#define _VA_ELEM8(v, a, b, c, d, e, f, g) \
+  (_VA_ELEM7(v, a, b, c, d, e, f) || _VA_ELEM2(v, g))
+#define _VA_ELEM9(v, a, b, c, d, e, f, g, h) \
+  (_VA_ELEM8(v, a, b, c, d, e, f, g) || _VA_ELEM2(v, h))
+#define _VA_ELEM10(v, a, b, c, d, e, f, g, h, i) \
+  (_VA_ELEM9(v, a, b, c, d, e, f, g, h) || _VA_ELEM2(v, i))
+#define _VA_ELEM11(v, a, b, c, d, e, f, g, h, i, j) \
+  (_VA_ELEM10(v, a, b, c, d, e, f, g, h, i) || _VA_ELEM2(v, j))
+#define _VA_ELEM12(v, a, b, c, d, e, f, g, h, i, j, k) \
+  (_VA_ELEM11(v, a, b, c, d, e, f, g, h, i, j) || _VA_ELEM2(v, k))
+#define _VA_ELEM13(v, a, b, c, d, e, f, g, h, i, j, k, l) \
+  (_VA_ELEM12(v, a, b, c, d, e, f, g, h, i, j, k) || _VA_ELEM2(v, l))
+#define _VA_ELEM14(v, a, b, c, d, e, f, g, h, i, j, k, l, m) \
+  (_VA_ELEM13(v, a, b, c, d, e, f, g, h, i, j, k, l) || _VA_ELEM2(v, m))
+#define _VA_ELEM15(v, a, b, c, d, e, f, g, h, i, j, k, l, m, n) \
+  (_VA_ELEM14(v, a, b, c, d, e, f, g, h, i, j, k, l, m) || _VA_ELEM2(v, n))
+#define _VA_ELEM16(v, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) \
+  (_VA_ELEM15(v, a, b, c, d, e, f, g, h, i, j, k, l, m, n) || _VA_ELEM2(v, o))
+#define _VA_ELEM17(v, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
+  (_VA_ELEM16(v, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) || _VA_ELEM2(v, p))
+/* --- internal helpers --- */
+#define _VA_NARGS_GLUE(x, y) x y
+#define _VA_NARGS_RETURN_COUNT(\
+  _1_, _2_, _3_, _4_, _5_, _6_, _7_, _8_, _9_, _10_, _11_, _12_, _13_, _14_, _15_, _16_, \
+  _17_, _18_, _19_, _20_, _21_, _22_, _23_, _24_, _25_, _26_, _27_, _28_, _29_, _30_, _31_, _32_, \
+  _33_, _34_, _35_, _36_, _37_, _38_, _39_, _40_, _41_, _42_, _43_, _44_, _45_, _46_, _47_, _48_, \
+  _49_, _50_, _51_, _52_, _53_, _54_, _55_, _56_, _57_, _58_, _59_, _60_, _61_, _62_, _63_, _64_, \
+  count, ...) count
+#define _VA_NARGS_EXPAND(args) _VA_NARGS_RETURN_COUNT args
+#define _VA_NARGS_OVERLOAD_MACRO2(name, count) name##count
+#define _VA_NARGS_OVERLOAD_MACRO1(name, count) _VA_NARGS_OVERLOAD_MACRO2(name, count)
+#define _VA_NARGS_OVERLOAD_MACRO(name,  count) _VA_NARGS_OVERLOAD_MACRO1(name, count)
+/* --- expose for re-use --- */
+/* 64 args max */
+#define VA_NARGS_COUNT(...) _VA_NARGS_EXPAND((__VA_ARGS__, \
+  64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, \
+  48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, \
+  32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, \
+  16, 15, 14, 13, 12, 11, 10,  9,  8,  7,  6,  5,  4,  3,  2, 1, 0))
+#define VA_NARGS_CALL_OVERLOAD(name, ...) \
+  _VA_NARGS_GLUE(_VA_NARGS_OVERLOAD_MACRO(name, VA_NARGS_COUNT(__VA_ARGS__)), (__VA_ARGS__))
+
+#define ELEM(...) VA_NARGS_CALL_OVERLOAD(_VA_ELEM, __VA_ARGS__)
+
+
 void DrawCommandExample::keyboardCB(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
 	case 'b':
 	{
+		if (ELEM(1, 2, 3, 4))
+			return;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		DrawRect();
-		rctf cirrect;
-		cirrect.xmin = -0.8f;
-		cirrect.xmax = 0.8f;
-		cirrect.ymin = -0.8f;
-		cirrect.ymax = 0.8f;
-		DrawHSVCIRCLE(&cirrect);
+		//rctf cirrect;
+		//cirrect.xmin = -0.8f;
+		//cirrect.xmax = 0.8f;
+		//cirrect.ymin = -0.8f;
+		//cirrect.ymax = 0.8f;
+		//DrawHSVCIRCLE(&cirrect);
 		//base::Display();
 		glutSwapBuffers();
 	}
 		break;
 	case 'v':
 	{
-		
-
-
+		bttt = true;
+		//剪切测试
+		DrawRect();
+		glutSwapBuffers();
 	}
 	break;
 	}
