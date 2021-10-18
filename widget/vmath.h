@@ -617,18 +617,91 @@ static inline mat4 frustum(float left, float right, float bottom, float top, flo
         (f < 0.0))
        return result;
 
-    result[0][0] = (2.0f * n) / (right - left);
-    result[1][1] = (2.0f * n) / (top - bottom);
+    //result[0][0] = (2.0f * n) / (right - left);
+    //result[1][1] = (2.0f * n) / (top - bottom);
 
-    result[2][0] = (right + left) / (right - left);
-    result[2][1] = (top + bottom) / (top - bottom);
-    result[2][2] = -(f + n) / (f - n);
-    result[2][3]= -1.0f;
+    //result[2][0] = (right + left) / (right - left);
+    //result[2][1] = (top + bottom) / (top - bottom);
+    //result[2][2] = -(f + n) / (f - n);
+    //result[2][3]= -1.0f;
 
-    result[3][2] = -(2.0f * f * n) / (f - n);
-    result[3][3] =  0.0f;
+    //result[3][2] = -(2.0f * f * n) / (f - n);
+    //result[3][3] =  0.0f;
 
+	result[0][0] = 2.0f * n / (right - left);
+	result[1][0] = 0.0f;
+	result[2][0] = (right + left) / (right - left);
+	result[3][0] = 0.0f;
+
+	result[0][1] = 0.0f;
+	result[1][1] = 2.0f * n / (top - bottom);
+	result[2][1] = (top + bottom) / (top - bottom);
+	result[3][1] = 0.0f;
+
+	result[0][2] = 0.0f;
+	result[1][2] = 0.0f;
+	result[2][2] = -(f + n) / (f - n);
+	result[3][2] = -2.0f * f * n / (f - n);
+
+	result[0][3] = 0.0f;
+	result[1][3] = 0.0f;
+	result[2][3] = -1.0f;
+	result[3][3] = 0.0f;
+
+	//result[0][0] = 2.0f / (right - left);
+	//result[1][0] = 0.0f;
+	//result[2][0] = 0.0f;
+	//result[3][0] = -(right + left) / (right - left);
+
+	//result[0][1] = 0.0f;
+	//result[1][1] = 2.0f / (top - bottom);
+	//result[2][1] = 0.0f;
+	//result[3][1] = -(top + bottom) / (top - bottom);
+
+	//result[0][2] = 0.0f;
+	//result[1][2] = 0.0f;
+	//result[2][2] = -2.0f / (f - n);
+	//result[3][2] = -(f + n) / (f - n);
+
+	//result[0][3] = 0.0f;
+	//result[1][3] = 0.0f;
+	//result[2][3] = 0.0f;
+	//result[3][3] = 1.0f;
     return result;
+}
+
+static inline mat4 Orthogonal(float left, float right, float bottom, float top, float n, float f)
+{
+	mat4 result(mat4::identity());
+
+	//if ((right == left) ||
+	//	(top == bottom) ||
+	//	(n == f) ||
+	//	(n < 0.0) ||
+	//	(f < 0.0))
+	//	return result;
+
+
+	result[0][0] = 2.0f / (right - left);
+	result[1][0] = 0.0f;
+	result[2][0] = 0.0f;
+	result[3][0] = -(right + left) / (right - left);
+
+	result[0][1] = 0.0f;
+	result[1][1] = 2.0f / (top - bottom);
+	result[2][1] = 0.0f;
+	result[3][1] = -(top + bottom) / (top - bottom);
+
+	result[0][2] = 0.0f;
+	result[1][2] = 0.0f;
+	result[2][2] = -2.0f / (f - n);
+	result[3][2] = -(f + n) / (f - n);
+
+	result[0][3] = 0.0f;
+	result[1][3] = 0.0f;
+	result[2][3] = 0.0f;
+	result[3][3] = 1.0f;
+	return result;
 }
 
 static inline mat4 perspective(float fovy /* in degrees */, float aspect, float n, float f)
