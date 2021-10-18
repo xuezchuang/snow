@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrices.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BLI_sys_types.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="GPU_common.h" />
     <ClInclude Include="GPU_vertex_format.h" />
     <ClInclude Include="interface_intern.h" />
+    <ClInclude Include="Matrices.h" />
     <ClInclude Include="vapp.h" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "interface_intern.h"
 #include <assert.h>
+#include "Matrices.h"
 using namespace vmath;
 UserDef U;
 // Define USE_PRIMITIVE_RESTART to 0 to use two separate draw commands
@@ -82,7 +83,13 @@ virtual void Display(bool auto_redraw);
 virtual void Finalize(void);
 virtual void Reshape(int width, int height);
 virtual void keyboardCB(unsigned char key, int x, int y);
+virtual void mouse(int, int, int, int);
+virtual void motion(int, int);
 void DrawRect();
+void DrawRubber();
+private:
+	bool mouseLeftDown = false;
+	bool bredraw = true;
 // Member variables
 float aspect;
 GLuint render_prog;
@@ -94,6 +101,8 @@ GLuint ebo[1];
 GLint modelview_matrix_loc;
 GLint project_matrix_loc;
 GLint parameters_loc;
+GLint color_loc;
+GLint brubber_loc;
 GLint test_loc;
 uiWidgetBaseParameters widgetParam;
 //
@@ -160,6 +169,8 @@ void DrawCommandExample::Initialize(const char* title)
     modelview_matrix_loc = glGetUniformLocation(render_prog, "model_matrix");
     project_matrix_loc = glGetUniformLocation(render_prog, "projection_matrix");
     parameters_loc = glGetUniformLocation(render_prog, "parameters");
+	color_loc = glGetUniformLocation(render_prog, "vcolor");
+	brubber_loc = glGetUniformLocation(render_prog, "bRubber");
     test_loc = glGetUniformLocation(render_prog, "btest");
 	 //Indices for the triangle strips
 	static const GLushort vertex_indices[] =
@@ -232,41 +243,23 @@ void DrawCommandExample::Initialize(const char* title)
 
 void DrawCommandExample::Display(bool auto_redraw)
 {
-	return;
-    mat4 model_matrix;
-
- //   // Setup
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//if(0)
+	if (bredraw)
 	{
-		// Activate simple shading program
-		glUseProgram(render_prog);
-
-		// Set up the model and projection matrix
-		vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0f));
-		glUniformMatrix4fv(project_matrix_loc, 1, GL_FALSE, projection_matrix);
-		// Set up for a glDrawElements call
-		glBindVertexArray(vao[0]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
-		//// Draw Arrays...
-		model_matrix = vmath::translation(-3.0f, 0.0f, -5.0f);
-		glUniformMatrix4fv(modelview_matrix_loc, 1, GL_FALSE, model_matrix);
-
-		widgetParam.rect.xmin = -1.0f;
-		widgetParam.rect.xmax = 1.f;
-		widgetParam.rect.ymin = -1.f;
-		widgetParam.rect.ymax = 1.f;
-		glUniform4fv(parameters_loc, MAX_WIDGET_PARAMETERS, (float*)&widgetParam);
-		//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, NULL);
-		glDrawElementsInstancedBaseVertexBaseInstance(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, NULL, 1, 0, 0);
-		//base::Display();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		DrawRect();
+		rctf cirrect;
+		cirrect.xmin = -0.8f;
+		cirrect.xmax = 0.8f;
+		cirrect.ymin = -0.8f;
+		cirrect.ymax = 0.8f;
+		DrawHSVCIRCLE(&cirrect);
+		if (mouseLeftDown)
+		{
+			DrawRubber();
+		}
+		bredraw = false;
+		base::Display();
 	}
-
-
-    base::Display();
 }
 
 void DrawCommandExample::Finalize(void)
@@ -298,6 +291,63 @@ void DrawCommandExample::DrawRect()
 	// Set up the model and projection matrix
 	vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0f));
 	glUniformMatrix4fv(project_matrix_loc, 1, GL_FALSE, projection_matrix);
+	if(mouseLeftDown)
+		glUniform4fv(color_loc, 1, vec4(1.0f, 1.0f, 0.0f, 1.0f));
+	else
+		glUniform4fv(color_loc, 1, vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	glUniform1i(brubber_loc, false);
+	// Set up for a glDrawElements call
+	glBindVertexArray(vao[0]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
+	//// Draw Arrays...
+	float t[16];
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0f);
+	float mat[16];// get the modelview matrix
+	//glGetDoublev(GL_PROJECTION_MATRIX, t);
+	glGetFloatv(GL_PROJECTION_MATRIX, t);
+
+	//memcpy(t, projection_matrix, sizeof(float) * 16);
+	Matrix4 tt(t);
+	//Matrix4 p2; p2.identity();
+	Vector4 p1(-3.0f, 0.0, 0.0,1.0);
+	p1 = tt * p1;
+	//
+	//tt.invert();
+	//p1 = tt * p1;
+
+	model_matrix = vmath::translation(-3.0f, 0.0f,  -5.0f);
+	glUniformMatrix4fv(modelview_matrix_loc, 1, GL_FALSE, model_matrix);
+
+
+	widgetParam.rect.xmin = -1.0f;
+	widgetParam.rect.xmax = 1.f;
+	widgetParam.rect.ymin = -1.f;
+	widgetParam.rect.ymax = 1.f;
+	glUniform4fv(parameters_loc, MAX_WIDGET_PARAMETERS, (float*)&widgetParam);
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, NULL);
+	glDrawElementsInstancedBaseVertexBaseInstance(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, NULL, 1, 0, 0);
+	//base::Display();
+}
+void DrawCommandExample::DrawRubber()
+{
+	mat4 model_matrix;
+
+	//   // Setup
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// Activate simple shading program
+	glUseProgram(render_prog);
+
+	// Set up the model and projection matrix
+	vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0f));
+	glUniformMatrix4fv(project_matrix_loc, 1, GL_FALSE, projection_matrix);
+
+	glUniform4fv(color_loc, 1, vec4(0.0f, 0.0f, 1.0f, 0.3f));
+	glUniform1i(brubber_loc, true);
 	// Set up for a glDrawElements call
 	glBindVertexArray(vao[0]);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
@@ -343,6 +393,50 @@ void DrawCommandExample::keyboardCB(unsigned char key, int x, int y)
 	}
 }
 
+void DrawCommandExample::mouse(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON)
+	{
+		if (state == GLUT_DOWN)
+			mouseLeftDown = true;
+		else if(state = GLUT_UP)
+			mouseLeftDown = false;
+		GLdouble _x, _y, _z;
+
+
+		GLint    viewport[4];
+		GLdouble modelview[16];
+		GLdouble projection[16];
+		GLfloat  winX, winY, winZ;
+		GLdouble posX, posY, posZ;
+		double t[16];
+		glMatrixMode(GL_PROJECTION);
+		glGetDoublev(GL_PROJECTION_MATRIX, projection);
+		vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0f));
+		memcpy(t, projection_matrix,sizeof(float)*16);
+		for (int i = 0; i < 16; i++)
+			modelview[i] = t[i];
+		//Matrix4 tt(t);
+		//memcpy(tt.get(), projection_matrix, sizeof(float) * 16);
+		//vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0f));
+		//vmath::vec4 viewport;
+		//vmath::mat4 modelview;
+		//y = viewport[3] - y;
+		//glReadPixels((int)x, (int)y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+		//gluUnProject(x, y, 0.0, modelview, projection, viewport, &_x, &_y, &_z);
+		//tt.invertGeneral();
+		//Vector3 bb(_x, _y,0.0);
+		//bb = tt* bb;
+		//int a = 3;
+	}
+}
+void DrawCommandExample::motion(int x, int y)
+{
+	if (mouseLeftDown)
+	{
+		bredraw = true;
+	}
+}
 
 static float clamp_f(float value, float min, float max)
 {

@@ -3,6 +3,7 @@
 uniform mat4 model_matrix;
 uniform mat4 projection_matrix;
 uniform bool btest;
+
 #define MAX_PARAM 12
 #ifdef USE_INSTANCE
 #  define MAX_INSTANCE 6
@@ -16,7 +17,8 @@ uniform vec4 parameters[MAX_PARAM];
 #define rect parameters[gl_InstanceID * MAX_PARAM + 1]
 
 
-out vec4 vs_fs_color;
+//out vec4 vs_fs_color;
+//out vec4 vs_fs_hight_color;
 flat out float lineWidth;
 flat out vec2 outRectSize;
 noperspective out vec2 uvInterp;
@@ -146,5 +148,6 @@ void main()
 
 	gl_Position = projection_matrix * (model_matrix  * vec4(pos, 0.0, 1.0));
 	vec4 abc = projection_matrix * (model_matrix  * vec4(rect.yz-rect.xw, 0.0, 1.0));
-	vs_fs_color = vec4(0.1,0.1,0.3,1);
+	//vs_fs_color = vec4(0.1,0.1,0.3,1);
+	//vs_fs_hight_color = hight_color;//vec4(0.1,0.1,0.3,1);
 }

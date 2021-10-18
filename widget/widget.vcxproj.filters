@@ -3,6 +3,9 @@
   <ItemGroup>
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrices.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BLI_sys_types.h" />
@@ -11,6 +14,9 @@
     <ClInclude Include="GPU_vertex_format.h" />
     <ClInclude Include="interface_intern.h" />
     <ClInclude Include="vapp.h" />
+    <ClInclude Include="Matrices.h">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\gpu_shader_2D_smooth_color_frag.glsl">
@@ -41,6 +47,9 @@
   <ItemGroup>
     <Filter Include="shader">
       <UniqueIdentifier>{0f6a7bcf-9ca1-4723-bbf1-5916d9bbaaf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{ab29ce6c-d667-4442-94f4-b169dfc187f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

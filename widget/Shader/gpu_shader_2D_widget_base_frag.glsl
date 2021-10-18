@@ -1,6 +1,10 @@
 #version 330
 
-in vec4 vs_fs_color;
+//in vec4 vs_fs_color;
+//in vec4 vs_fs_hight_color;
+
+uniform vec4 vcolor;
+uniform bool bRubber;
 
 layout (location = 0) out vec4 color;
 flat in vec2 outRectSize;
@@ -34,10 +38,14 @@ float sdBox_f( in vec2 p, in vec2 b,float r)
 
 void main(void)
 {
-    color = vec4(1,1.0,1.0,1.0);
+    color = vec4(0.1f, 0.1f, 0.2f, 1.0f);
+    float t = 0.5;
+    if(bRubber){
+        t = 0.0;
+    }
     float sdf = sdBox_f(uvInterp,outRectSize,0.5);
     if(sdf < 0)
     {
-       color = vec4(1.0,0.0,0.0,1.0);
+       color = vcolor;vec4(1.0f,0.0f,0.0f,1.0f);
     }
 }
