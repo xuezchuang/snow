@@ -2,17 +2,33 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="LoadShaders.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrices.cpp" />
+    <ClCompile Include="IFrameApi.cpp" />
+    <ClCompile Include="GPUShader.cpp">
+      <Filter>gpu_shader</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="BLI_camera.cpp">
+      <Filter>gpu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BLI_sys_types.h" />
-    <ClInclude Include="GPU_batch.h" />
-    <ClInclude Include="GPU_common.h" />
-    <ClInclude Include="GPU_vertex_format.h" />
     <ClInclude Include="interface_intern.h" />
     <ClInclude Include="vapp.h" />
     <ClInclude Include="Matrices.h" />
+    <ClInclude Include="IFrameApi.h" />
+    <ClInclude Include="GPUShader.h">
+      <Filter>gpu_shader</Filter>
+    </ClInclude>
+    <ClInclude Include="GPU_format.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="utildefines.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="BLI_camera.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\gpu_shader_2D_smooth_color_frag.glsl">
@@ -43,6 +59,21 @@
   <ItemGroup>
     <Filter Include="shader">
       <UniqueIdentifier>{0f6a7bcf-9ca1-4723-bbf1-5916d9bbaaf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render">
+      <UniqueIdentifier>{e7f81fdb-b0cc-4b1b-8a28-e7c59177df91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\blockrender">
+      <UniqueIdentifier>{429f1575-31a3-42f4-9ffc-805554e82baa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gpu_shader">
+      <UniqueIdentifier>{dce1976e-2da5-44fc-84e4-61f07f1b14ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gpu">
+      <UniqueIdentifier>{559efe00-0862-47c2-976c-2b330e0e4b9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{b33b51a6-1f37-4bb5-a908-ff04d6cff8dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

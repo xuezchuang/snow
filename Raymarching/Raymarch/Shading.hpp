@@ -239,6 +239,7 @@ private:
 		return 1.0f;
 	}
 
+
 	Vector3f GetSurfaceNormal(const Vector3f& surfacePosition)
 	{
 		float distanceToNearestSurface = _scene.GetMinDistance(surfacePosition);

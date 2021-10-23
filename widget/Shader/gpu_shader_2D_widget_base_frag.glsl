@@ -3,6 +3,7 @@
 in vec4 vs_fs_color;
 
 layout (location = 0) out vec4 color;
+out uint fragColor;
 flat in vec2 outRectSize;
 uniform vec4 vcolor;
 noperspective in vec2 uvInterp;
@@ -39,6 +40,6 @@ void main(void)
     float sdf = sdBox_f(uvInterp,outRectSize,0.5);
     if(sdf < 0)
     {
-       color = vcolor;//vec4(1.0,0.0,0.0,1.0);
+       color = vcolor;
     }
 }

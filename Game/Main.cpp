@@ -9,7 +9,7 @@
 #include "renderbuffer.h"
 
 //#endif
-#define _TEST1
+//#define _TEST1
 #ifdef _TEST1
 static GLfloat view_rotx = 0.f, view_roty = 0.f, view_rotz = 0.f;
 static GLint gear1, gear2, gear3;
@@ -677,8 +677,6 @@ int main(int argc, char* argv[])
 int main(int argc, char** argv)
 {
 	//Create manager object and call sequential functions
-	_CrtSetBreakAlloc(340);
-	_CrtSetBreakAlloc(368);
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//Manager manager;
 	//manager.init();

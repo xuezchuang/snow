@@ -9,6 +9,7 @@ uniform vec3 objectColor;
 uniform vec3 lightColor;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
+uniform bool bspecular;
 
 void main()
 {
@@ -29,9 +30,12 @@ void main()
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * spec * lightColor;
-
-    vec3 result = (ambient + diffuse + specular) * objectColor;
-   // vec3 result = (ambient + diffuse) * objectColor;
+    vec3 result = (ambient + diffuse);
+    if(bspecular){
+        result += specular; 
+    }
+    result *= objectColor;
+     
     FragColor = vec4(result, 1.0f);
     test_matrix = model_matrix;
 }

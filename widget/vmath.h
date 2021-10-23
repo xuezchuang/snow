@@ -610,12 +610,12 @@ static inline mat4 frustum(float left, float right, float bottom, float top, flo
 {
     mat4 result(mat4::identity());
 
-    if ((right == left) ||
-        (top == bottom) ||
-        (n == f) ||
-        (n < 0.0) ||
-        (f < 0.0))
-       return result;
+	if ((right == left) ||
+		(top == bottom) ||
+		(n == f) ||
+		(n < 0.0) ||
+		(f < 0.0))
+		return result;
 
     //result[0][0] = (2.0f * n) / (right - left);
     //result[1][1] = (2.0f * n) / (top - bottom);

@@ -1,4 +1,4 @@
-#include "../Shader.h"
+#include "Shader.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -7,8 +7,8 @@
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../stb_image.h"
-#include "../Camera.h"
+#include "stb_image.h"
+#include "Camera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -93,6 +93,8 @@ glm::vec3 cubePositions[] = {
 	glm::vec3(1.5f, 0.2f, -1.5f),
 	glm::vec3(-1.3f, 1.0f, -1.5f)
 };
+
+bool bortho = false;
 
 int main() {
 	glfwInit();
@@ -187,6 +189,14 @@ int main() {
 		//投影
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+		float  top = 0.1f * (float)tan(glm::radians(0.5f * camera.Zoom)); // bottom = -top
+		float  right = top * (float)SCR_WIDTH / (float)SCR_HEIGHT; // left = -right
+
+		if(!bortho)
+			projection = glm::frustum(-right,right,-top, top,  0.1f, 100.0f);
+		else
+			projection = glm::ortho(-right, right, -top, top, 1.f, 100.0f);
 		lightingShader.setMat4("projection", glm::value_ptr(projection));
 
 		//观察
@@ -253,6 +263,7 @@ void processInput(GLFWwindow *window) {
 
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		camera.ProcessKeyboard(DOWN, deltaTime);
+
 }
 
 void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
@@ -267,13 +278,14 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 	lastX = xPos;
 	lastY = yPos;
 
-	camera.ProcessMouseMovement(xoffset, yoffset);
+	//camera.ProcessMouseMovement(xoffset, yoffset);
 
 }
 
 //鼠标滚轮消息回调
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.ProcessMouseScroll(yoffset);
+	bortho = !bortho;
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {

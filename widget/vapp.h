@@ -42,7 +42,9 @@ public:
 
         glutInitWindowSize(800, 560);
         glutInitWindowPosition (140, 140);
-        glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+        
+        //glutInitDisplayMode(GLUT_INDEX | GLUT_SINGLE);
+        glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE );
         glutInit(&one, &name);
 
         glutCreateWindow( title ? title : "OpenGL Application" );

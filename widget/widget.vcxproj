@@ -95,7 +95,11 @@
       <AdditionalIncludeDirectories>$(INCLUDE_DIR);.\Shader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,17 +153,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BLI_camera.cpp" />
+    <ClCompile Include="GPUShader.cpp" />
+    <ClCompile Include="IFrameApi.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrices.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BLI_sys_types.h" />
-    <ClInclude Include="GPU_batch.h" />
-    <ClInclude Include="GPU_common.h" />
-    <ClInclude Include="GPU_vertex_format.h" />
+    <ClInclude Include="BLI_camera.h" />
+    <ClInclude Include="GPUShader.h" />
+    <ClInclude Include="GPU_format.h" />
+    <ClInclude Include="IFrameApi.h" />
     <ClInclude Include="interface_intern.h" />
     <ClInclude Include="Matrices.h" />
+    <ClInclude Include="utildefines.h" />
     <ClInclude Include="vapp.h" />
   </ItemGroup>
   <ItemGroup>

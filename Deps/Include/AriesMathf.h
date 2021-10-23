@@ -9,6 +9,8 @@
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
+
+
 #define DECLARE_TMPL_API template<typename T>
 #define DECLARE_TMPL2_API template<typename T, typename T2>
 #define DECLARE_TMPL3_API template<typename T, typename T2, typename T3>

@@ -30,7 +30,7 @@ bool firstMouse = true;
 // 摄像机
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
+bool bspecular = false;
 // 光照
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
@@ -107,6 +107,7 @@ void getVertexAttribList(GLint programHandle)
 
 
 int main() {
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -127,7 +128,17 @@ int main() {
 	//	std::cout << "Failed to initialize GLAD" << std::endl;
 	//	return -1;
 	//}
-
+	{
+		const GLubyte* name = glGetString(GL_VENDOR); //返回负责当前OpenGL实现厂商的名字
+		const GLubyte* biaoshifu = glGetString(GL_RENDERER); //返回一个渲染器标识符，通常是个硬件平台
+		const GLubyte* OpenGLVersion = glGetString(GL_VERSION); //返回当前OpenGL实现的版本号
+		const GLubyte* gluVersion = glewGetString(GLEW_VERSION);
+		std::cout << "OpenGL实现厂商的名字：" << name << std::endl;
+		std::cout << "渲染器标识符：" << biaoshifu << std::endl;
+		std::cout << "OpenGL实现的版本号：" << OpenGLVersion << std::endl;
+		std::cout << "OGLEW工具库版本：" << gluVersion << std::endl;
+		//system("pause");
+	}
 	//开启深度测试
 	glEnable(GL_DEPTH_TEST);
 
@@ -190,7 +201,8 @@ int main() {
 		lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		lightingShader.setVec3("lightPos", lightPos);
 		lightingShader.setVec3("viewPos", camera.Position);
-
+		lightingShader.setBool("bspecular", bspecular);
+		glUseProgram(0);
 		//投影
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -251,7 +263,10 @@ void processInput(GLFWwindow *window) {
 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
-
+	//Open specular
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
+		bspecular = !bspecular;
+	}
 }
 
 void mouse_callback(GLFWwindow* window, double xPos, double yPos) {

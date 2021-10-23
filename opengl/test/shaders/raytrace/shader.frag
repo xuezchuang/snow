@@ -372,7 +372,7 @@ float Distance(vec3 position,int i)
 	vec3 transformedSpherePosition = position - vec3(sphere[i]);
 	return length(transformedSpherePosition) - sphere[i].w;
 }
-
+//通用的球按ray的步长叠加考虑地板后
 vec3 getsdfPoint(vec3 origin, vec3 ray, int dontcare, inout int iidx)
 {
 	float d_less=40;
@@ -408,7 +408,7 @@ vec3 getsdfPoint(vec3 origin, vec3 ray, int dontcare, inout int iidx)
 	d_less = raymarchingDistance;
 	return origin + ray*d_less;
 }
-
+//算ray到球的距离;
 vec3 getSpherePoint(vec3 origin, vec3 ray, int dontcare, inout int iidx)
 {
 	int low=-1;
@@ -421,7 +421,9 @@ vec3 getSpherePoint(vec3 origin, vec3 ray, int dontcare, inout int iidx)
 		float ldotc = dot(ray, origin-sphere[i].xyz);
 		float cdotc = dot(origin-sphere[i].xyz, origin-sphere[i].xyz);
 		float rsq = sphere[i].a*sphere[i].a;
-		
+		//圆有r2 = (a+b)2 = t2 + a2;t2 = b2 + 2ab;
+		//L2 - D2 + (a+b)2;有L2-D2+a2 = 0;
+		//所以float d = ldotc*ldotc - cdotc + rsq = b2 + 2ab = t2;
 		float d = ldotc*ldotc - cdotc + rsq;
 		
 		if(d<0)continue;
@@ -502,8 +504,6 @@ void main(void)
 	vec3 origin = vec3(0,0,0);
 
 	int low;
-	//vec3 p = getSpherePoint(origin, ray, -1, low);
-	vec3 p = getsdfPoint(origin, ray, -1, low);
 	if(bnew)
 	{
 		vec4 kCameraRotation = FromTo(kCameraPosition,vec3(0.0));// vec3(0.0f, 0.0f, 1.0f),normalize(-kCameraPosition));
@@ -524,6 +524,8 @@ void main(void)
 		}
 		return;
 	}
+	//--------------------------------------------------------------------//
+	vec3 p = getsdfPoint(origin, ray, -1, low);
 	if(low!=-1)
 	{
 				
@@ -542,6 +544,7 @@ void main(void)
 		
 		int refl;
 		vec3 refpt = getSpherePoint(p, ray_reflect, low, refl);
+		//vec3 refpt = getsdfPoint(p, ray_reflect, low, refl);
 		
 		if(refl!=-1)
 		{

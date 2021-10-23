@@ -207,6 +207,9 @@
     <Filter Include="Frame\view">
       <UniqueIdentifier>{6d6149b7-7c10-4578-a454-16e23179764c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Navigation">
+      <UniqueIdentifier>{3cd8808b-d9ca-42df-9dc7-e3f9101d10b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader.fs">

@@ -181,8 +181,54 @@ int main()
 
     // load textures
     // -------------
-    unsigned int cubeTexture = loadTexture("../../resources/textures/container.jpg");
-    unsigned int floorTexture = loadTexture("../../resources/textures/metal.png");
+    //unsigned int cubeTexture = loadTexture("../../resources/textures/container.jpg");
+    unsigned int cubeTexture;
+	glGenTextures(1, &cubeTexture);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, cubeTexture);
+
+	static const unsigned char texture_data[] =
+	{
+		0x0F, 0x00, 0xF0, 0x00, 0xFF, 0x00, 0xFF, 0x00,
+		0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+		0xFF, 0x00, 0xFF, 0x00, 0xF0, 0x00, 0xFF, 0x00,
+		0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+		0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00,
+		0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+		0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00,
+		0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF
+	};
+
+	glTexStorage2D(GL_TEXTURE_2D, 4, GL_R8, 8, 8);
+	glTexSubImage2D(GL_TEXTURE_2D,
+		0,
+		0, 0,
+		8, 8,
+		GL_RED, GL_UNSIGNED_BYTE,
+		texture_data);
+
+	int n = glGetError();
+
+	static const GLint swizzles[] = { GL_RED, GL_RED, GL_RED, GL_ONE };
+	glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, swizzles);//RGB分量都是有红色分量，所以为白色
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
+
+
+    //unsigned int floorTexture = loadTexture("../../resources/textures/metal.png");
+    unsigned int floorTexture = loadTexture("metal.png");
+
+
+
+
+
 
     // shader configuration
     // --------------------
