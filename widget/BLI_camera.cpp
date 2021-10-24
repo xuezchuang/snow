@@ -1,15 +1,15 @@
 #include "BLI_camera.h"
 #include "gl/glew.h"
 
-camera::camera()
+BLICamera::BLICamera()
 {
 
 }
 
-camera::~camera()
+BLICamera::~BLICamera()
 {}
 
-int camera::BKE_camera_sensor_fit(int sensor_fit, float sizex, float sizey)
+int BLICamera::BKE_camera_sensor_fit(int sensor_fit, float sizex, float sizey)
 {
 	if (sensor_fit == CAMERA_SENSOR_FIT_AUTO) {
 		if (sizex >= sizey) {
@@ -26,7 +26,7 @@ int camera::BKE_camera_sensor_fit(int sensor_fit, float sizex, float sizey)
 #define DEFAULT_SENSOR_WIDTH 36.0f
 #define DEFAULT_SENSOR_HEIGHT 24.0f
 
-void camera::BKE_camera_params_init()
+void BLICamera::BKE_camera_params_init()
 {
 	/* defaults */
 	sensor_x = DEFAULT_SENSOR_WIDTH;
@@ -35,7 +35,7 @@ void camera::BKE_camera_params_init()
 
 	zoom = 1.0f;
 
-	/* fallback for non camera objects */
+	/* fallback for non BLICamera objects */
 	clip_start = 0.1f;
 	clip_end = 100.0f;
 	float viewport_size[4];
@@ -49,7 +49,7 @@ void camera::BKE_camera_params_init()
 /* values for CameraParams.zoom, need to be taken into account for some operations */
 #define CAMERA_PARAM_ZOOM_INIT_CAMOB 1.0f
 #define CAMERA_PARAM_ZOOM_INIT_PERSP 3.0
-void camera::BKE_camera_params_from_view3d()
+void BLICamera::BKE_camera_params_from_view3d()
 {
     clip_end = 1000.0f;
     clip_start = 0.01f;
@@ -71,11 +71,11 @@ void camera::BKE_camera_params_from_view3d()
 		zoom = CAMERA_PARAM_ZOOM_INIT_PERSP;
 	}
 }
-void camera::setortho(bool bortho)
+void BLICamera::setortho(bool bortho)
 {
     is_ortho = bortho;
 }
-void camera::update()
+void BLICamera::update()
 {
     //rctf viewplane;
     float pixsize, viewfac, sensor_size, dx, dy;
@@ -89,7 +89,7 @@ void camera::update()
         pixsize = ortho_scale;
     }
     else {
-        /* perspective camera */
+        /* perspective BLICamera */
         sensor_size = sensor_fit == CAMERA_SENSOR_FIT_VERT ? sensor_y : sensor_x;
         pixsize = (sensor_size * clip_start) / lens;
     }
@@ -138,7 +138,7 @@ void camera::update()
     viewdx = pixsize;
     viewdy = ycor * pixsize;
 }
-rctf camera::getViewplane()
+rctf BLICamera::getViewplane()
 {
     return viewplane;
 }

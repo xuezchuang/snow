@@ -6,11 +6,11 @@ enum {
 	CAMERA_SENSOR_FIT_HOR = 1,
 	CAMERA_SENSOR_FIT_VERT = 2,
 };
-class camera
+class BLICamera
 {
 public:
-	camera();
-	~camera();
+	BLICamera();
+	~BLICamera();
 	void BKE_camera_params_init();
 	void BKE_camera_params_from_view3d();
 	void update();

@@ -38,50 +38,6 @@ float lastFrame = 0.0f;
 // 光照
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
-float vertices[] = {
-	// 位置              // 法线            // 纹理坐标
-	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-	0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-	0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-	-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-
-	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-	0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-	-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-
-	-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-	-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-	-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-
-	0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-	0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-	0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-	0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-	0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-	0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
-	0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-	0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-
-	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-	0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-	0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-	-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
-};
 
 glm::vec3 cubePositions[] = {
 	glm::vec3(0.0f, 0.0f, 0.0f),
@@ -448,7 +404,7 @@ BLI_INLINE float BLI_rctf_size_y(const struct rctf* rct)
 {
 	return (rct->ymax - rct->ymin);
 }
-
+#include "BLI_camera.h"
 void DrawRect()
 {
 	//glm::mat4 model_matrix;
@@ -468,7 +424,7 @@ void DrawRect()
 
 	
 	model_matrix = mat4::identity();
-	//model_matrix *= vmath::translation(1.01f, 0.0f, -0.1f);
+	model_matrix *= vmath::translation(0.0f, 0.0f, -0.1f);
 	//model_matrix *= vmath::scale(0.8f, 0.8f, 1.f);
 	float dscale = 5.0;
 	{
@@ -478,10 +434,10 @@ void DrawRect()
 		viewplane.ymax *= dscale;
 	}
 	vmath::mat4 projection_matrix(vmath::frustum(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 0.1f, 100.0f));
-	projection_matrix = vmath::perspective(1, aspect, 0.1f, 500.0f);
+	//projection_matrix = vmath::perspective(1, aspect, 0.1f, 500.0f);
 	if (1)
 	{
-		projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, -500.0f, 500.0f);
+		//projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, -500.0f, 500.0f);
 	}
 	else
 	{
@@ -587,6 +543,13 @@ void DrawTest()
 	viewplane.xmax = width;
 	viewplane.ymin = -height;
 	viewplane.ymax = height;
+
+	BLICamera tt;
+	tt.setortho(false);
+	tt.BKE_camera_params_init();
+	tt.BKE_camera_params_from_view3d();
+	tt.update();
+	viewplane = tt.getViewplane();
 	vmath::mat4 projection_matrix;
 	GLuint QueryIDs;
 	if (mouseLeftDown)
@@ -611,7 +574,7 @@ void DrawTest()
 	if (0)
 		projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 0.1f, 100.0f);
 	else
-		projection_matrix = vmath::frustum(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 0.1f, 100.0f);
+		projection_matrix = vmath::frustum(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 0.01f, 1000.0f);
 	//projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, -500.0f, 500.0f);
 
 
@@ -623,12 +586,12 @@ void DrawTest()
 	// Set up for a glDrawElements call
 	glBindVertexArray(vaoTest);
 	glBindBuffer(GL_ARRAY_BUFFER, vboTest);
-	//model_matrix = mat4::identity();
-	//model_matrix *= vmath::translation(0.0f, 0.0f, -.2f);
+	mat4 model_matrix = mat4::identity();
+	model_matrix *= vmath::translation(0.0f, 0.0f, -3.0f);
 	//model_matrix *= vmath::scale(0.3f, 0.3f, 0.3f);
-	glm::mat4 model_matrix = m_camera.GetViewMatrix();
+	//glm::mat4 model_matrix = m_camera.GetViewMatrix();
 	GLuint Test_model_matrix_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "model_matrix");
-	glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
+	glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, model_matrix);// glm::value_ptr(model_matrix));
 	GLuint Test_color_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "color");
 	glUniform4fv(Test_color_loc, 1, color);
 
