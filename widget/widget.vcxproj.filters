@@ -7,10 +7,10 @@
     <ClCompile Include="GPUShader.cpp">
       <Filter>gpu_shader</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="BLI_camera.cpp">
       <Filter>gpu</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="interface_intern.h" />

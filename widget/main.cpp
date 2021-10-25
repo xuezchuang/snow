@@ -373,15 +373,15 @@ void wm_draw_update()
 	if (bredraw)
 	{
 		bredraw = false;
-		DrawRect();
-		//DrawTest();
+		//DrawRect();
+		DrawTest();
 		float viewport_size[4];
 		glGetFloatv(GL_VIEWPORT, viewport_size);
 		rctf cirrect;
-		cirrect.xmin = -100.0f;
-		cirrect.xmax = 100.0f;
-		cirrect.ymin = -100.0f;
-		cirrect.ymax = 100.0f;
+		cirrect.xmin = -1.0f;
+		cirrect.xmax = 1.0f;
+		cirrect.ymin = -1.0f;
+		cirrect.ymax = 1.0f;
 		DrawHSVCIRCLE(&cirrect);
 		glfwSwapBuffers(window);
 	}
@@ -576,7 +576,7 @@ void DrawTest()
 		viewplane.xmax = temp.xmin + (BLI_rctf_size_x(&temp) * (m_CrupRect.xmax / viewport[2]));
 		viewplane.ymax = temp.ymin + (BLI_rctf_size_y(&temp) * (m_CrupRect.ymax / viewport[3]));
 
-		glViewport(0, 0, m_CrupRect.xmax - m_CrupRect.xmin, m_CrupRect.ymax - m_CrupRect.ymin);
+		glViewport(0, 0, GLsizei(m_CrupRect.xmax - m_CrupRect.xmin), GLsizei(m_CrupRect.ymax - m_CrupRect.ymin));
 		//projection_matrix = vmath::Orthogonal(m_CrupRect.xmin, m_CrupRect.xmax, m_CrupRect.ymin, m_CrupRect.ymax, -400.0f, 400.0f);
 		//计算出projection_matrix 后计算6个面对所有构件CPU剔除(简单快速)后,进行使用GPU裁剪
 	}
@@ -746,38 +746,11 @@ void immBegin(GLuint prim_type, uint vertex_len)
 void immBindProgram(eGPUBuiltinShader program)
 {
 	IGPUShader::Instance()->bindShader(program);
-	//
-	{
-		//rctf viewplane;
-		//float fovY = tan(glm::radians(m_camera.Zoom) / 2);
 
-		//float viewport_size[4];
-		//glGetFloatv(GL_VIEWPORT, viewport_size);
-		//float aspectRatio = viewport_size[2] / viewport_size[3];
-		//const float DEG2RAD = 3.141593f / 180.0f;
-		////float tangent = glm::radians(m_camera.Zoom); //tanf(fovY / 2 * DEG2RAD);   // tangent of half fovY
-		//float tangent = fovY;
-		//float height = 0.1f * tangent;           // half height of near plane
-		//float width = height * aspectRatio;       // half width of near plane
-		//viewplane.xmin = -width;
-		//viewplane.xmax = width;
-		//viewplane.ymin = -height;
-		//viewplane.ymax = height;
-		//vmath::mat4 projection_matrix = vmath::frustum(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 0.01f, 1000.0f);
-		//glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "projection_matrix"), 1, GL_FALSE, projection_matrix);
-	}
-
-	//
-	//glViewport(0, 0, 500.0f, 500.0f);
-
-	vmath::mat4 projection_matrix(vmath::Orthogonal(-1.0f, 1.0f, -1.0f, 1.0f, -500.0f, 500.0f));
-	//vmath::mat4 projection_matrix(vmath::Orthogonal(-1.0f, 1.0f, -aspect, aspect, -500.0f, 500.0f));
+	vmath::mat4 projection_matrix(vmath::Orthogonal(0.0f, float(SCR_WIDTH), 0.0f, float(SCR_HEIGHT), -500.0f, 500.0f));
 	glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "projection_matrix"), 1, GL_FALSE, projection_matrix);
-	//// Draw Arrays...
-	float t1 = 200.0 / SCR_WIDTH-1;
-	float t2 = 1-200.0 / SCR_HEIGHT;
-	mat4 model_matrix = vmath::translation(t1, t2, 0.0f); 
-	//model_matrix *= vmath::scale(0.15f);
+	mat4 model_matrix = vmath::translation(120.0f, SCR_HEIGHT-120.0f, 0.0f);
+	model_matrix *= vmath::scale(100.0f);
 	glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "model_matrix"), 1, GL_FALSE, model_matrix);
 
 	GPUVertFormat* format = &imm.vertex_format;
@@ -982,16 +955,15 @@ void DrawHSVCIRCLE(const rctf* rect)
 	GPUVertFormat* format = immVertexFormat();
 	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
 	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3);
+	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
-	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
-
-
 	glDisable(GL_DEPTH_TEST);
+	
 	immBegin(GL_TRIANGLE_FAN, tot + 2);
 	float/* rgb[3],*/ hsv[3], rgb_center[3];
-	const float centx = 0.0f;
-	const float centy = 0.0f;
+	const float centx = 0.0;
+	const float centy = 0.0;
 	//hsv[0] = 0.08f; hsv[1] = 1.0f; hsv[2] = 1.0f;
 	hsv[0] = 0.0163f; hsv[1] = 0.9875f; hsv[2] = 1.0f;
 	rgb_center[0] = 1; rgb_center[1] = 1; rgb_center[2] = 1;
@@ -1019,7 +991,7 @@ void DrawHSVCIRCLE(const rctf* rect)
 		//}
 
 		immAttr3f(color, rgb_ang[0], rgb_ang[1], rgb_ang[2]);
-		immVertex2f(pos, centx + co * radius / SCR_WIDTH, centy + si * radius / SCR_HEIGHT);
+		immVertex2f(pos, centx + co * radius, centy + si * radius);
 	}
 
 	immEnd();
