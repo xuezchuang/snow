@@ -20,8 +20,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 unsigned int loadTexture(char const* path);
 void wm_draw_update();
 // фад╩©М╦ъ
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+unsigned int SCR_WIDTH = 1280;
+unsigned int SCR_HEIGHT = 720;
 
 float factor = 0.2f;
 float fov = 45.0f;
@@ -322,6 +322,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 	aspect = float(height) / float(width);
+	SCR_WIDTH = width;
+	SCR_HEIGHT = height;
 	bredraw = true;
 }
 
@@ -371,15 +373,16 @@ void wm_draw_update()
 	if (bredraw)
 	{
 		bredraw = false;
-		//DrawRect();
-		DrawTest();
-
-		//rctf cirrect;
-		//cirrect.xmin = -0.8f;
-		//cirrect.xmax = 0.8f;
-		//cirrect.ymin = -0.8f;
-		//cirrect.ymax = 0.8f;
-		//DrawHSVCIRCLE(&cirrect);
+		DrawRect();
+		//DrawTest();
+		float viewport_size[4];
+		glGetFloatv(GL_VIEWPORT, viewport_size);
+		rctf cirrect;
+		cirrect.xmin = -100.0f;
+		cirrect.xmax = 100.0f;
+		cirrect.ymin = -100.0f;
+		cirrect.ymax = 100.0f;
+		DrawHSVCIRCLE(&cirrect);
 		glfwSwapBuffers(window);
 	}
 	glfwPollEvents();
@@ -522,12 +525,15 @@ void DrawRect()
 }
 void DrawTest()
 {
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	static int a = 0;
+	if(a)
+		return;
 	//glUseProgram(GPU_SHADER_3D_TEST);
 	IGPUShader::Instance()->bindShader(GPU_SHADER_3D_TEST);
 	//tt.setortho(false);
 	//tt.update();
-	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	float viewport_size[4];
 	glGetFloatv(GL_VIEWPORT, viewport_size);
 	rctf viewplane;
@@ -544,12 +550,15 @@ void DrawTest()
 	viewplane.ymin = -height;
 	viewplane.ymax = height;
 
-	BLICamera tt;
-	tt.setortho(false);
-	tt.BKE_camera_params_init();
-	tt.BKE_camera_params_from_view3d();
-	tt.update();
-	viewplane = tt.getViewplane();
+	//viewplane.xmin = -1.0f;		viewplane.xmax = 1.0f;
+	//viewplane.ymin = -aspect;	viewplane.ymax = aspect;
+
+	//BLICamera tt;
+	//tt.setortho(false);
+	//tt.BKE_camera_params_init();
+	//tt.BKE_camera_params_from_view3d();
+	//tt.update();
+	//viewplane = tt.getViewplane();
 	vmath::mat4 projection_matrix;
 	GLuint QueryIDs;
 	if (mouseLeftDown)
@@ -560,10 +569,12 @@ void DrawTest()
 		GLint viewport[4];
 		glGetIntegerv(GL_VIEWPORT, viewport);
 
-		viewplane.xmin = viewplane.xmin + (BLI_rctf_size_x(&viewplane) * (m_CrupRect.xmin / viewport[2]));
-		viewplane.ymin = viewplane.ymin + (BLI_rctf_size_y(&viewplane) * (m_CrupRect.ymin / viewport[3]));
-		viewplane.xmax = viewplane.xmin + (BLI_rctf_size_x(&viewplane) * (m_CrupRect.xmax / viewport[2]));
-		viewplane.ymax = viewplane.ymin + (BLI_rctf_size_y(&viewplane) * (m_CrupRect.ymax / viewport[3]));
+		rctf temp = viewplane;
+
+		viewplane.xmin = temp.xmin + (BLI_rctf_size_x(&temp) * (m_CrupRect.xmin / viewport[2]));
+		viewplane.ymin = temp.ymin + (BLI_rctf_size_y(&temp) * (m_CrupRect.ymin / viewport[3]));
+		viewplane.xmax = temp.xmin + (BLI_rctf_size_x(&temp) * (m_CrupRect.xmax / viewport[2]));
+		viewplane.ymax = temp.ymin + (BLI_rctf_size_y(&temp) * (m_CrupRect.ymax / viewport[3]));
 
 		glViewport(0, 0, m_CrupRect.xmax - m_CrupRect.xmin, m_CrupRect.ymax - m_CrupRect.ymin);
 		//projection_matrix = vmath::Orthogonal(m_CrupRect.xmin, m_CrupRect.xmax, m_CrupRect.ymin, m_CrupRect.ymax, -400.0f, 400.0f);
@@ -572,7 +583,7 @@ void DrawTest()
 
 	
 	if (0)
-		projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 0.1f, 100.0f);
+		projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, -500, 500.0f);
 	else
 		projection_matrix = vmath::frustum(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 0.01f, 1000.0f);
 	//projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, -500.0f, 500.0f);
@@ -586,12 +597,13 @@ void DrawTest()
 	// Set up for a glDrawElements call
 	glBindVertexArray(vaoTest);
 	glBindBuffer(GL_ARRAY_BUFFER, vboTest);
-	mat4 model_matrix = mat4::identity();
-	model_matrix *= vmath::translation(0.0f, 0.0f, -3.0f);
+	//mat4 model_matrix = mat4::identity();
+	//model_matrix *= vmath::translation(0.0f, 0.0f, -.1f);
 	//model_matrix *= vmath::scale(0.3f, 0.3f, 0.3f);
-	//glm::mat4 model_matrix = m_camera.GetViewMatrix();
+	glm::mat4 model_matrix = m_camera.GetViewMatrix();
 	GLuint Test_model_matrix_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "model_matrix");
-	glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, model_matrix);// glm::value_ptr(model_matrix));
+	//glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, model_matrix);
+	glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
 	GLuint Test_color_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "color");
 	glUniform4fv(Test_color_loc, 1, color);
 
@@ -734,10 +746,38 @@ void immBegin(GLuint prim_type, uint vertex_len)
 void immBindProgram(eGPUBuiltinShader program)
 {
 	IGPUShader::Instance()->bindShader(program);
-	vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 400.0f));
+	//
+	{
+		//rctf viewplane;
+		//float fovY = tan(glm::radians(m_camera.Zoom) / 2);
+
+		//float viewport_size[4];
+		//glGetFloatv(GL_VIEWPORT, viewport_size);
+		//float aspectRatio = viewport_size[2] / viewport_size[3];
+		//const float DEG2RAD = 3.141593f / 180.0f;
+		////float tangent = glm::radians(m_camera.Zoom); //tanf(fovY / 2 * DEG2RAD);   // tangent of half fovY
+		//float tangent = fovY;
+		//float height = 0.1f * tangent;           // half height of near plane
+		//float width = height * aspectRatio;       // half width of near plane
+		//viewplane.xmin = -width;
+		//viewplane.xmax = width;
+		//viewplane.ymin = -height;
+		//viewplane.ymax = height;
+		//vmath::mat4 projection_matrix = vmath::frustum(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, 0.01f, 1000.0f);
+		//glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "projection_matrix"), 1, GL_FALSE, projection_matrix);
+	}
+
+	//
+	//glViewport(0, 0, 500.0f, 500.0f);
+
+	vmath::mat4 projection_matrix(vmath::Orthogonal(-1.0f, 1.0f, -1.0f, 1.0f, -500.0f, 500.0f));
+	//vmath::mat4 projection_matrix(vmath::Orthogonal(-1.0f, 1.0f, -aspect, aspect, -500.0f, 500.0f));
 	glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "projection_matrix"), 1, GL_FALSE, projection_matrix);
 	//// Draw Arrays...
-	mat4 model_matrix = vmath::translation(0.0f, 0.0f, -5.0f);
+	float t1 = 200.0 / SCR_WIDTH-1;
+	float t2 = 1-200.0 / SCR_HEIGHT;
+	mat4 model_matrix = vmath::translation(t1, t2, 0.0f); 
+	//model_matrix *= vmath::scale(0.15f);
 	glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "model_matrix"), 1, GL_FALSE, model_matrix);
 
 	GPUVertFormat* format = &imm.vertex_format;
@@ -944,7 +984,6 @@ void DrawHSVCIRCLE(const rctf* rect)
 	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3);
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
-	//glEnableVertexAttribArray(1);
 	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
 
 
@@ -980,7 +1019,7 @@ void DrawHSVCIRCLE(const rctf* rect)
 		//}
 
 		immAttr3f(color, rgb_ang[0], rgb_ang[1], rgb_ang[2]);
-		immVertex2f(pos, centx + co * radius, centy + si * radius);
+		immVertex2f(pos, centx + co * radius / SCR_WIDTH, centy + si * radius / SCR_HEIGHT);
 	}
 
 	immEnd();
