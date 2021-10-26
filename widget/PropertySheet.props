@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <LIB_DIR>..\Deps\Libs</LIB_DIR>
-    <INCLUDE_DIR>..\Deps\Include</INCLUDE_DIR>
+    <INCLUDE_DIR>..\Deps\Include;..\extern\Eigen3\</INCLUDE_DIR>
     <BIN_DIR>..\bin</BIN_DIR>
   </PropertyGroup>
   <PropertyGroup />

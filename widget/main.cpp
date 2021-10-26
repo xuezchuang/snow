@@ -8,9 +8,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "Camera.h"
-
-Camera m_camera(glm::vec3(0.0f, 0.0f, 3.0f));
+#include "BLI_camera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -27,6 +25,8 @@ float factor = 0.2f;
 float fov = 45.0f;
 
 //ÉãÏñ»ú
+BLICamera m_camera;
+
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -90,6 +90,10 @@ GLFWwindow* window;
 float aspect;
 void _InitVAO()
 {
+	m_camera.setortho(false);
+	m_camera.BKE_camera_params_init();
+	m_camera.BKE_camera_params_from_view3d();
+
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	aspect = float(viewport[3]) / viewport[2];
@@ -239,7 +243,7 @@ void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	/*if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		m_camera.ProcessKeyboard(FORWARD, deltaTime);
 		bredraw = true;
@@ -268,7 +272,7 @@ void processInput(GLFWwindow* window) {
 	{
 		m_camera.ProcessKeyboard(DOWN, deltaTime);
 		bredraw = true;
-	}
+	}*/
 }
 
 void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
@@ -407,7 +411,7 @@ BLI_INLINE float BLI_rctf_size_y(const struct rctf* rct)
 {
 	return (rct->ymax - rct->ymin);
 }
-#include "BLI_camera.h"
+
 void DrawRect()
 {
 	//glm::mat4 model_matrix;
@@ -527,9 +531,6 @@ void DrawTest()
 {
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	static int a = 0;
-	if(a)
-		return;
 	//glUseProgram(GPU_SHADER_3D_TEST);
 	IGPUShader::Instance()->bindShader(GPU_SHADER_3D_TEST);
 	//tt.setortho(false);
@@ -537,28 +538,10 @@ void DrawTest()
 	float viewport_size[4];
 	glGetFloatv(GL_VIEWPORT, viewport_size);
 	rctf viewplane;
-	float fovY = tan(glm::radians(m_camera.Zoom)/2);
 
-	float aspectRatio = viewport_size[2] / viewport_size[3];
-	const float DEG2RAD = 3.141593f / 180.0f;
-	//float tangent = glm::radians(m_camera.Zoom); //tanf(fovY / 2 * DEG2RAD);   // tangent of half fovY
-	float tangent = fovY;
-	float height = 0.1f * tangent;           // half height of near plane
-	float width = height * aspectRatio;       // half width of near plane
-	viewplane.xmin = -width;
-	viewplane.xmax = width;
-	viewplane.ymin = -height;
-	viewplane.ymax = height;
 
-	//viewplane.xmin = -1.0f;		viewplane.xmax = 1.0f;
-	//viewplane.ymin = -aspect;	viewplane.ymax = aspect;
-
-	//BLICamera tt;
-	//tt.setortho(false);
-	//tt.BKE_camera_params_init();
-	//tt.BKE_camera_params_from_view3d();
-	//tt.update();
-	//viewplane = tt.getViewplane();
+	m_camera.update();
+	viewplane = m_camera.getViewplane();
 	vmath::mat4 projection_matrix;
 	GLuint QueryIDs;
 	if (mouseLeftDown)
@@ -600,10 +583,13 @@ void DrawTest()
 	//mat4 model_matrix = mat4::identity();
 	//model_matrix *= vmath::translation(0.0f, 0.0f, -.1f);
 	//model_matrix *= vmath::scale(0.3f, 0.3f, 0.3f);
-	glm::mat4 model_matrix = m_camera.GetViewMatrix();
+	//glm::mat4 model_matrix = m_camera.GetViewMatrix();
+	float model_matrix[4][4];
+	m_camera.ED_view3d_update_viewmat();
+	m_camera.getviewmatrix(model_matrix);
 	GLuint Test_model_matrix_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "model_matrix");
-	//glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, model_matrix);
-	glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
+	glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, model_matrix[0]);
+	//glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
 	GLuint Test_color_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "color");
 	glUniform4fv(Test_color_loc, 1, color);
 

@@ -1,5 +1,16 @@
 #pragma once
 #include "interface_intern.h"
+
+#ifndef M_PI
+#  define M_PI 3.14159265358979323846 /* pi */
+#endif
+#ifndef M_PI_2
+#  define M_PI_2 1.57079632679489661923 /* pi/2 */
+#endif
+#ifndef M_SQRT2
+#  define M_SQRT2 1.41421356237309504880 /* sqrt(2) */
+#endif
+
 /* Sensor fit */
 enum {
 	CAMERA_SENSOR_FIT_AUTO = 0,
@@ -19,10 +30,14 @@ public:
 	rctf getViewplane();
 	float getclip_start() { return clip_start; }
 	float getclip_end() { return clip_end; }
+	
+	void getviewmatrix(float m1[4][4]);
+	void ProcessMouseScroll(float offset);
+	void BLICamera::ED_view3d_update_viewmat();
+
 private:
 	int BKE_camera_sensor_fit(int sensor_fit, float sizex, float sizey);
-
-
+	void view3d_viewmatrix_set();
 
 private:
 	float winx;
@@ -54,7 +69,28 @@ private:
 	float viewdy;
 	rctf viewplane;
 
-	/* computed matrix */
+	///* computed matrix */
+	//float winmat[4][4];
+
+
+
+
+
+
+	/** View rotation, must be kept normalized. */
+	float viewquat[4];
+	/**
+	 * View center & orbit pivot, negative of worldspace location,
+	 * also matches -viewinv[3][0:3] in ortho mode.
+	 */
+	float ofs[3];
+	/** GL_PROJECTION matrix. */
 	float winmat[4][4];
+	/** GL_MODELVIEW matrix. */
+	float viewmat[4][4];
+	/** Viewmat*winmat. */
+	float persmat[4][4];
+	/** Inverse of persmat. */
+	float persinv[4][4];
 
 };
