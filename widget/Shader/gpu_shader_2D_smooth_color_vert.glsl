@@ -11,4 +11,10 @@ void main()
 {
   gl_Position = projection_matrix * model_matrix * vec4(pos, 0.0, 1.0);
   finalColor = color;
+//      vec4 temp = vec4(0,0,0,1);
+//    vec4 tt = projection_matrix * model_matrix * temp;
+//    if( tt.x  < -0.812 && tt.y < 0.66)
+//        finalColor = vec4(1.0,0.0,0.0,1.0);
+//    else
+//        finalColor = vec4(0.0,1.0,0.0,1.0);
 }

@@ -729,6 +729,8 @@ void immBegin(GLuint prim_type, uint vertex_len)
 	imm.vertex_data = (GLubyte*)glMapBufferRange(GL_ARRAY_BUFFER, buffer_offset, bytes_needed, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
 }
 
+
+
 void immBindProgram(eGPUBuiltinShader program)
 {
 	IGPUShader::Instance()->bindShader(program);
@@ -737,6 +739,16 @@ void immBindProgram(eGPUBuiltinShader program)
 	glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "projection_matrix"), 1, GL_FALSE, projection_matrix);
 	mat4 model_matrix = vmath::translation(120.0f, SCR_HEIGHT-120.0f, 0.0f);
 	model_matrix *= vmath::scale(100.0f);
+	double temp[4] = { 0.0f,0.0f,0.0f,1.0f };
+	double r[4];
+	mul_v4d_m4v4d(r, (float(*)[4])(float*)model_matrix, temp);
+	//mul_v4d_m4v4d(temp, (float(*)[4])(float*)projection_matrix, r);
+	float viewinv[4][4];
+	invert_m4_m4(viewinv, (float(*)[4])(float*)model_matrix);
+	//double temp2[4] = { 12,0.0f,0.0f,1.0f };
+	mul_v4d_m4v4d(temp, viewinv, r);
+
+
 	glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "model_matrix"), 1, GL_FALSE, model_matrix);
 
 	GPUVertFormat* format = &imm.vertex_format;

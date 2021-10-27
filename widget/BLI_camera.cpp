@@ -118,6 +118,21 @@ bool invert_m4_m4(float inverse[4][4], const float mat[4][4])
 {
 	return EIG_invert_m4_m4(inverse, mat);
 }
+void mul_v4d_m4v4d(double r[4], const float mat[4][4], const double v[4])
+{
+	const double x = v[0];
+	const double y = v[1];
+	const double z = v[2];
+
+	r[0] = x * (double)mat[0][0] + y * (double)mat[1][0] + z * (double)mat[2][0] +
+		(double)mat[3][0] * v[3];
+	r[1] = x * (double)mat[0][1] + y * (double)mat[1][1] + z * (double)mat[2][1] +
+		(double)mat[3][1] * v[3];
+	r[2] = x * (double)mat[0][2] + y * (double)mat[1][2] + z * (double)mat[2][2] +
+		(double)mat[3][2] * v[3];
+	r[3] = x * (double)mat[0][3] + y * (double)mat[1][3] + z * (double)mat[2][3] +
+		(double)mat[3][3] * v[3];
+}
 //-------------------------------------------//
 BLICamera::BLICamera()
 {

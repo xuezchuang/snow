@@ -11,6 +11,9 @@
 #  define M_SQRT2 1.41421356237309504880 /* sqrt(2) */
 #endif
 
+
+bool invert_m4_m4(float inverse[4][4], const float mat[4][4]);
+void mul_v4d_m4v4d(double r[4], const float mat[4][4], const double v[4]);
 /* Sensor fit */
 enum {
 	CAMERA_SENSOR_FIT_AUTO = 0,
