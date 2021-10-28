@@ -133,6 +133,17 @@ void mul_v4d_m4v4d(double r[4], const float mat[4][4], const double v[4])
 	r[3] = x * (double)mat[0][3] + y * (double)mat[1][3] + z * (double)mat[2][3] +
 		(double)mat[3][3] * v[3];
 }
+
+float mul_project_m4_v3_zfac(const float mat[4][4], const float co[3])
+{
+	return (mat[0][3] * co[0]) + (mat[1][3] * co[1]) + (mat[2][3] * co[2]) + mat[3][3];
+}
+void negate_v3_v3(float r[3], const float a[3])
+{
+	r[0] = -a[0];
+	r[1] = -a[1];
+	r[2] = -a[2];
+}
 //-------------------------------------------//
 BLICamera::BLICamera()
 {
@@ -300,4 +311,27 @@ void BLICamera::ED_view3d_update_viewmat()
 	view3d_viewmatrix_set();
 	mul_m4_m4m4(persmat, winmat, viewmat);
 	invert_m4_m4(persinv, persmat);
+}
+
+float BLICamera::ED_view3d_calc_zfac(const float co[3], bool* r_flip)
+{
+	float zfac = mul_project_m4_v3_zfac((float(*)[4])persmat, co);
+
+	if (r_flip) {
+		*r_flip = (zfac < 0.0f);
+	}
+
+	/* if x,y,z is exactly the viewport offset, zfac is 0 and we don't want that
+	 * (accounting for near zero values) */
+	if (zfac < 1.e-6f && zfac > -1.e-6f) {
+		zfac = 1.0f;
+	}
+
+	/* Negative zfac means x, y, z was behind the camera (in perspective).
+	 * This gives flipped directions, so revert back to ok default case. */
+	if (zfac < 0.0f) {
+		zfac = -zfac;
+	}
+
+	return zfac;
 }

@@ -274,25 +274,20 @@ void processInput(GLFWwindow* window) {
 		bredraw = true;
 	}*/
 }
-
-void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
-	//if (firstMouse) {
-	//	lastX = xPos;
-	//	lastY = yPos;
-	//	firstMouse = false;
-	//}
-
-	//float xoffset = lastX - xPos;	//别忘了，在窗口中，左边的坐标小于右边的坐标，而我们需要一个正的角度
-	//float yoffset = lastY - yPos;	//同样，在窗口中，下面的坐标大于上面的坐标，而我们往上抬头的时候需要一个正的角度
-	//lastX = xPos;
-	//lastY = yPos;
-
-	//camera.ProcessMouseMovement(xoffset, yoffset);
-
-}
 double xpos, ypos;
 bool mouseLeftDown = false;
 rctf m_CrupRect;
+double curxpos, curypos;
+bool brotateing = false;
+void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
+	if (brotateing)
+	{
+		
+		bredraw = true;
+	}
+}
+
+
 void mouseButton_callback(GLFWwindow* window, int button, int action, int mode)
 {
 	if (button == GLFW_MOUSE_BUTTON_1)
@@ -314,7 +309,26 @@ void mouseButton_callback(GLFWwindow* window, int button, int action, int mode)
 			bredraw = true;
 		}
 	}
-
+	if (button == GLFW_MOUSE_BUTTON_3)
+	{
+		if (action == 1)
+		{
+			glfwGetCursorPos(window, &xpos, &ypos);
+			brotateing = true;
+		}
+		else if (action == 0)
+		{
+			brotateing = false;
+			//mouseLeftDown = true;
+			//double x, y;
+			//glfwGetCursorPos(window, &x, &y);
+			//m_CrupRect.xmin = float(min(x, xpos));
+			//m_CrupRect.xmax = float(max(x, xpos));
+			//m_CrupRect.ymin = float(min(y, ypos));
+			//m_CrupRect.ymax = float(max(y, ypos));
+			//bredraw = true;
+		}
+	}
 }
 
 //鼠标滚轮消息回调

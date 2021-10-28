@@ -36,8 +36,8 @@ public:
 	
 	void getviewmatrix(float m1[4][4]);
 	void ProcessMouseScroll(float offset);
-	void BLICamera::ED_view3d_update_viewmat();
-
+	void ED_view3d_update_viewmat();
+	float ED_view3d_calc_zfac(const float co[3], bool* r_flip);
 private:
 	int BKE_camera_sensor_fit(int sensor_fit, float sizex, float sizey);
 	void view3d_viewmatrix_set();
