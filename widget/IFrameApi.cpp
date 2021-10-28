@@ -1,4 +1,5 @@
 #include "IFrameApi.h"
+#include "GPU_immediate.h"
 IFrameAPI* IFrameAPI::_instance = nullptr;
 IFrameAPI* IFrameAPI::Instance ()
 {
@@ -24,34 +25,7 @@ void IFrameAPI::Clear()
 
  IFrameAPI::IFrameAPI()
 {
-	 /*m_pCmdBar	  = nullptr;
-	 m_pCmdMgr	  = nullptr;
-	 m_pStatusBar  = nullptr;
-	 m_pProjectMgr = nullptr;
-	 m_pProductMgr = nullptr;
-	 m_pMenuMgr    = nullptr;
-	 m_pCmdResMgr  = nullptr;
-	 m_pResMgr	  = nullptr;
-	 m_pDockBar    = nullptr;
-	 m_pViewMgr    = nullptr;
-	 m_pUnitCtrl	  = nullptr;
-	 m_pDBMgr	  = nullptr;
-	 m_pPlugin	  = nullptr;
-	 m_pMainPlugin = nullptr;
-	 m_pEventMgr   = nullptr;
-	 m_pLabelMgr   = nullptr;
-	 m_pFigMakerMgr= nullptr;
-	 m_pGripEditorMgr= nullptr;
-	 m_pFigurePoolMgr = nullptr;
-	 m_pPluginSlot = nullptr;
-	 m_pLanguage	  = nullptr;
-	 m_pToolbar    = nullptr;
-	 m_pServiceMgr = nullptr;
-	 m_pOptionMgr  = nullptr;
-	 m_pFrmUtilMgr = nullptr;
-	 m_pLinkMgr	  = nullptr;
-	 m_pLockMgr    = nullptr;
-	 m_pUserPrivileges = new IUserPrivileges();*/
+	 m_GPUImmediate = new GPUImmediate();
 }
 
 IFrameAPI::~IFrameAPI()
@@ -96,3 +70,7 @@ IFrameAPI::~IFrameAPI()
 }
 
 
+GPUImmediate* IFrameAPI::Immediate()
+{
+	return m_GPUImmediate;
+}

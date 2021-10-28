@@ -1,19 +1,6 @@
 #pragma once
 #include "interface_intern.h"
 
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846 /* pi */
-#endif
-#ifndef M_PI_2
-#  define M_PI_2 1.57079632679489661923 /* pi/2 */
-#endif
-#ifndef M_SQRT2
-#  define M_SQRT2 1.41421356237309504880 /* sqrt(2) */
-#endif
-
-
-bool invert_m4_m4(float inverse[4][4], const float mat[4][4]);
-void mul_v4d_m4v4d(double r[4], const float mat[4][4], const double v[4]);
 /* Sensor fit */
 enum {
 	CAMERA_SENSOR_FIT_AUTO = 0,
@@ -37,11 +24,12 @@ public:
 	void getviewmatrix(float m1[4][4]);
 	void ProcessMouseScroll(float offset);
 	void ED_view3d_update_viewmat();
-	float ED_view3d_calc_zfac(const float co[3], bool* r_flip);
+	float ED_view3d_calc_zfac(bool* r_flip);
+	void ED_view3d_win_to_delta(const float mval[2]);
 private:
 	int BKE_camera_sensor_fit(int sensor_fit, float sizex, float sizey);
 	void view3d_viewmatrix_set();
-
+	
 private:
 	float winx;
 	float winy;
@@ -95,5 +83,8 @@ private:
 	float persmat[4][4];
 	/** Inverse of persmat. */
 	float persinv[4][4];
+	//
+private:
+	float zfac;//calc 
 
 };

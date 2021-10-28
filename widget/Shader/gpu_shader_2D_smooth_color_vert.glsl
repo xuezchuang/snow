@@ -1,11 +1,11 @@
-#version 330
+#version 410
 uniform mat4 model_matrix;
 uniform mat4 projection_matrix;
 
 layout (location = 0)in vec2 pos;
 layout (location = 1)in vec4 color;
 
-out vec4 finalColor;
+noperspective out vec4 finalColor;
 
 void main()
 {

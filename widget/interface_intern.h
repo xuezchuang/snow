@@ -1,6 +1,6 @@
 #ifndef __INTERFACE_INTERN_H__
 #define __INTERFACE_INTERN_H__
-
+#include "gl/glew.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

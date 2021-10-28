@@ -9,7 +9,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "BLI_camera.h"
-
+#include "interface_region_color_picker.h"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xPos, double yPos);
@@ -54,7 +54,7 @@ glm::vec3 cubePositions[] = {
 
 #include "GPUShader.h"
 #include "interface_intern.h"
-#include "GPU_format.h"
+
 bool bredraw = true;
 GLint modelview_matrix_loc;
 GLint project_matrix_loc;
@@ -70,23 +70,12 @@ GLuint vboTest;
 #define USE_PRIMITIVE_RESTART 1
 
 
+typedef unsigned int				uint;
 
 
-typedef struct {
-	GLuint shader_interface;
-	uint vertex_len;
-	uint buffer_bytes_mapped;
-	GLuint vao_id;
-	GLuint prim_type;
-	GPUVertFormat vertex_format;
-	GLubyte* vertex_data;
-} Immediate;
-Immediate imm;
-GLuint Imm_buffer_vbo_id;
-uint buffer_size;
-uint buffer_offset;
 UserDef U;
 GLFWwindow* window;
+
 float aspect;
 void _InitVAO()
 {
@@ -171,17 +160,9 @@ void _InitVAO()
 		glEnableVertexAttribArray(0);
 
 	}
-	//
+	
 	{
 		IGPUShader::Instance()->bindShader(GPU_SHADER_2D_SMOOTH_COLOR);
-		// Set up the vertex attributes
-		glGenVertexArrays(1, &imm.vao_id);
-		glBindVertexArray(imm.vao_id);
-
-		glGenBuffers(1, &Imm_buffer_vbo_id);
-		glBindBuffer(GL_ARRAY_BUFFER, Imm_buffer_vbo_id);
-		glBufferData(GL_ARRAY_BUFFER, 4 * 1024 * 1024, NULL, GL_DYNAMIC_DRAW);
-
 
 		//GLuint pos = glGetAttribLocation(GPU_SHADER_2D_UNIFORM_COLOR, "position");
 		GLuint pos = glGetAttribLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_2D_SMOOTH_COLOR)->program, "pos");
@@ -193,8 +174,6 @@ void _InitVAO()
 		glEnableVertexAttribArray(color);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
-	buffer_size = 0;
-	buffer_offset = 0;
 	//glClearColor(1.f, 1.f, 1.f, 1.0f);
 	glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 	{
@@ -217,7 +196,7 @@ int main() {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	//glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetMouseButtonCallback(window, mouseButton_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
@@ -236,8 +215,22 @@ int main() {
 
 void DrawRect();
 void DrawTest();
-void DrawHSVCIRCLE(const rctf* rect);
 
+/* keep in sync with shader */
+#define MAX_WIDGET_BASE_BATCH 6
+#define MAX_WIDGET_PARAMETERS 12
+
+#include "Matrices.h"
+#include "vmath.h"
+using namespace vmath;
+BLI_INLINE float BLI_rctf_size_x(const struct rctf* rct)
+{
+	return (rct->xmax - rct->xmin);
+}
+BLI_INLINE float BLI_rctf_size_y(const struct rctf* rct)
+{
+	return (rct->ymax - rct->ymin);
+}
 
 void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -277,12 +270,17 @@ void processInput(GLFWwindow* window) {
 double xpos, ypos;
 bool mouseLeftDown = false;
 rctf m_CrupRect;
-double curxpos, curypos;
-bool brotateing = false;
+float mval[2];
+bool bmoveing = false;
 void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
-	if (brotateing)
+	if (bmoveing)
 	{
-		
+		double x, y;
+		glfwGetCursorPos(window, &x, &y);
+		mval[0] = float(x - xpos);
+		mval[1] = float(ypos - y);
+		xpos = x;
+		ypos = y;
 		bredraw = true;
 	}
 }
@@ -314,11 +312,12 @@ void mouseButton_callback(GLFWwindow* window, int button, int action, int mode)
 		if (action == 1)
 		{
 			glfwGetCursorPos(window, &xpos, &ypos);
-			brotateing = true;
+			bmoveing = true;
+			m_camera.ED_view3d_calc_zfac(nullptr);
 		}
 		else if (action == 0)
 		{
-			brotateing = false;
+			bmoveing = false;
 			//mouseLeftDown = true;
 			//double x, y;
 			//glfwGetCursorPos(window, &x, &y);
@@ -391,40 +390,28 @@ void wm_draw_update()
 	if (bredraw)
 	{
 		bredraw = false;
+
 		//DrawRect();
+		IRColorPicker Selectcolor;
 		DrawTest();
-		float viewport_size[4];
-		glGetFloatv(GL_VIEWPORT, viewport_size);
 		rctf cirrect;
 		cirrect.xmin = -1.0f;
 		cirrect.xmax = 1.0f;
 		cirrect.ymin = -1.0f;
 		cirrect.ymax = 1.0f;
-		DrawHSVCIRCLE(&cirrect);
+		Selectcolor.DrawHSVCIRCLE(&cirrect);
 		glfwSwapBuffers(window);
 	}
 	glfwPollEvents();
 }
 
-#include "Matrices.h"
-#include "vmath.h"
+
 bool bttt = false;
 
 
 uiWidgetBaseParameters widgetParam;
 
-/* keep in sync with shader */
-#define MAX_WIDGET_BASE_BATCH 6
-#define MAX_WIDGET_PARAMETERS 12
-using namespace vmath;
-BLI_INLINE float BLI_rctf_size_x(const struct rctf* rct)
-{
-	return (rct->xmax - rct->xmin);
-}
-BLI_INLINE float BLI_rctf_size_y(const struct rctf* rct)
-{
-	return (rct->ymax - rct->ymin);
-}
+
 
 void DrawRect()
 {
@@ -432,7 +419,7 @@ void DrawRect()
 	mat4 model_matrix;
 
 	//glDisable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Activate simple shading program
 	//glUseProgram(render_prog);
@@ -546,7 +533,9 @@ void DrawTest()
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glUseProgram(GPU_SHADER_3D_TEST);
+	
 	IGPUShader::Instance()->bindShader(GPU_SHADER_3D_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	//tt.setortho(false);
 	//tt.update();
 	float viewport_size[4];
@@ -599,6 +588,8 @@ void DrawTest()
 	//model_matrix *= vmath::scale(0.3f, 0.3f, 0.3f);
 	//glm::mat4 model_matrix = m_camera.GetViewMatrix();
 	float model_matrix[4][4];
+	
+	m_camera.ED_view3d_win_to_delta(mval);
 	m_camera.ED_view3d_update_viewmat();
 	m_camera.getviewmatrix(model_matrix);
 	GLuint Test_model_matrix_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "model_matrix");
@@ -606,6 +597,8 @@ void DrawTest()
 	//glUniformMatrix4fv(Test_model_matrix_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
 	GLuint Test_color_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "color");
 	glUniform4fv(Test_color_loc, 1, color);
+
+	glDisableVertexAttribArray(1);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	if (mouseLeftDown)
@@ -622,410 +615,3 @@ void DrawTest()
 }
 
 
-#pragma region
-static float clamp_f(float value, float min, float max)
-{
-	if (value > max) {
-		return max;
-	}
-	else if (value < min) {
-		return min;
-	}
-	return value;
-}
-
-static void ui_hsvcircle_pos_from_vals(const rctf* rect, const float* hsv, float* r_xpos, float* r_ypos)
-{
-	float radius = (float)min(rect->xmax - rect->xmin, rect->ymax - rect->ymin) / 2.0f;
-	const float centx = float((rect->xmin + rect->xmax) / 2.0);
-	const float centy = float((rect->ymin + rect->ymax) / 2.0);
-	const float ang = 2.0f * (float)M_PI * hsv[0] + (float)M_PI_2;
-	float radius_t = hsv[1];
-
-	radius = clamp_f(radius_t, 0.0f, 1.0f) * radius;
-	*r_xpos = centx + cosf(-ang) * radius;
-	*r_ypos = centy + sinf(-ang) * radius;
-}
-
-
-GLenum convert_comp_type_to_gl(GPUVertCompType type)
-{
-	static const GLenum table[] = {
-		GL_BYTE,
-		GL_UNSIGNED_BYTE,
-		GL_SHORT,
-		GL_UNSIGNED_SHORT,
-		GL_INT,
-		GL_UNSIGNED_INT,
-
-		GL_FLOAT,
-
-		GL_INT_2_10_10_10_REV,
-	};
-	return table[type];
-}
-uint attr_sz(const GPUVertAttr* a)
-{
-	if (a->comp_type == GPU_COMP_I10) {
-		return 4; /* always packed as 10_10_10_2 */
-	}
-	const GLubyte sizes[] = { 1, 1, 2, 2, 4, 4, 4 };
-	uint usize = sizes[a->comp_type];
-
-	return a->comp_len * usize;
-}
-
-uint GPU_vertformat_attr_add(GPUVertFormat* format, const char* name, GPUVertCompType comp_type, uint comp_len)
-{
-	format->name_len++; /* multiname support */
-
-	const uint attr_id = format->attr_len++;
-	GPUVertAttr* attr = &format->attrs[attr_id];
-
-	//attr->names[attr->name_len++] = copy_attr_name(format, name);
-	attr->comp_type = comp_type;
-	attr->gl_comp_type = convert_comp_type_to_gl(comp_type);
-	attr->comp_len = (comp_type == GPU_COMP_I10) ? 4 : comp_len; /* system needs 10_10_10_2 to be 4 or BGRA */
-	attr->sz = attr_sz(attr);
-	attr->offset = 0; /* offsets & stride are calculated later (during pack) */
-	//attr->fetch_mode = fetch_mode;
-	return attr_id;
-}
-
-
-void GPU_vertformat_clear(GPUVertFormat* format)
-{
-	memset(format, 0, sizeof(GPUVertFormat));
-}
-
-GPUVertFormat* immVertexFormat()
-{
-	GPU_vertformat_clear(&imm.vertex_format);
-	return &imm.vertex_format;
-}
-
-uint vertex_buffer_size(const GPUVertFormat* format, uint vertex_len)
-{
-	return format->stride * vertex_len;
-}
-
-static uint padding(uint offset, uint alignment)
-{
-	const uint mod = offset % alignment;
-	return (mod == 0) ? 0 : (alignment - mod);
-}
-
-void immBegin(GLuint prim_type, uint vertex_len)
-{
-	glBindBuffer(GL_ARRAY_BUFFER, Imm_buffer_vbo_id);
-	const uint available_bytes = buffer_size - buffer_offset;
-	const uint bytes_needed = vertex_buffer_size(&imm.vertex_format, vertex_len);
-	bool recreate_buffer = false;
-	if (bytes_needed > buffer_size)
-	{
-		recreate_buffer = true;
-		buffer_size = bytes_needed;
-	}
-
-	if (recreate_buffer)
-	{
-		//glBufferData(GL_ARRAY_BUFFER, buffer_size, NULL, GL_DYNAMIC_DRAW);
-		//buffer_offset = 0;
-	}
-	else
-	{
-		const uint pre_padding = padding(buffer_offset, imm.vertex_format.stride);
-		buffer_offset += pre_padding;
-	}
-	imm.vertex_len = vertex_len;
-	imm.prim_type = prim_type;
-	imm.buffer_bytes_mapped = bytes_needed;
-	imm.vertex_data = (GLubyte*)glMapBufferRange(GL_ARRAY_BUFFER, buffer_offset, bytes_needed, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
-}
-
-
-
-void immBindProgram(eGPUBuiltinShader program)
-{
-	IGPUShader::Instance()->bindShader(program);
-
-	vmath::mat4 projection_matrix(vmath::Orthogonal(0.0f, float(SCR_WIDTH), 0.0f, float(SCR_HEIGHT), -500.0f, 500.0f));
-	glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "projection_matrix"), 1, GL_FALSE, projection_matrix);
-	mat4 model_matrix = vmath::translation(120.0f, SCR_HEIGHT-120.0f, 0.0f);
-	model_matrix *= vmath::scale(100.0f);
-	double temp[4] = { 0.0f,0.0f,0.0f,1.0f };
-	double r[4];
-	mul_v4d_m4v4d(r, (float(*)[4])(float*)model_matrix, temp);
-	//mul_v4d_m4v4d(temp, (float(*)[4])(float*)projection_matrix, r);
-	float viewinv[4][4];
-	invert_m4_m4(viewinv, (float(*)[4])(float*)model_matrix);
-	//double temp2[4] = { 12,0.0f,0.0f,1.0f };
-	mul_v4d_m4v4d(temp, viewinv, r);
-
-
-	glUniformMatrix4fv(glGetUniformLocation(IGPUShader::Instance()->GetShader(program)->program, "model_matrix"), 1, GL_FALSE, model_matrix);
-
-	GPUVertFormat* format = &imm.vertex_format;
-	GPUVertAttr* a0 = &format->attrs[0];
-	a0->offset = 0;
-	uint offset = a0->sz;
-	for (uint a_idx = 1; a_idx < format->attr_len; a_idx++) {
-		GPUVertAttr* a = &format->attrs[a_idx];
-		a->offset = offset;
-		offset += a->sz;
-	}
-	format->stride = offset;
-	imm.shader_interface = IGPUShader::Instance()->GetShader(program)->program;
-}
-
-void immDrawSetup(void)
-{
-	/* set up VAO -- can be done during Begin or End really */
-	glBindVertexArray(imm.vao_id);
-
-	if (imm.vertex_format.attr_len > 1)
-		glEnableVertexAttribArray(1);
-	else
-		glDisableVertexAttribArray(1);
-	const uint stride = imm.vertex_format.stride;
-
-	for (uint a_idx = 0; a_idx < imm.vertex_format.attr_len; a_idx++) {
-		const GPUVertAttr* a = &imm.vertex_format.attrs[a_idx];
-
-		const uint offset = buffer_offset + a->offset;
-		const GLvoid* pointer = (const GLubyte*)0 + offset;
-
-		const uint loc = a_idx;
-
-		glVertexAttribPointer(loc, a->comp_len, a->gl_comp_type, GL_FALSE, stride, pointer);
-	}
-
-}
-
-void immEnd()
-{
-	glUnmapBuffer(GL_ARRAY_BUFFER);
-	if (imm.vertex_len > 0) {
-		immDrawSetup();
-		glDrawArrays(imm.prim_type, 0, imm.vertex_len);
-		buffer_offset += imm.buffer_bytes_mapped;
-	}
-}
-void immEndVertex(void)
-{
-	//imm.vertex_idx++;
-	imm.vertex_data += imm.vertex_format.stride;
-}
-
-void immAttr3f(uint attr_id, float x, float y, float z)
-{
-	GPUVertAttr* attr = &imm.vertex_format.attrs[attr_id];
-	float* data = (float*)(imm.vertex_data + attr->offset);
-
-	data[0] = x;
-	data[1] = y;
-	data[2] = z;
-}
-
-void immAttr2f(uint attr_id, float x, float y)
-{
-	GPUVertAttr* attr = &imm.vertex_format.attrs[attr_id];
-
-	float* data = (float*)(imm.vertex_data + attr->offset);
-
-	data[0] = x;
-	data[1] = y;
-}
-
-void immVertex2f(uint attr_id, float x, float y)
-{
-	immAttr2f(attr_id, x, y);
-	immEndVertex();
-}
-
-
-float len_squared_v2(const float v[2])
-{
-	return v[0] * v[0] + v[1] * v[1];
-}
-
-void ui_hsvcircle_vals_from_pos(const rctf* rect, const float mx, const float my, float* r_val_rad, float* r_val_dist)
-{
-	/* duplication of code... well, simple is better now */
-	const float centx = float((rect->xmin + rect->xmax) / 2.0);
-	const float centy = float((rect->ymin + rect->ymax) / 2.0);
-	const float radius = (float)min(rect->xmax - rect->xmin, rect->ymax - rect->ymin) / 2.0f;
-	const float m_delta[2] = { mx - centx, my - centy };
-	const float dist_sq = len_squared_v2(m_delta);
-
-	*r_val_dist = (dist_sq < (radius* radius)) ? sqrtf(dist_sq) / radius : 1.0f;
-	*r_val_rad = atan2f(m_delta[0], m_delta[1]) / (2.0f * (float)M_PI) + 0.5f;
-}
-
-
-
-#define CLAMP(a, b, c) \
-  { \
-    if ((a) < (b)) \
-      (a) = (b); \
-    else if ((a) > (c)) \
-      (a) = (c); \
-  } 
-void hsv_to_rgb(float h, float s, float v, float* r_r, float* r_g, float* r_b)
-{
-	float nr, ng, nb;
-
-	nr = fabsf(h * 6.0f - 3.0f) - 1.0f;
-	ng = 2.0f - fabsf(h * 6.0f - 2.0f);
-	nb = 2.0f - fabsf(h * 6.0f - 4.0f);
-
-	CLAMP(nr, 0.0f, 1.0f);
-	CLAMP(nb, 0.0f, 1.0f);
-	CLAMP(ng, 0.0f, 1.0f);
-
-	*r_r = ((nr - 1.0f) * s + 1.0f) * v;
-	*r_g = ((ng - 1.0f) * s + 1.0f) * v;
-	*r_b = ((nb - 1.0f) * s + 1.0f) * v;
-}
-
-void hsv_to_rgb_v(const float hsv[3], float r_rgb[3])
-{
-	hsv_to_rgb(hsv[0], hsv[1], hsv[2], &r_rgb[0], &r_rgb[1], &r_rgb[2]);
-}
-
-void rgb_to_hsv(float r, float g, float b, float* r_h, float* r_s, float* r_v)
-{
-	float k = 0.0f;
-	float chroma;
-	float min_gb;
-
-#define SWAP(type, a, b) \
-  { \
-    type sw_ap; \
-    sw_ap = (a); \
-    (a) = (b); \
-    (b) = sw_ap; \
- }
-
-	if (g < b) {
-		SWAP(float, g, b);
-		k = -1.0f;
-	}
-	min_gb = b;
-	if (r < g) {
-		SWAP(float, r, g);
-		k = -2.0f / 6.0f - k;
-		min_gb = min(g, b);
-	}
-
-	chroma = r - min_gb;
-
-	*r_h = fabsf(k + (g - b) / (6.0f * chroma + 1e-20f));
-	*r_s = chroma / (r + 1e-20f);
-	*r_v = r;
-}
-
-
-void immUniformColor3f(float r, float g, float b)
-{
-	GLuint uniform_loc = glGetUniformLocation(imm.shader_interface, "color");
-	const float scale = 1.0f;// / 255.0f;`
-	glUniform4f(uniform_loc, r * scale, g * scale, b * scale, 1.0);
-}
-
-void imm_draw_circle(GLuint prim_type, const uint shdr_pos, float x, float y, float rad_x, float rad_y, int nsegments)
-{
-	immBegin(prim_type, nsegments);
-	for (int i = 0; i < nsegments; i++) {
-		const float angle = (float)(2 * M_PI) * ((float)i / (float)nsegments);
-		immVertex2f(shdr_pos, x + (rad_x * cosf(angle)), y + (rad_y * sinf(angle)));
-	}
-	immEnd();
-}
-
-void ui_hsv_cursor(float x, float y)
-{
-	GPUVertFormat* format = immVertexFormat();
-	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
-	immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
-	immUniformColor3f(1, 1, 1);
-	imm_draw_circle(GL_TRIANGLE_FAN, pos, x, y, 3 * U.pixelsize, 3 * U.pixelsize, 8);
-
-	//immUnbindProgram();
-	glEnable(GL_BLEND);
-	glEnable(GL_LINE_SMOOTH);
-	immUniformColor3f(0, 0, 0);
-	//imm_draw_circle(GL_TRIANGLE_FAN, pos, x,y, 0.03f, 0.03f, 8);
-	imm_draw_circle(GL_LINE_LOOP, pos, x, y, 3 * U.pixelsize, 3 * U.pixelsize, 12);
-	glDisable(GL_BLEND);
-	glDisable(GL_LINE_SMOOTH);
-}
-
-void DrawHSVCIRCLE(const rctf* rect)
-{
-	const int tot = 64;
-	GPUVertFormat* format = immVertexFormat();
-	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
-	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3);
-	immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
-	glDisable(GL_BLEND);
-	glDisable(GL_LINE_SMOOTH);
-	glDisable(GL_DEPTH_TEST);
-	
-	immBegin(GL_TRIANGLE_FAN, tot + 2);
-	float/* rgb[3],*/ hsv[3], rgb_center[3];
-	const float centx = 0.0;
-	const float centy = 0.0;
-	//hsv[0] = 0.08f; hsv[1] = 1.0f; hsv[2] = 1.0f;
-	hsv[0] = 0.0163f; hsv[1] = 0.9875f; hsv[2] = 1.0f;
-	rgb_center[0] = 1; rgb_center[1] = 1; rgb_center[2] = 1;
-
-	immAttr3f(color, rgb_center[0], rgb_center[1], rgb_center[2]);
-	immVertex2f(pos, centx, centy);
-
-	float ang = 0.0f;
-	const float radstep = 2.0f * (float)M_PI / (float)tot;
-	const float radius = (float)min(rect->xmax - rect->xmin, rect->ymax - rect->ymin) / 2.0f;
-	for (int a = 0; a <= tot; a++, ang += radstep) {
-		float si = sinf(ang);
-		float co = cosf(ang);
-		float hsv_ang[3];
-		float rgb_ang[3];
-
-		ui_hsvcircle_vals_from_pos(rect, centx + co * radius, centy + si * radius, hsv_ang, hsv_ang + 1);
-		hsv_ang[2] = hsv[2];
-
-		hsv_to_rgb_v(hsv_ang, rgb_ang);
-		//ui_color_picker_to_scene_linear_space(but, rgb_ang);
-
-		//if (!is_color_gamma) {
-		//	ui_block_cm_to_display_space_v3(but->block, rgb_ang);
-		//}
-
-		immAttr3f(color, rgb_ang[0], rgb_ang[1], rgb_ang[2]);
-		immVertex2f(pos, centx + co * radius, centy + si * radius);
-	}
-
-	immEnd();
-
-	glUseProgram(0);
-	{
-		GPUVertFormat* format = immVertexFormat();
-		uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
-		//glDisableVertexAttribArray(1);
-		immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
-		glEnable(GL_BLEND);
-		glEnable(GL_LINE_SMOOTH);
-		immUniformColor3f(0.1f, 0.1f, 0.2f);
-		imm_draw_circle(GL_LINE_LOOP, pos, centx, centy, radius, radius, 200);
-	}
-	glDisable(GL_BLEND);
-	glDisable(GL_LINE_SMOOTH);
-	// 
-	float x, y;
-	ui_hsvcircle_pos_from_vals(rect, hsv, &x, &y);
-	ui_hsv_cursor(x, y);
-	glUseProgram(0);
-}
-
-#pragma endregion 

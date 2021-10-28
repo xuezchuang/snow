@@ -11,6 +11,18 @@
       <Filter>gpu</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="interface_region_color_picker.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="GPU_vertex_format.c">
+      <Filter>gpu</Filter>
+    </ClCompile>
+    <ClCompile Include="math_matrix.cpp">
+      <Filter>gpu</Filter>
+    </ClCompile>
+    <ClCompile Include="GPU_immediate.cpp">
+      <Filter>gpu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="interface_intern.h" />
@@ -20,13 +32,25 @@
     <ClInclude Include="GPUShader.h">
       <Filter>gpu_shader</Filter>
     </ClInclude>
-    <ClInclude Include="GPU_format.h">
-      <Filter>gpu</Filter>
-    </ClInclude>
     <ClInclude Include="utildefines.h">
       <Filter>lib</Filter>
     </ClInclude>
     <ClInclude Include="BLI_camera.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="interface_region_color_picker.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="GPU_vertex_format.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="GPU_matrix.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="math_matrix.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="GPU_immediate.h">
       <Filter>gpu</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,6 +98,9 @@
     </Filter>
     <Filter Include="lib">
       <UniqueIdentifier>{b33b51a6-1f37-4bb5-a908-ff04d6cff8dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="interface">
+      <UniqueIdentifier>{5f33a6fa-07cf-494c-ad7b-04202a9a7914}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

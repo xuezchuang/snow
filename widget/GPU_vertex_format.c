@@ -66,6 +66,12 @@ static uint attr_sz(const GPUVertAttr* a)
 	return a->comp_len * comp_sz(a->comp_type);
 }
 
+uint padding(uint offset, uint alignment)
+{
+	const uint mod = offset % alignment;
+	return (mod == 0) ? 0 : (alignment - mod);
+}
+
 
 uint GPU_vertformat_attr_add(GPUVertFormat* format,const char* name,GPUVertCompType comp_type,uint comp_len,GPUVertFetchMode fetch_mode)
 {
@@ -110,4 +116,11 @@ uint GPU_vertformat_attr_add(GPUVertFormat* format,const char* name,GPUVertCompT
     attr->fetch_mode = fetch_mode;
 
     return attr_id;
+}
+
+
+uint vertex_buffer_size(const GPUVertFormat* format, uint vertex_len)
+{
+	//assert(format->packed && format->stride > 0);
+	return format->stride * vertex_len;
 }

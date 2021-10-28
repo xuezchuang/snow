@@ -1,20 +1,14 @@
 #pragma once
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-#ifdef __cplusplus
-extern "C" {
-#endif
-	typedef enum eGPUBuiltinShader {
-		/* specialized drawing */
-		GPU_SHADER_2D_SMOOTH_COLOR,
-		GPU_SHADER_2D_UNIFORM_COLOR,
-		GPU_SHADER_3D_TEST,
-		render_prog,
-	}eGPUBuiltinShader;
+typedef enum eGPUBuiltinShader {
+	/* specialized drawing */
+	GPU_SHADER_2D_SMOOTH_COLOR,
+	GPU_SHADER_2D_UNIFORM_COLOR,
+	GPU_SHADER_3D_TEST,
+	render_prog,
+}eGPUBuiltinShader;
 #define GPU_SHADER_BUILTIN_LEN (render_prog + 1)
-#ifdef __cplusplus
-}
-#endif
 
 struct GPUShader {
 	GLuint program;
@@ -42,6 +36,8 @@ protected:
 private:
 	static IGPUShader* _instance;
 	GPUShader* m_GPUShader[GPU_SHADER_BUILTIN_LEN];
+	GLint modelview_matrix_loc;
+	GLint project_matrix_loc;
 };
 
 

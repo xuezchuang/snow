@@ -3,147 +3,7 @@
 #include <string.h>
 #include "Matrices.h"
 #include "vmath.h"
-
-#include <Eigen/Core>
-#include <Eigen/Dense>
-using Eigen::Map;
-using Eigen::Matrix4f;
-
-void quat_to_mat4(float m[4][4], const float q[4])
-{
-	double q0, q1, q2, q3, qda, qdb, qdc, qaa, qab, qac, qbb, qbc, qcc;
-
-	q0 = M_SQRT2 * (double)q[0];
-	q1 = M_SQRT2 * (double)q[1];
-	q2 = M_SQRT2 * (double)q[2];
-	q3 = M_SQRT2 * (double)q[3];
-
-	qda = q0 * q1;
-	qdb = q0 * q2;
-	qdc = q0 * q3;
-	qaa = q1 * q1;
-	qab = q1 * q2;
-	qac = q1 * q3;
-	qbb = q2 * q2;
-	qbc = q2 * q3;
-	qcc = q3 * q3;
-
-	m[0][0] = (float)(1.0 - qbb - qcc);
-	m[0][1] = (float)(qdc + qab);
-	m[0][2] = (float)(-qdb + qac);
-	m[0][3] = 0.0f;
-
-	m[1][0] = (float)(-qdc + qab);
-	m[1][1] = (float)(1.0 - qaa - qcc);
-	m[1][2] = (float)(qda + qbc);
-	m[1][3] = 0.0f;
-
-	m[2][0] = (float)(qdb + qac);
-	m[2][1] = (float)(-qda + qbc);
-	m[2][2] = (float)(1.0 - qaa - qbb);
-	m[2][3] = 0.0f;
-
-	m[3][0] = m[3][1] = m[3][2] = 0.0f;
-	m[3][3] = 1.0f;
-}
-void translate_m4(float mat[4][4], float Tx, float Ty, float Tz)
-{
-	mat[3][0] += (Tx * mat[0][0] + Ty * mat[1][0] + Tz * mat[2][0]);
-	mat[3][1] += (Tx * mat[0][1] + Ty * mat[1][1] + Tz * mat[2][1]);
-	mat[3][2] += (Tx * mat[0][2] + Ty * mat[1][2] + Tz * mat[2][2]);
-}
-void copy_m4_m4(float m1[4][4], const float m2[4][4])
-{
-	memcpy(m1, m2, sizeof(float[4][4]));
-}
-void mul_m4_m4m4_uniq(float R[4][4], const float A[4][4], const float B[4][4])
-{
-	R[0][0] = B[0][0] * A[0][0] + B[0][1] * A[1][0] + B[0][2] * A[2][0] + B[0][3] * A[3][0];
-	R[0][1] = B[0][0] * A[0][1] + B[0][1] * A[1][1] + B[0][2] * A[2][1] + B[0][3] * A[3][1];
-	R[0][2] = B[0][0] * A[0][2] + B[0][1] * A[1][2] + B[0][2] * A[2][2] + B[0][3] * A[3][2];
-	R[0][3] = B[0][0] * A[0][3] + B[0][1] * A[1][3] + B[0][2] * A[2][3] + B[0][3] * A[3][3];
-
-	R[1][0] = B[1][0] * A[0][0] + B[1][1] * A[1][0] + B[1][2] * A[2][0] + B[1][3] * A[3][0];
-	R[1][1] = B[1][0] * A[0][1] + B[1][1] * A[1][1] + B[1][2] * A[2][1] + B[1][3] * A[3][1];
-	R[1][2] = B[1][0] * A[0][2] + B[1][1] * A[1][2] + B[1][2] * A[2][2] + B[1][3] * A[3][2];
-	R[1][3] = B[1][0] * A[0][3] + B[1][1] * A[1][3] + B[1][2] * A[2][3] + B[1][3] * A[3][3];
-
-	R[2][0] = B[2][0] * A[0][0] + B[2][1] * A[1][0] + B[2][2] * A[2][0] + B[2][3] * A[3][0];
-	R[2][1] = B[2][0] * A[0][1] + B[2][1] * A[1][1] + B[2][2] * A[2][1] + B[2][3] * A[3][1];
-	R[2][2] = B[2][0] * A[0][2] + B[2][1] * A[1][2] + B[2][2] * A[2][2] + B[2][3] * A[3][2];
-	R[2][3] = B[2][0] * A[0][3] + B[2][1] * A[1][3] + B[2][2] * A[2][3] + B[2][3] * A[3][3];
-
-	R[3][0] = B[3][0] * A[0][0] + B[3][1] * A[1][0] + B[3][2] * A[2][0] + B[3][3] * A[3][0];
-	R[3][1] = B[3][0] * A[0][1] + B[3][1] * A[1][1] + B[3][2] * A[2][1] + B[3][3] * A[3][1];
-	R[3][2] = B[3][0] * A[0][2] + B[3][1] * A[1][2] + B[3][2] * A[2][2] + B[3][3] * A[3][2];
-	R[3][3] = B[3][0] * A[0][3] + B[3][1] * A[1][3] + B[3][2] * A[2][3] + B[3][3] * A[3][3];
-}
-void mul_m4_m4_post(float R[4][4], const float B[4][4])
-{
-	float A[4][4];
-	copy_m4_m4(A, R);
-	mul_m4_m4m4_uniq(R, A, B);
-}
-void mul_m4_m4_pre(float R[4][4], const float A[4][4])
-{
-	float B[4][4];
-	copy_m4_m4(B, R);
-	mul_m4_m4m4_uniq(R, A, B);
-}
-void mul_m4_m4m4(float R[4][4], const float A[4][4], const float B[4][4])
-{
-	if (A == R) {
-		mul_m4_m4_post(R, B);
-	}
-	else if (B == R) {
-		mul_m4_m4_pre(R, A);
-	}
-	else {
-		mul_m4_m4m4_uniq(R, A, B);
-	}
-}
-bool EIG_invert_m4_m4(float inverse[4][4], const float matrix[4][4])
-{
-	Map<Matrix4f> M = Map<Matrix4f>((float*)matrix);
-	Matrix4f R;
-	bool invertible = true;
-	M.computeInverseWithCheck(R, invertible, 0.0f);
-	if (!invertible) {
-		R = R.Zero();
-	}
-	memcpy(inverse, R.data(), sizeof(float) * 4 * 4);
-	return invertible;
-}
-bool invert_m4_m4(float inverse[4][4], const float mat[4][4])
-{
-	return EIG_invert_m4_m4(inverse, mat);
-}
-void mul_v4d_m4v4d(double r[4], const float mat[4][4], const double v[4])
-{
-	const double x = v[0];
-	const double y = v[1];
-	const double z = v[2];
-
-	r[0] = x * (double)mat[0][0] + y * (double)mat[1][0] + z * (double)mat[2][0] +
-		(double)mat[3][0] * v[3];
-	r[1] = x * (double)mat[0][1] + y * (double)mat[1][1] + z * (double)mat[2][1] +
-		(double)mat[3][1] * v[3];
-	r[2] = x * (double)mat[0][2] + y * (double)mat[1][2] + z * (double)mat[2][2] +
-		(double)mat[3][2] * v[3];
-	r[3] = x * (double)mat[0][3] + y * (double)mat[1][3] + z * (double)mat[2][3] +
-		(double)mat[3][3] * v[3];
-}
-
-float mul_project_m4_v3_zfac(const float mat[4][4], const float co[3])
-{
-	return (mat[0][3] * co[0]) + (mat[1][3] * co[1]) + (mat[2][3] * co[2]) + mat[3][3];
-}
-void negate_v3_v3(float r[3], const float a[3])
-{
-	r[0] = -a[0];
-	r[1] = -a[1];
-	r[2] = -a[2];
-}
+#include "math_matrix.h"
 //-------------------------------------------//
 BLICamera::BLICamera()
 {
@@ -313,9 +173,11 @@ void BLICamera::ED_view3d_update_viewmat()
 	invert_m4_m4(persinv, persmat);
 }
 
-float BLICamera::ED_view3d_calc_zfac(const float co[3], bool* r_flip)
+float BLICamera::ED_view3d_calc_zfac(bool* r_flip)
 {
-	float zfac = mul_project_m4_v3_zfac((float(*)[4])persmat, co);
+	float co[3];
+	negate_v3_v3(co, ofs);
+	zfac = mul_project_m4_v3_zfac((float(*)[4])persmat, co);
 
 	if (r_flip) {
 		*r_flip = (zfac < 0.0f);
@@ -334,4 +196,25 @@ float BLICamera::ED_view3d_calc_zfac(const float co[3], bool* r_flip)
 	}
 
 	return zfac;
+}
+/**
+ * Calculate a 3d difference vector from 2d window offset.
+ * note that #ED_view3d_calc_zfac() must be called first to determine
+ * the depth used to calculate the delta.
+ * \param region: The region (used for the window width and height).
+ * \param mval: The area relative 2d difference (such as event->mval[0] - other_x).
+ * \param out: The resulting world-space delta.
+ */
+void BLICamera::ED_view3d_win_to_delta(const float mval[2])
+{
+	float out[3];
+	float dx, dy;
+
+	dx = 2.0f * mval[0] * zfac / winx;
+	dy = 2.0f * mval[1] * zfac / winy;
+
+	out[0] = (persinv[0][0] * dx + persinv[1][0] * dy);
+	out[1] = (persinv[0][1] * dx + persinv[1][1] * dy);
+	out[2] = (persinv[0][2] * dx + persinv[1][2] * dy);
+	add_v3_v3(ofs, out);
 }
