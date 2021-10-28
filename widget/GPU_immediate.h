@@ -2,6 +2,8 @@
 #include "interface_intern.h"
 #include "GPU_vertex_format.h"
 #include "GPUShader.h"
+#include "gpu_attr_binding.h"
+
 typedef struct {
 	GLuint shader_interface;
 	uint vertex_len;
@@ -10,6 +12,8 @@ typedef struct {
 	GLuint prim_type;
 	GPUVertFormat vertex_format;
 	GLubyte* vertex_data;
+	GPUAttrBinding attr_binding;
+	uint16_t prev_enabled_attr_bits; /* <-- only affects this VAO, so we're ok */
 } Immediate;
 
 class GPUImmediate

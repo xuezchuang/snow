@@ -1,6 +1,5 @@
 #include "GPUShader.h"
 #include "LoadShaders.h"
-#include < assert.h >
 IGPUShader* IGPUShader::_instance = nullptr;
 IGPUShader* IGPUShader::Instance()
 {
@@ -73,11 +72,20 @@ GPUShader* IGPUShader::GetShader(eGPUBuiltinShader shader)
 
 void IGPUShader::bindShader(eGPUBuiltinShader shader)
 {
-	GLuint program = GetShader(shader)->program;
-	glUseProgram(program);
+	m_Curprogram = GetShader(shader)->program;
+	glUseProgram(m_Curprogram);
 
-	modelview_matrix_loc = glGetUniformLocation(program, "model_matrix");
-	project_matrix_loc = glGetUniformLocation(program, "projection_matrix");
+	modelview_matrix_loc = glGetUniformLocation(m_Curprogram, "model_matrix");
+	project_matrix_loc = glGetUniformLocation(m_Curprogram, "projection_matrix");
 	assert(modelview_matrix_loc != -1);
 	assert(project_matrix_loc != -1);
 }
+GLuint IGPUShader::GetCurProgram()
+{
+	return m_Curprogram;
+}
+//uint IGPUShader::GPU_shaderinterface_attr(char* name)
+//{
+//	assert(m_Curprogram != 0);
+//	return glGetAttribLocation(m_Curprogram, name);
+//}

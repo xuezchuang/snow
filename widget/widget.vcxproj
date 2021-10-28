@@ -155,28 +155,31 @@
   <ItemGroup>
     <ClCompile Include="BLI_camera.cpp" />
     <ClCompile Include="GPUShader.cpp" />
+    <ClCompile Include="gpu_attr_binding.cpp" />
     <ClCompile Include="GPU_immediate.cpp" />
     <ClCompile Include="GPU_vertex_format.c" />
     <ClCompile Include="IFrameApi.cpp" />
     <ClCompile Include="interface_region_color_picker.cpp" />
+    <ClCompile Include="interface_widgets.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math_matrix.cpp" />
-    <ClCompile Include="Matrices.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BLI_camera.h" />
+    <ClInclude Include="BLI_sys_types.h" />
     <ClInclude Include="GPUShader.h" />
+    <ClInclude Include="gpu_attr_binding.h" />
+    <ClInclude Include="GPU_common.h" />
     <ClInclude Include="GPU_immediate.h" />
     <ClInclude Include="GPU_matrix.h" />
     <ClInclude Include="GPU_vertex_format.h" />
     <ClInclude Include="IFrameApi.h" />
     <ClInclude Include="interface_intern.h" />
     <ClInclude Include="interface_region_color_picker.h" />
+    <ClInclude Include="interface_widgets.h" />
     <ClInclude Include="math_matrix.h" />
-    <ClInclude Include="Matrices.h" />
     <ClInclude Include="utildefines.h" />
-    <ClInclude Include="vapp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\gpu_shader_2D_smooth_color_frag.glsl" />

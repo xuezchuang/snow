@@ -1,6 +1,6 @@
 #include "GPU_vertex_format.h"
 #include <string.h>
-
+#include <assert.h>
 void GPU_vertformat_clear(GPUVertFormat* format)
 {
 	memset(format, 0, sizeof(GPUVertFormat));
@@ -11,7 +11,7 @@ void GPU_vertformat_copy(GPUVertFormat* dest, const GPUVertFormat* src)
 	/* copy regular struct fields */
 	memcpy(dest, src, sizeof(GPUVertFormat));
 }
-uchar copy_attr_name(GPUVertFormat* format, const char* name)
+static uchar copy_attr_name(GPUVertFormat* format, const char* name)
 {
 	/* strncpy does 110% of what we need; let's do exactly 100% */
 	uchar name_offset = format->name_offset;
@@ -123,9 +123,4 @@ uint vertex_buffer_size(const GPUVertFormat* format, uint vertex_len)
 {
 	//assert(format->packed && format->stride > 0);
 	return format->stride * vertex_len;
-}
-
-const char* GPU_vertformat_attr_name_get(const GPUVertFormat* format, const GPUVertAttr* attr, uint n_idx)
-{
-	return format->names + attr->names[n_idx];
 }

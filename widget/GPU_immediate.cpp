@@ -2,8 +2,7 @@
 #include <string.h>
 #include "Matrices.h"
 #include "vmath.h"
-//#include "GPU_matrix.h"
-//-------------------------------------------//
+
 GPUImmediate::GPUImmediate()
 {
 	Init();
@@ -22,6 +21,7 @@ void GPUImmediate::Init()
 	glBufferData(GL_ARRAY_BUFFER, 4 * 1024 * 1024, NULL, GL_DYNAMIC_DRAW);
 	buffer_size = 0;
 	buffer_offset = 0;
+	imm.prev_enabled_attr_bits = 0;
 }
 //extern uint padding(uint offset, uint alignment);
 //extern uint vertex_buffer_size(const GPUVertFormat* format, uint vertex_len);
@@ -53,9 +53,6 @@ void GPUImmediate::immBegin(GLuint prim_type, uint vertex_len)
 	imm.vertex_data = (GLubyte*)glMapBufferRange(GL_ARRAY_BUFFER, buffer_offset, bytes_needed, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
 }
 
-
-
-
 void GPUImmediate::immBindProgram(eGPUBuiltinShader program)
 {
 	IGPUShader::Instance()->bindShader(program);
@@ -69,6 +66,7 @@ void GPUImmediate::immBindProgram(eGPUBuiltinShader program)
 		offset += a->sz;
 	}
 	format->stride = offset;
+	get_attr_locations(&imm.vertex_format, &imm.attr_binding);
 	imm.shader_interface = IGPUShader::Instance()->GetShader(program)->program;
 }
 
@@ -76,10 +74,25 @@ void GPUImmediate::immDrawSetup(void)
 {
 	/* set up VAO -- can be done during Begin or End really */
 	glBindVertexArray(imm.vao_id);
-	if (imm.vertex_format.attr_len > 1)
-		glEnableVertexAttribArray(1);
-	else
-		glDisableVertexAttribArray(1);
+	/* Enable/Disable vertex attributes as needed. */
+	if (imm.attr_binding.enabled_bits != imm.prev_enabled_attr_bits)
+	{
+		for (uint loc = 0; loc < GPU_VERT_ATTR_MAX_LEN; loc++)
+		{
+			bool is_enabled = imm.attr_binding.enabled_bits & (1 << loc);
+			bool was_enabled = imm.prev_enabled_attr_bits & (1 << loc);
+			if (is_enabled && !was_enabled) 
+			{
+				glEnableVertexAttribArray(loc);
+			}
+			else if (was_enabled && !is_enabled)
+			{
+				glDisableVertexAttribArray(loc);
+			}
+		}
+
+		imm.prev_enabled_attr_bits = imm.attr_binding.enabled_bits;
+	}
 	const uint stride = imm.vertex_format.stride;
 
 	for (uint a_idx = 0; a_idx < imm.vertex_format.attr_len; a_idx++) {

@@ -64,15 +64,19 @@ extern "C" {
 		GPU_FETCH_INT_TO_FLOAT,      /* 127 (any int type) -> 127.0 */
 	} GPUVertFetchMode;
 
+	uchar copy_attr_name(GPUVertFormat* format, const char* name);
 	void GPU_vertformat_copy(GPUVertFormat* dest, const GPUVertFormat* src);
 	void GPU_vertformat_clear(GPUVertFormat*);
 
 
-	uint GPU_vertformat_attr_add(GPUVertFormat*, const char* name, GPUVertCompType, uint comp_len, GPUVertFetchMode);
+	uint GPU_vertformat_attr_add(GPUVertFormat* format, const char* name, GPUVertCompType comp_type, uint comp_len, GPUVertFetchMode fetch_mode);
 
 	uint vertex_buffer_size(const GPUVertFormat* format, uint vertex_len);
 
 	uint padding(uint offset, uint alignment);
+
+	const char* GPU_vertformat_attr_name_get(const GPUVertFormat* format, const GPUVertAttr* attr, uint n_idx);
+
 #ifdef __cplusplus
 }
 #endif

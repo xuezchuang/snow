@@ -7,6 +7,8 @@
 #include <windows.h>
 #include "IFrameApi.h"
 #include "GPU_immediate.h"
+#include "math_matrix.h"
+
 #pragma region
 static float clamp_f(float value, float min, float max)
 {
@@ -58,23 +60,6 @@ uint attr_sz(const GPUVertAttr* a)
 	uint usize = sizes[a->comp_type];
 
 	return a->comp_len * usize;
-}
-
-uint GPU_vertformat_attr_add(GPUVertFormat* format, const char* name, GPUVertCompType comp_type, uint comp_len)
-{
-	format->name_len++; /* multiname support */
-
-	const uint attr_id = format->attr_len++;
-	GPUVertAttr* attr = &format->attrs[attr_id];
-
-	//attr->names[attr->name_len++] = copy_attr_name(format, name);
-	attr->comp_type = comp_type;
-	attr->gl_comp_type = convert_comp_type_to_gl(comp_type);
-	attr->comp_len = (comp_type == GPU_COMP_I10) ? 4 : comp_len; /* system needs 10_10_10_2 to be 4 or BGRA */
-	attr->sz = attr_sz(attr);
-	attr->offset = 0; /* offsets & stride are calculated later (during pack) */
-	//attr->fetch_mode = fetch_mode;
-	return attr_id;
 }
 
 float len_squared_v2(const float v[2])
@@ -158,50 +143,35 @@ void rgb_to_hsv(float r, float g, float b, float* r_h, float* r_s, float* r_v)
 }
 
 
-void imm_draw_circle(GLuint prim_type, const uint shdr_pos, float x, float y, float rad_x, float rad_y, int nsegments)
-{
-	IFrameAPI::Instance()->Immediate()->immBegin(prim_type, nsegments);
-	for (int i = 0; i < nsegments; i++) {
-		const float angle = (float)(2 * M_PI) * ((float)i / (float)nsegments);
-		IFrameAPI::Instance()->Immediate()->immVertex2f(shdr_pos, x + (rad_x * cosf(angle)), y + (rad_y * sinf(angle)));
-	}
-	IFrameAPI::Instance()->Immediate()->immEnd();
-}
+
 
 
 #pragma endregion 
 //-------------------------------------------//
 IRColorPicker::IRColorPicker()
 {
-
 }
 
 IRColorPicker::~IRColorPicker()
 {}
 
-#include "math_matrix.h"
-void IRColorPicker::DrawHSVCIRCLE(const rctf* rect)
+
+void IRColorPicker::draw(const rctf* rect)
 {
 	const int tot = 64;
-	GPUVertFormat* format = IFrameAPI::Instance()->Immediate()->immVertexFormat();
-	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
-	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3);
-	IFrameAPI::Instance()->Immediate()->immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
+	GPUVertFormat* format = m_pImmediate->immVertexFormat();
+	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2, GPU_FETCH_FLOAT);
+	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3, GPU_FETCH_FLOAT);
+	m_pImmediate->immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
+
+	float viewport_size[4];
+	glGetFloatv(GL_VIEWPORT, viewport_size);
+	vmath::mat4 projection_matrix(vmath::Orthogonal(0.0f, viewport_size[2], 0.0f, viewport_size[3], -500.0f, 500.0f));
+	vmath::mat4 model_matrix = vmath::translation(m_offx, viewport_size[3] - m_offy, 0.0f);
+	model_matrix *= vmath::scale(m_radio);
 	{
-		//GLuint pos = glGetAttribLocation(GPU_SHADER_2D_UNIFORM_COLOR, "position");
-		GLuint pos = glGetAttribLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_2D_SMOOTH_COLOR)->program, "pos");
-		GLuint color = glGetAttribLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_2D_SMOOTH_COLOR)->program, "color");
-
-		glEnableVertexAttribArray(pos);
-		glEnableVertexAttribArray(color);
-
-		float viewport_size[4];
-		glGetFloatv(GL_VIEWPORT, viewport_size);
-		vmath::mat4 projection_matrix(vmath::Orthogonal(0.0f, viewport_size[2], 0.0f, viewport_size[3], -500.0f, 500.0f));
-		vmath::mat4 model_matrix = vmath::translation(120.0f, viewport_size[3] - 120.0f, 0.0f);
-		model_matrix *= vmath::scale(100.0f);
-		IFrameAPI::Instance()->Immediate()->matrix_projection_set((float(*)[4])(float*)projection_matrix);
-		IFrameAPI::Instance()->Immediate()->matrix_model_view_set((float(*)[4])(float*)model_matrix);
+		m_pImmediate->matrix_projection_set((float(*)[4])(float*)projection_matrix);
+		m_pImmediate->matrix_model_view_set((float(*)[4])(float*)model_matrix);
 		////Test
 		double temp[4] = { 0.0f,0.0f,0.0f,1.0f };
 		double r[4];
@@ -213,15 +183,10 @@ void IRColorPicker::DrawHSVCIRCLE(const rctf* rect)
 		mul_v4d_m4v4d(temp, viewinv, r);
 	}
 	
-
-
-	
-	IFrameAPI::Instance()->Immediate()->immBegin(GL_TRIANGLE_FAN, tot + 2);
+	m_pImmediate->immBegin(GL_TRIANGLE_FAN, tot + 2);
 
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
-	//glDisable(GL_DEPTH_TEST);
-	//glDisable(GL_DEPTH);
 
 	float/* rgb[3],*/ hsv[3], rgb_center[3];
 	const float centx = 0.0;
@@ -230,8 +195,8 @@ void IRColorPicker::DrawHSVCIRCLE(const rctf* rect)
 	hsv[0] = 0.0163f; hsv[1] = 0.9875f; hsv[2] = 1.0f;
 	rgb_center[0] = 1; rgb_center[1] = 1; rgb_center[2] = 1;
 
-	IFrameAPI::Instance()->Immediate()->immAttr3f(color, rgb_center[0], rgb_center[1], rgb_center[2]);
-	IFrameAPI::Instance()->Immediate()->immVertex2f(pos, centx, centy);
+	m_pImmediate->immAttr3f(color, rgb_center[0], rgb_center[1], rgb_center[2]);
+	m_pImmediate->immVertex2f(pos, centx, centy);
 
 	float ang = 0.0f;
 	const float radstep = 2.0f * (float)M_PI / (float)tot;
@@ -252,21 +217,24 @@ void IRColorPicker::DrawHSVCIRCLE(const rctf* rect)
 		//	ui_block_cm_to_display_space_v3(but->block, rgb_ang);
 		//}
 
-		IFrameAPI::Instance()->Immediate()->immAttr3f(color, rgb_ang[0], rgb_ang[1], rgb_ang[2]);
-		IFrameAPI::Instance()->Immediate()->immVertex2f(pos, centx + co * radius, centy + si * radius);
+		m_pImmediate->immAttr3f(color, rgb_ang[0], rgb_ang[1], rgb_ang[2]);
+		m_pImmediate->immVertex2f(pos, centx + co * radius, centy + si * radius);
 	}
 
-	IFrameAPI::Instance()->Immediate()->immEnd();
+	m_pImmediate->immEnd();
 
 	glUseProgram(0);
 	{
-		GPUVertFormat* format = IFrameAPI::Instance()->Immediate()->immVertexFormat();
-		uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
+		GPUVertFormat* format = m_pImmediate->immVertexFormat();
+		uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2, GPU_FETCH_FLOAT);
+		m_pImmediate->immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
+		m_pImmediate->matrix_projection_set((float(*)[4])(float*)projection_matrix);
+		m_pImmediate->matrix_model_view_set((float(*)[4])(float*)model_matrix);
 		//glDisableVertexAttribArray(1);
-		IFrameAPI::Instance()->Immediate()->immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
+		
 		glEnable(GL_BLEND);
 		glEnable(GL_LINE_SMOOTH);
-		IFrameAPI::Instance()->Immediate()->immUniformColor3f(0.1f, 0.1f, 0.2f);
+		m_pImmediate->immUniformColor3f(0.1f, 0.1f, 0.2f);
 		imm_draw_circle(GL_LINE_LOOP, pos, centx, centy, radius, radius, 200);
 	}
 	glDisable(GL_BLEND);
@@ -278,21 +246,35 @@ void IRColorPicker::DrawHSVCIRCLE(const rctf* rect)
 	glUseProgram(0);
 }
 
+void IRColorPicker::set_radio(float radio)
+{
+	m_radio = radio;
+}
 
 void IRColorPicker::ui_hsv_cursor(float x, float y)
 {
-	GPUVertFormat* format = IFrameAPI::Instance()->Immediate()->immVertexFormat();
-	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2);
-	IFrameAPI::Instance()->Immediate()->immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
-	IFrameAPI::Instance()->Immediate()->immUniformColor3f(1, 1, 1);
+	GPUVertFormat* format = m_pImmediate->immVertexFormat();
+	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2, GPU_FETCH_FLOAT);
+	m_pImmediate->immBindProgram(GPU_SHADER_2D_UNIFORM_COLOR);
+	m_pImmediate->immUniformColor3f(1, 1, 1);
 	imm_draw_circle(GL_TRIANGLE_FAN, pos, x, y, 3 * U.pixelsize, 3 * U.pixelsize, 8);
 
 	//immUnbindProgram();
 	glEnable(GL_BLEND);
 	glEnable(GL_LINE_SMOOTH);
-	IFrameAPI::Instance()->Immediate()->immUniformColor3f(0, 0, 0);
+	m_pImmediate->immUniformColor3f(0, 0, 0);
 	//imm_draw_circle(GL_TRIANGLE_FAN, pos, x,y, 0.03f, 0.03f, 8);
 	imm_draw_circle(GL_LINE_LOOP, pos, x, y, 3 * U.pixelsize, 3 * U.pixelsize, 12);
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
+}
+
+void IRColorPicker::imm_draw_circle(GLuint prim_type, const uint shdr_pos, float x, float y, float rad_x, float rad_y, int nsegments)
+{
+	m_pImmediate->immBegin(prim_type, nsegments);
+	for (int i = 0; i < nsegments; i++) {
+		const float angle = (float)(2 * M_PI) * ((float)i / (float)nsegments);
+		m_pImmediate->immVertex2f(shdr_pos, x + (rad_x * cosf(angle)), y + (rad_y * sinf(angle)));
+	}
+	m_pImmediate->immEnd();
 }

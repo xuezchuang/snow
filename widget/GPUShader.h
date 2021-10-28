@@ -1,6 +1,5 @@
 #pragma once
-#include <GL/glew.h>
-#include <GL/freeglut.h>
+#include "GPU_common.h"
 typedef enum eGPUBuiltinShader {
 	/* specialized drawing */
 	GPU_SHADER_2D_SMOOTH_COLOR,
@@ -10,17 +9,16 @@ typedef enum eGPUBuiltinShader {
 }eGPUBuiltinShader;
 #define GPU_SHADER_BUILTIN_LEN (render_prog + 1)
 
-struct GPUShader {
+typedef struct GPUShader {
 	GLuint program;
 	GLuint vertex;
 	GLuint geometry;
 	GLuint fragment;
 	//GPUShaderInterface* interface;
 	int feedback_transform_type;
-#ifndef NDEBUG
 	char name[64];
-#endif
-};
+}GPUShader;
+
 class IGPUShader
 {
 public:
@@ -30,6 +28,8 @@ public:
 public:
 	GPUShader* GetShader(eGPUBuiltinShader shader);
 	void bindShader(eGPUBuiltinShader shader);
+	GLuint GetCurProgram();
+	//uint GPU_shaderinterface_attr(char* name);
 protected:
 	IGPUShader();
 	virtual ~IGPUShader();
@@ -38,6 +38,7 @@ private:
 	GPUShader* m_GPUShader[GPU_SHADER_BUILTIN_LEN];
 	GLint modelview_matrix_loc;
 	GLint project_matrix_loc;
+	GLuint m_Curprogram;
 };
 
 

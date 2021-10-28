@@ -181,6 +181,8 @@ void _InitVAO()
 	}
 }
 #include "LoadShaders.h"
+#include "vmath.h"
+using namespace vmath;
 int main() {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -220,9 +222,7 @@ void DrawTest();
 #define MAX_WIDGET_BASE_BATCH 6
 #define MAX_WIDGET_PARAMETERS 12
 
-#include "Matrices.h"
-#include "vmath.h"
-using namespace vmath;
+
 BLI_INLINE float BLI_rctf_size_x(const struct rctf* rct)
 {
 	return (rct->xmax - rct->xmin);
@@ -390,16 +390,19 @@ void wm_draw_update()
 	if (bredraw)
 	{
 		bredraw = false;
-
 		//DrawRect();
-		IRColorPicker Selectcolor;
 		DrawTest();
+
+		IRColorPicker Selectcolor[2];
+		Selectcolor[0].SetOff(120.0f, 120.0f);
+		Selectcolor[1].SetOff(450.0f, 120.0f);
 		rctf cirrect;
 		cirrect.xmin = -1.0f;
 		cirrect.xmax = 1.0f;
 		cirrect.ymin = -1.0f;
 		cirrect.ymax = 1.0f;
-		Selectcolor.DrawHSVCIRCLE(&cirrect);
+		Selectcolor[0].draw(&cirrect);
+		Selectcolor[1].draw(&cirrect);
 		glfwSwapBuffers(window);
 	}
 	glfwPollEvents();
@@ -480,33 +483,9 @@ void DrawRect()
 	glBindVertexArray(vao[0]);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
 	//// Draw Arrays...
-
 	
 	//glUniformMatrix4fv(modelview_matrix_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
 	glUniformMatrix4fv(modelview_matrix_loc, 1, GL_FALSE, model_matrix);
-
-	Matrix4 pm, mm;
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{ 
-			pm[i * 4+j] = projection_matrix[i][j];
-			mm[i * 4+j] = model_matrix[i][j];
-		}
-		
-	}
-	//float view[4];
-	//glViewport(view);
-
-	//Vector4 vv(824.0f, 568.0f,0.0f,1.0f);
-	//vv = pm * vv;
-
-	Vector4 vec(-1.f, 1.0f, 0.0f, 1.0);
-	Vector4 vec2 = pm * vec;
-	//Vector3 v(vec2.x / vec2.w, vec2.y / vec2.w, vec2.z / vec2.w);
-	Vector4 tempv(vec2.x, vec2.y, vec2.z, 0.0);
-	Vector4 temp = tempv * pm.invert();
-
 
 	widgetParam.rect.xmin = -1.0f;
 	widgetParam.rect.xmax = 1.f;

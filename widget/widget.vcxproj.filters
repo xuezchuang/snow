@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="LoadShaders.cpp" />
-    <ClCompile Include="Matrices.cpp" />
     <ClCompile Include="IFrameApi.cpp" />
     <ClCompile Include="GPUShader.cpp">
       <Filter>gpu_shader</Filter>
@@ -23,11 +22,15 @@
     <ClCompile Include="GPU_immediate.cpp">
       <Filter>gpu</Filter>
     </ClCompile>
+    <ClCompile Include="gpu_attr_binding.cpp">
+      <Filter>gpu</Filter>
+    </ClCompile>
+    <ClCompile Include="interface_widgets.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="interface_intern.h" />
-    <ClInclude Include="vapp.h" />
-    <ClInclude Include="Matrices.h" />
     <ClInclude Include="IFrameApi.h" />
     <ClInclude Include="GPUShader.h">
       <Filter>gpu_shader</Filter>
@@ -52,6 +55,18 @@
     </ClInclude>
     <ClInclude Include="GPU_immediate.h">
       <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="BLI_sys_types.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="gpu_attr_binding.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="GPU_common.h">
+      <Filter>gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="interface_widgets.h">
+      <Filter>interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

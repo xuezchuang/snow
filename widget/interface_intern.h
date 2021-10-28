@@ -1,6 +1,7 @@
 #ifndef __INTERFACE_INTERN_H__
 #define __INTERFACE_INTERN_H__
 #include "gl/glew.h"
+#include "BLI_sys_types.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
