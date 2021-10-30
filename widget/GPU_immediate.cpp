@@ -1,6 +1,5 @@
 #include "GPU_immediate.h"
 #include <string.h>
-#include "Matrices.h"
 #include "vmath.h"
 
 GPUImmediate::GPUImmediate()

@@ -1,7 +1,6 @@
 #include "interface_region_color_picker.h"
 #include "gl/glew.h"
 #include <string.h>
-#include "Matrices.h"
 #include "vmath.h"
 #include "GPU_vertex_format.h"
 #include <windows.h>
@@ -163,7 +162,7 @@ void IRColorPicker::draw(const rctf* rect)
 	uint pos = GPU_vertformat_attr_add(format, "pos", GPU_COMP_F32, 2, GPU_FETCH_FLOAT);
 	uint color = GPU_vertformat_attr_add(format, "color", GPU_COMP_F32, 3, GPU_FETCH_FLOAT);
 	m_pImmediate->immBindProgram(GPU_SHADER_2D_SMOOTH_COLOR);
-
+	glDisable(GL_DEPTH_TEST);
 	float viewport_size[4];
 	glGetFloatv(GL_VIEWPORT, viewport_size);
 	vmath::mat4 projection_matrix(vmath::Orthogonal(0.0f, viewport_size[2], 0.0f, viewport_size[3], -500.0f, 500.0f));
@@ -182,12 +181,8 @@ void IRColorPicker::draw(const rctf* rect)
 		//double temp2[4] = { 12,0.0f,0.0f,1.0f };
 		mul_v4d_m4v4d(temp, viewinv, r);
 	}
-	
 	m_pImmediate->immBegin(GL_TRIANGLE_FAN, tot + 2);
-
-	glDisable(GL_BLEND);
-	glDisable(GL_LINE_SMOOTH);
-
+	
 	float/* rgb[3],*/ hsv[3], rgb_center[3];
 	const float centx = 0.0;
 	const float centy = 0.0;
