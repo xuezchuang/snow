@@ -19,22 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <None Include="1.advanced_lighting.fs" />
+    <None Include="1.advanced_lighting.vs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.fs" />
-    <None Include="shader.vs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="wood.png" />
+    <ClCompile Include="advanced_lighting.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{775C4B7A-4FFA-43AF-B193-CB548C2A48B1}</ProjectGuid>
+    <ProjectGuid>{6F4ACE31-5E26-4AB1-99A1-508230E7CD69}</ProjectGuid>
     <RootNamespace>chapter1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
-    <ProjectName>advance_lighting</ProjectName>
+    <ProjectName>advanced_lighting</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -103,7 +100,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_DEBUG;GLFW_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(INCLUDE_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(INCLUDE_DIR);..\..\resources\textures;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <DisableSpecificWarnings>4244;</DisableSpecificWarnings>
     </ClCompile>

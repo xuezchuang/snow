@@ -2,9 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <INCLUDE_DIR>..\..\Deps\include</INCLUDE_DIR>
-    <LIB_DIR>..\..\Deps\Libs</LIB_DIR>
-    <BIN_DIR>..\..\..\bin</BIN_DIR>
+    <INCLUDE_DIR>..\..\..\Deps\include</INCLUDE_DIR>
+    <LIB_DIR>..\..\..\Deps\Libs</LIB_DIR>
+    <BIN_DIR>..\..\..\..\bin</BIN_DIR>
   </PropertyGroup>
   <PropertyGroup>
     <TargetExt>.exe</TargetExt>
