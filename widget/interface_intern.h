@@ -1,5 +1,4 @@
-#ifndef __INTERFACE_INTERN_H__
-#define __INTERFACE_INTERN_H__
+#pragma once
 #include "gl/glew.h"
 #include "BLI_sys_types.h"
 #ifdef __cplusplus
@@ -102,16 +101,18 @@ extern UserDef U;
 MINLINE int min_ii(int a, int b);
 //BLI_INLINE int BLI_rcti_size_x(const struct rcti* rct);
 //BLI_INLINE int BLI_rcti_size_y(const struct rcti* rct);
-int BLI_rcti_size_x(const struct rcti* rct);
-int BLI_rcti_size_y(const struct rcti* rct);
-void BLI_rctf_rcti_copy(rctf* dst, const rcti* src);
-void BLI_rctf_sanitize(rctf* rect);
-void BLI_rctf_init(rctf* rect, float xmin, float xmax, float ymin, float ymax);
+//int BLI_rcti_size_x(const struct rcti* rct);
+//int BLI_rcti_size_y(const struct rcti* rct);
+
+float BLI_rcti_cent_x_fl(const struct rctf* rct);
+float BLI_rcti_cent_y_fl(const struct rctf* rct);
+//void BLI_rctf_rcti_copy(rctf* dst, const rcti* src);
+//void BLI_rctf_sanitize(rctf* rect);
+//void BLI_rctf_init(rctf* rect, float xmin, float xmax, float ymin, float ymax);
 
 
 #pragma endregion math_base_inline.c
 
 #ifdef __cplusplus
 }
-#endif
 #endif

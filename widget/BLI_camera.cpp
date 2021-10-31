@@ -52,7 +52,7 @@ void BLICamera::BKE_camera_params_init()
 
 /* values for CameraParams.zoom, need to be taken into account for some operations */
 #define CAMERA_PARAM_ZOOM_INIT_CAMOB 1.0f
-#define CAMERA_PARAM_ZOOM_INIT_PERSP 3.0
+#define CAMERA_PARAM_ZOOM_INIT_PERSP 2.0
 void BLICamera::BKE_camera_params_from_view3d()
 {
     clip_end = 1000.0f;

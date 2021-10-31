@@ -1,5 +1,4 @@
 #pragma once
-#include "interface_intern.h"
 #include "GPU_vertex_format.h"
 #include "GPUShader.h"
 #include "gpu_attr_binding.h"

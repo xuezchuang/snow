@@ -30,7 +30,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="interface_intern.h" />
     <ClInclude Include="IFrameApi.h" />
     <ClInclude Include="GPUShader.h">
       <Filter>gpu_shader</Filter>
@@ -66,6 +65,9 @@
       <Filter>gpu</Filter>
     </ClInclude>
     <ClInclude Include="interface_widgets.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface_intern.h">
       <Filter>interface</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,8 +18,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 unsigned int loadTexture(char const* path);
 void wm_draw_update();
 // 屏幕宽高
-unsigned int SCR_WIDTH = 1280;
-unsigned int SCR_HEIGHT = 720;
+unsigned int SCR_WIDTH = 1586;
+unsigned int SCR_HEIGHT = 870;
 
 float factor = 0.2f;
 float fov = 45.0f;
@@ -75,10 +75,11 @@ typedef unsigned int				uint;
 
 UserDef U;
 GLFWwindow* window;
-
+IRColorPicker* m_pSelectcolor;
 float aspect;
 void _InitVAO()
 {
+	m_pSelectcolor = new IRColorPicker();
 	m_camera.setortho(false);
 	m_camera.BKE_camera_params_init();
 	m_camera.BKE_camera_params_from_view3d();
@@ -177,7 +178,7 @@ void _InitVAO()
 	//glClearColor(1.f, 1.f, 1.f, 1.0f);
 	glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 	{
-		U.pixelsize = 0.01f;
+		U.pixelsize = 1.0f;// 0.01f;
 	}
 }
 #include "LoadShaders.h"
@@ -201,6 +202,12 @@ int main() {
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetMouseButtonCallback(window, mouseButton_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+
+	GLboolean bdepth;
+	glGetBooleanv(GL_DEPTH_TEST,&bdepth);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_ALWAYS);
+	glDepthMask(GL_TRUE);
 
 	glewInit();
 	_InitVAO();
@@ -269,13 +276,16 @@ void processInput(GLFWwindow* window) {
 }
 double xpos, ypos;
 bool mouseLeftDown = false;
+bool mask_leftdown = false;
 rctf m_CrupRect;
 float mval[2];
 bool bmoveing = false;
 void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
+	float viewport_size[4];
+	glGetFloatv(GL_VIEWPORT, viewport_size);
+	double x, y;
 	if (bmoveing)
 	{
-		double x, y;
 		glfwGetCursorPos(window, &x, &y);
 		mval[0] = float(x - xpos);
 		mval[1] = float(ypos - y);
@@ -283,17 +293,26 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 		ypos = y;
 		bredraw = true;
 	}
+	if (mask_leftdown)
+	{
+		glfwGetCursorPos(window, &x, &y);
+		m_pSelectcolor->update(float(x), (float)(viewport_size[3] - y));
+		bredraw = true;
+	}
 }
 
 
 void mouseButton_callback(GLFWwindow* window, int button, int action, int mode)
 {
+	float viewport_size[4];
+	glGetFloatv(GL_VIEWPORT, viewport_size);
 	if (button == GLFW_MOUSE_BUTTON_1)
 	{
 		if (action == 1)
 		{
 			glfwGetCursorPos(window, &xpos, &ypos);
 			mouseLeftDown = false;
+			mask_leftdown = true;
 		}
 		else if (action == 0)
 		{
@@ -302,9 +321,11 @@ void mouseButton_callback(GLFWwindow* window, int button, int action, int mode)
 			glfwGetCursorPos(window, &x, &y);
 			m_CrupRect.xmin = float(min(x, xpos));
 			m_CrupRect.xmax = float(max(x, xpos));
-			m_CrupRect.ymin = float(min(y, ypos));
-			m_CrupRect.ymax = float(max(y, ypos));
+			m_CrupRect.ymin = float(min(viewport_size[3]-y, viewport_size[3] - ypos));
+			m_CrupRect.ymax = float(max(viewport_size[3] - y, viewport_size[3] - ypos));
+			m_pSelectcolor->update(float(x), (float)(viewport_size[3]-y));
 			bredraw = true;
+			mask_leftdown = false;
 		}
 	}
 	if (button == GLFW_MOUSE_BUTTON_3)
@@ -318,6 +339,8 @@ void mouseButton_callback(GLFWwindow* window, int button, int action, int mode)
 		else if (action == 0)
 		{
 			bmoveing = false;
+			mval[0] = 0.0;
+			mval[1] = 0.0;
 			//mouseLeftDown = true;
 			//double x, y;
 			//glfwGetCursorPos(window, &x, &y);
@@ -393,16 +416,26 @@ void wm_draw_update()
 		//DrawRect();
 		DrawTest();
 
-		IRColorPicker Selectcolor[2];
-		Selectcolor[0].SetOff(120.0f, 120.0f);
-		Selectcolor[1].SetOff(450.0f, 120.0f);
+		
 		rctf cirrect;
-		cirrect.xmin = -1.0f;
-		cirrect.xmax = 1.0f;
-		cirrect.ymin = -1.0f;
-		cirrect.ymax = 1.0f;
-		Selectcolor[0].draw(&cirrect);
-		Selectcolor[1].draw(&cirrect);
+		cirrect.xmin = 400.0f;
+		cirrect.xmax = 600.0f;
+		cirrect.ymin = 400.0f;
+		cirrect.ymax = 600.0f;
+		m_pSelectcolor->set_rect(&cirrect);
+		m_pSelectcolor->draw();
+		// 
+		// 
+		//IRColorPicker Selectcolor[2];
+		//Selectcolor[0].SetOff(120.0f, 120.0f);
+		//Selectcolor[1].SetOff(450.0f, 120.0f);
+		//rctf cirrect;
+		//cirrect.xmin = -1.0f;
+		//cirrect.xmax = 1.0f;
+		//cirrect.ymin = -1.0f;
+		//cirrect.ymax = 1.0f;
+		//Selectcolor[0].draw(&cirrect);
+		//Selectcolor[1].draw(&cirrect);
 		glfwSwapBuffers(window);
 	}
 	glfwPollEvents();
@@ -509,7 +542,6 @@ void DrawRect()
 }
 void DrawTest()
 {
-	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glUseProgram(GPU_SHADER_3D_TEST);
 	
@@ -536,12 +568,13 @@ void DrawTest()
 
 		rctf temp = viewplane;
 
+
 		viewplane.xmin = temp.xmin + (BLI_rctf_size_x(&temp) * (m_CrupRect.xmin / viewport[2]));
 		viewplane.ymin = temp.ymin + (BLI_rctf_size_y(&temp) * (m_CrupRect.ymin / viewport[3]));
 		viewplane.xmax = temp.xmin + (BLI_rctf_size_x(&temp) * (m_CrupRect.xmax / viewport[2]));
 		viewplane.ymax = temp.ymin + (BLI_rctf_size_y(&temp) * (m_CrupRect.ymax / viewport[3]));
 
-		glViewport(0, 0, GLsizei(m_CrupRect.xmax - m_CrupRect.xmin), GLsizei(m_CrupRect.ymax - m_CrupRect.ymin));
+		//glViewport(0, 0, GLsizei(m_CrupRect.xmax - m_CrupRect.xmin), GLsizei(m_CrupRect.ymax - m_CrupRect.ymin));
 		//projection_matrix = vmath::Orthogonal(m_CrupRect.xmin, m_CrupRect.xmax, m_CrupRect.ymin, m_CrupRect.ymax, -400.0f, 400.0f);
 		//计算出projection_matrix 后计算6个面对所有构件CPU剔除(简单快速)后,进行使用GPU裁剪
 	}
@@ -554,9 +587,13 @@ void DrawTest()
 	//projection_matrix = vmath::Orthogonal(viewplane.xmin, viewplane.xmax, viewplane.ymin, viewplane.ymax, -500.0f, 500.0f);
 
 
-	vec4 color(1.0f, 0.0f, 0.0f, 1.0f);
+	float color[4];
+	m_pSelectcolor->getcolor(color);
 	if (bttt)
-		color = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	{
+		color[0] = 0.0f; color[1] = 1.0f; color[2] = 0.0f; color[3] = 0.0f;
+	}
+		
 	GLuint Test_project_matrix_loc = glGetUniformLocation(IGPUShader::Instance()->GetShader(GPU_SHADER_3D_TEST)->program, "projection_matrix");
 	glUniformMatrix4fv(Test_project_matrix_loc, 1, GL_FALSE, projection_matrix);
 	// Set up for a glDrawElements call
@@ -589,6 +626,7 @@ void DrawTest()
 		bttt = result;
 		glDeleteQueries(1, &result);
 		mouseLeftDown = false;
+		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		DrawTest();
 	}
 }
