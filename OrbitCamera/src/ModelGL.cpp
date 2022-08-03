@@ -41,9 +41,9 @@ const float NEAR_PLANE = 0.1f;
 const float FAR_PLANE = 1000.0f;
 const int   MAX_LOG_LENGTH = 4096;
 const float OBJ_SCALE = 0.01f;
-const std::string OBJ_MODEL = "../bin/data/debugger_small_5k.obj";
-const std::string OBJ_CAM = "../bin/data/camera.obj";
-const std::string FONT_FILE = "../bin/data/walkway32_bold.fnt";
+const std::string OBJ_MODEL = "data/debugger_small_5k.obj";
+const std::string OBJ_CAM = "data/camera.obj";
+const std::string FONT_FILE = "data/walkway32_bold.fnt";
 
 #pragma region Shader
 // flat shading ===========================================
@@ -1037,7 +1037,7 @@ void ModelGL::resetCamera()
     cam1.lookAt(Vector3(CAM_DIST*2, CAM_DIST*1.5f, CAM_DIST*2), Vector3(0, 0, 0));
 
     // camera object
-    cam2.lookAt(Vector3(5 ,5 ,-CAM_DIST), Vector3(0, 0, 0));
+    cam2.lookAt(Vector3(0 ,0 ,-CAM_DIST), Vector3(0, 0, 0));
     cameraAngle = cam2.getAngle();
     cameraPosition = cam2.getPosition();
     cameraTarget = cam2.getTarget();
@@ -1344,8 +1344,14 @@ void ModelGL::SetViewMatrixInfo()
 ///////////////////////////////////////////////////////////////////////////////
 bool ModelGL::loadObjs()
 {
-    objModel.read(OBJ_MODEL.c_str());
-    objCam.read(OBJ_CAM.c_str());
+    char buffer[_MAX_PATH];
+	::GetModuleFileNameA(NULL, buffer, _MAX_PATH);
+    std::string ProgramPath = buffer;
+    ProgramPath = ProgramPath.substr(0, ProgramPath.rfind("\\")+1);
+
+    //string strmodel = OBJ_MODEL
+    objModel.read((ProgramPath+OBJ_MODEL).c_str());
+    objCam.read((ProgramPath+OBJ_CAM).c_str());
     if(objModel.getVertexCount() > 0 && objCam.getVertexCount() > 0)
         objLoaded = true;
     else

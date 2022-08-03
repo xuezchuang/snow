@@ -74,7 +74,6 @@ HWND Window::create()
 {
     // register a window class
     if(!::RegisterClassEx(&winClass)) return 0;
-
     handle = ::CreateWindowEx(winStyleEx,           // window border with a sunken edge
                               className,            // name of a registered window class
                               title,                // caption of window
@@ -89,7 +88,6 @@ HWND Window::create()
                               (LPVOID)controller);  // window creation data
 
     //this->show(SW_SHOWDEFAULT);                     // make it visible
-
     return handle;
 }
 

@@ -57,7 +57,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -102,7 +102,7 @@
     <TargetName>glfw3</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(BIN_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
+    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
     <IntDir>tmp\$(Configuration)\$(Platform)\</IntDir>
     <TargetName>glfw3</TargetName>
   </PropertyGroup>
@@ -135,7 +135,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(INCLUDE_DIR);../;</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_GLFW_WIN32;GLFW_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_GLFW_WIN32;_CRT_SECURE_NO_DEPRECATE;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;glfw_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

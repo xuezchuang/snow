@@ -40,7 +40,8 @@
 
 //#include <afxwin.h>
 
-//#include <windows.h>
+#include <windows.h>
+#include <GL\glew.h>
 /*============================================================================*/
 //#include "ProjInfo.h"
 

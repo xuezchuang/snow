@@ -80,11 +80,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdArgs, int cmdS
     glWin1.setClassStyle(CS_OWNDC);
     glWin1.setWidth(fullWidth);
     glWin1.setHeight(fullHeight);
-    if(glWin1.create())
+    if (glWin1.create())
+    {
         Win::log("OpenGL rendering window 1 is created.");
+    }
     else
+	{
         Win::log("[ERROR] Failed to create OpenGL window 1.");
-
+	}
+    
     // create OpenGL rendering window 2 as a child
     Win::ControllerGL2 glCtrl2(&modelGL, &viewGL2);
     // set RC with existing RC/pixelformat from view1
@@ -99,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdArgs, int cmdS
         Win::log("OpenGL rendering window 2 is created.");
     else
         Win::log("[ERROR] Failed to create OpenGL window 2.");
-
+    //MessageBox(NULL, L"3", L"3", MB_OK);
     // create a child dialog box contains controls
     Win::ViewForm viewForm(&modelGL);
     glCtrl2.setViewForm(&viewForm);

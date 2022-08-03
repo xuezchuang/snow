@@ -1,43 +1,3 @@
-/*
-  Copyright (c) 2005, 
-	  Aaron Lefohn	  (lefohn@cs.ucdavis.edu)
-	  Robert Strzodka (strzodka@stanford.edu)
-	  Adam Moerschell (atmoerschell@ucdavis.edu)
-  All rights reserved.
-
-  This software is licensed under the BSD open-source license. See
-  http://www.opensource.org/licenses/bsd-license.php for more detail.
-
-  *************************************************************
-  Redistribution and use in source and binary forms, with or 
-  without modification, are permitted provided that the following 
-  conditions are met:
-
-  Redistributions of source code must retain the above copyright notice, 
-  this list of conditions and the following disclaimer. 
-
-  Redistributions in binary form must reproduce the above copyright notice, 
-  this list of conditions and the following disclaimer in the documentation 
-  and/or other materials provided with the distribution. 
-
-  Neither the name of the University of Californa, Davis nor the names of 
-  the contributors may be used to endorse or promote products derived 
-  from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
-  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
-  THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
-  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
-  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
-  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
-  OF SUCH DAMAGE.
-*/
 
 #ifndef UCDAVIS_FRAMEBUFFER_OBJECT_H
 #define UCDAVIS_FRAMEBUFFER_OBJECT_H
@@ -45,61 +5,6 @@
 #include <GL/glew.h>
 #include <iostream>
 
-/*!
-FramebufferObject Class. This class encapsulates the FramebufferObject
-(FBO) OpenGL spec. See the official spec at:
-	http://oss.sgi.com/projects/ogl-sample/registry/EXT/framebuffer_object.txt
-
-for details.
-
-A framebuffer object (FBO) is conceptually a structure containing pointers
-to GPU memory. The memory pointed to is either an OpenGL texture or an
-OpenGL RenderBuffer. FBOs can be used to render to one or more textures,
-share depth buffers between multiple sets of color buffers/textures and
-are a complete replacement for pbuffers.
-
-Performance Notes:
-  1) It is more efficient (but not required) to call Bind() 
-     on an FBO before making multiple method calls. For example:
-		
-      FramebufferObject fbo;
-      fbo.Bind();
-      fbo.AttachTexture(GL_TEXTURE_2D, texId0, GL_COLOR_ATTACHMENT0_EXT);
-      fbo.AttachTexture(GL_TEXTURE_2D, texId1, GL_COLOR_ATTACHMENT1_EXT);
-      fbo.IsValid();
-
-    To provide a complete encapsulation, the following usage
-    pattern works correctly but is less efficient:
-
-      FramebufferObject fbo;
-      // NOTE : No Bind() call
-      fbo.AttachTexture(GL_TEXTURE_2D, texId0, GL_COLOR_ATTACHMENT0_EXT);
-      fbo.AttachTexture(GL_TEXTURE_2D, texId1, GL_COLOR_ATTACHMENT1_EXT);
-      fbo.IsValid();
-
-    The first usage pattern binds the FBO only once, whereas
-    the second usage binds/unbinds the FBO for each method call.
-
-  2) Use FramebufferObject::Disable() sparingly. We have intentionally
-     left out an "Unbind()" method because it is largely unnecessary
-     and encourages rendundant Bind/Unbind coding. Binding an FBO is
-     usually much faster than enabling/disabling a pbuffer, but is
-     still a costly operation. When switching between multiple FBOs
-     and a visible OpenGL framebuffer, the following usage pattern 
-     is recommended:
-
-      FramebufferObject fbo1, fbo2;
-      fbo1.Bind();
-        ... Render ...
-      // NOTE : No Unbind/Disable here...
-
-      fbo2.Bind();
-        ... Render ...
-
-      // Disable FBO rendering and return to visible window
-      // OpenGL framebuffer.
-      FramebufferObject::Disable();
-*/
 #define _SAFE_DELETE(x) { if (x) { delete (x); (x)=NULL; } }
 class  FramebufferObject
 {

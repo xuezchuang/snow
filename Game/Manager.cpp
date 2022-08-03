@@ -1,4 +1,5 @@
 //Needs header file
+#include "stdafx.h"
 #include "Manager.h"
 #include "Externs.h"
 
@@ -6,7 +7,7 @@
 #include <Engine\Time.h>
 #include <Engine\Input.h>
 #include <Engine\Loader.h>
-#include <Engine\Shader.h>
+#include "Shader.h"
 #include <Engine\Console.h>
 #include <Engine\Graphics.h>
 #include <Engine\Primitives.h>
@@ -122,10 +123,10 @@ void Manager::init()
 	Graphics.createBuffers();
 
 	//Load shaders
-	GLuint vertex_shader = Shader.load(VERTEX_PATH, GL_VERTEX_SHADER);
-	GLuint fragment_shader = Shader.load(FRAGMENT_PATH, GL_FRAGMENT_SHADER);
+	//GLuint vertex_shader = Shader.load(VERTEX_PATH, GL_VERTEX_SHADER);
+	//GLuint fragment_shader = Shader.load(FRAGMENT_PATH, GL_FRAGMENT_SHADER);
 
-	shader_program = Shader.bind(vertex_shader, fragment_shader);
+	//shader_program = Shader.bind(vertex_shader, fragment_shader);
 
 	Graphics.bindShaderData(shader_program);
 

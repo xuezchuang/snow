@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{d8b30bfb-96c4-497d-89cd-ddeb6fcbcc35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raytrace">
+      <UniqueIdentifier>{81aeb348-2ff0-4198-a72b-befc6f7b009f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{55b65227-b73c-4b85-b87f-1ebca791eb4b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Shader\loadShaders.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\SwitchShader.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\allShaders\raytrace.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+    <ClCompile Include="controllerlist.cpp" />
+    <ClCompile Include="Dimension.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="helpful.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="program.cpp" />
+    <ClCompile Include="OrbitCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="animUtils.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Matrices.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader\SwitchShader.hpp">
+      <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\allShaders\allShaders.hpp">
+      <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\allShaders\raytrace.hpp">
+      <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="controllerlist.hpp" />
+    <ClInclude Include="Dimension.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="helpful.hpp" />
+    <ClInclude Include="Matrix.hpp" />
+    <ClInclude Include="OrbitCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="animUtils.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\raytrace\shader.fs">
+      <Filter>raytrace</Filter>
+    </None>
+    <None Include="shaders\raytrace\shader.vs">
+      <Filter>raytrace</Filter>
+    </None>
+  </ItemGroup>
+</Project>

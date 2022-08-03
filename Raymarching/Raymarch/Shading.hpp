@@ -107,7 +107,8 @@ public:
 		Vector3 carm;
 		carm.x = _camera.m_Position.x; carm.y = _camera.m_Position.y; carm.z = _camera.m_Position.z;
 		lookAt(carm, Vector3(0, 0, 0));
-
+		Matrix4 matrix;
+		matrix.lookAt(carm);
 		// Light
 		_light.m_Color = kLightColor;
 		_light.m_Position = kLightPosition;

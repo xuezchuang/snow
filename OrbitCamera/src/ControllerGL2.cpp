@@ -50,6 +50,7 @@ int ControllerGL2::destroy()
 ///////////////////////////////////////////////////////////////////////////////
 int ControllerGL2::create()
 {
+	//MessageBox(NULL, L"ControllerGL2", L"ControllerGL2", MB_OK);
     // set DC only, and use RC from view 1
 	bool result = view->setContext(handle, hglrc, pixelFormat);
     if(result)

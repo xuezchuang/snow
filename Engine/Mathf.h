@@ -37,7 +37,7 @@ public:
 	const GLfloat PI = 3.1415926f; //The circumference to the perimeter of a circle
 	const GLfloat TAU = 6.2831852f; //Double 'pi'
 	const GLfloat TRUNCATION_LIMITS = 0.005f; //Temp
-	const GLfloat INFINITE = std::numeric_limits<float>::infinity(); //Like: HUGE_VALF
+	//const GLfloat INFINITE = 0.0f;// std::numeric_limits<float>::infinity(); //Like: HUGE_VALF
 	const GLfloat DEG_TO_RAD = (TAU) / 360; //For converting degrees to radians
 	const GLfloat RAD_TO_DEG = 360 / (TAU); //For converting radians to degrees
 

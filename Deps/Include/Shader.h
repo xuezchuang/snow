@@ -28,6 +28,8 @@ public:
 	void setVec3(const std::string& name, float x, float y, float z) const;
 	void setVec3(const std::string& name, float value[])const;
 	void setVec4(const std::string& name, float x, float y, float z, float w) const;
+	void setVec2(const std::string& name, float x, float y)const;
+
 };
 
 #ifdef _WIN32
@@ -91,8 +93,8 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
 		std::cout << "编译片元着色器失败，错误信息：" << infoLog << std::endl;
 		USES_CONVERSION;
-		std::wstring abc = std::wstring(_T("编译片元着色器失败，错误信息：")) + A2W(infoLog) + A2W("\n");
-		OutputDebugString(abc.c_str());
+		//std::wstring abc = std::wstring(_T("编译片元着色器失败，错误信息：")) + A2W(infoLog) + A2W("\n");
+		//OutputDebugString(abc.c_str());
 	}
 
 	//着色器程序

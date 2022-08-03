@@ -35,5 +35,14 @@
     <ClInclude Include="Vectors.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SDFObject.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SDFBox.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SDFSubtract.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

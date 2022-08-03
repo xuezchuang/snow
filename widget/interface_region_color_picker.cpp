@@ -224,13 +224,13 @@ void IRColorPicker::draw()
 		m_pImmediate->matrix_model_view_set((float(*)[4])(float*)model_matrix);
 		//glDisableVertexAttribArray(1);
 		
-		glEnable(GL_BLEND);
-		glEnable(GL_LINE_SMOOTH);
+		//glEnable(GL_BLEND);
+		//glEnable(GL_LINE_SMOOTH);
 		m_pImmediate->immUniformColor3f(0.1f, 0.1f, 0.2f);
-		imm_draw_circle(GL_LINE_LOOP, pos, centx, centy, radius, radius, 200);
+		imm_draw_circle(GL_LINE_LOOP, pos, centx, centy, radius, radius, 64);
 	}
-	glDisable(GL_BLEND);
-	glDisable(GL_LINE_SMOOTH);
+	//glDisable(GL_BLEND);
+	//glDisable(GL_LINE_SMOOTH);
 	// 
 	float x, y;
 	ui_hsvcircle_pos_from_vals(&m_rect, hsv, &x, &y);

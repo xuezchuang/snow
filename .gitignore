@@ -1,0 +1,9 @@
+/test/Debug/raytrace.tlog/*.tlog
+/test/Debug/*.log
+/test/Debug/*.idb
+/test/Debug/raytrace.tlog/*.lastbuildstate
+/test/Debug/*.recipe
+/test/Debug/*.ilk
+/test/Debug
+/test/x64
+/test/*.user

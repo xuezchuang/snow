@@ -191,7 +191,6 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Primitives.cpp" />
     <ClCompile Include="Rigidbody.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
