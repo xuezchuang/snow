@@ -142,7 +142,7 @@ bool ObjModel::read(const char* fileName)
     }
 
     // remember path and file name (assume fileName has absolute path)
-    char Buffer[1024];
+    //char Buffer[1024];
     //_getcwd(NULL, Buffer, 1024);
 
     std::string path = fileName;

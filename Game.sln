@@ -13,9 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gl_shared", "gl_shared", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glew_shared", "Deps\src\glew_shared\glew_shared.vcxproj", "{74219373-92F3-43DF-9D75-4D9FB7A722FC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "freeglut_shared", "Deps\src\freeglut_shared\freeglut_shared.vcxproj", "{60AB969E-FB0E-4A20-8815-A1EBE03E7BF0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "freeglut", "Deps\src\freeglut_shared\freeglut_shared.vcxproj", "{60AB969E-FB0E-4A20-8815-A1EBE03E7BF0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OrbitCamera", "OrbitCamera\src\OrbitCamera.vcxproj", "{97B457D1-0836-4254-94C2-A4ADA3C9CD98}"
+	ProjectSection(ProjectDependencies) = postProject
+		{74219373-92F3-43DF-9D75-4D9FB7A722FC} = {74219373-92F3-43DF-9D75-4D9FB7A722FC}
+		{60AB969E-FB0E-4A20-8815-A1EBE03E7BF0} = {60AB969E-FB0E-4A20-8815-A1EBE03E7BF0}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{AA3DA364-FDC8-40FF-B3EC-8BAF61D197CD}"
 EndProject
