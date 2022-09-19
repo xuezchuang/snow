@@ -76,13 +76,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>tmp\$(Configuration)\$(Platform)\</IntDir>
-    <OutDir>$(SolutionDir)$(Configuration)\x86\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
     <TargetName>glew32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>tmp\$(Configuration)\$(Platform)\</IntDir>
-    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
     <TargetName>glew32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

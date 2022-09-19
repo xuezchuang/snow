@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Deps\Include\Shader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Console.h" />
@@ -174,7 +175,6 @@
     <ClInclude Include="PhysicsConstants.h" />
     <ClInclude Include="Primitives.h" />
     <ClInclude Include="Rigidbody.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Time.h" />

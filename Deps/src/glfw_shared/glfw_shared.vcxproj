@@ -97,12 +97,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(LIB_DIR)\$(Configuration)\x86\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
     <IntDir>tmp\$(Configuration)\$(Platform)\</IntDir>
     <TargetName>glfw3</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(LIB_DIR)\$(Configuration)\$(PlatformName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
     <IntDir>tmp\$(Configuration)\$(Platform)\</IntDir>
     <TargetName>glfw3</TargetName>
   </PropertyGroup>

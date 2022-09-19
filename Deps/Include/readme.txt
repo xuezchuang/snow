@@ -1,0 +1,1 @@
+SOIL是简易OpenGL图像库(Simple OpenGL Image Library)的缩写

@@ -90,7 +90,7 @@ void SceneController::update()
     checkGlError("Error at start of frame");
 
 
-    glViewport( 0, 0, Dimension::getWidth(), Dimension::getHeight());
+    glViewport( 0, 0, (GLsizei)Dimension::getWidth(), (GLsizei)Dimension::getHeight());
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     
@@ -102,7 +102,7 @@ void SceneController::update()
         glm::vec4(3,-1,2,1)
     };
     for (int i = 0; i < 4; i++)
-        spheres[i][2] += 0.1*z;
+        spheres[i][2] += 0.1f*z;
 
     glBindBuffer(GL_UNIFORM_BUFFER, ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec4)*4, spheres, GL_DYNAMIC_DRAW);

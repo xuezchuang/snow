@@ -18,6 +18,60 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="fg_callbacks.c" />
+    <ClCompile Include="fg_cursor.c" />
+    <ClCompile Include="fg_display.c" />
+    <ClCompile Include="fg_ext.c" />
+    <ClCompile Include="fg_font.c" />
+    <ClCompile Include="fg_font_data.c" />
+    <ClCompile Include="fg_gamemode.c" />
+    <ClCompile Include="fg_geometry.c" />
+    <ClCompile Include="fg_gl2.c" />
+    <ClCompile Include="fg_init.c" />
+    <ClCompile Include="fg_input_devices.c" />
+    <ClCompile Include="fg_joystick.c" />
+    <ClCompile Include="fg_main.c" />
+    <ClCompile Include="fg_menu.c" />
+    <ClCompile Include="fg_misc.c" />
+    <ClCompile Include="fg_overlay.c" />
+    <ClCompile Include="fg_spaceball.c" />
+    <ClCompile Include="fg_state.c" />
+    <ClCompile Include="fg_stroke_mono_roman.c" />
+    <ClCompile Include="fg_stroke_roman.c" />
+    <ClCompile Include="fg_structure.c" />
+    <ClCompile Include="fg_teapot.c" />
+    <ClCompile Include="fg_videoresize.c" />
+    <ClCompile Include="fg_window.c" />
+    <ClCompile Include="mswin\fg_cursor_mswin.c" />
+    <ClCompile Include="mswin\fg_display_mswin.c" />
+    <ClCompile Include="mswin\fg_ext_mswin.c" />
+    <ClCompile Include="mswin\fg_gamemode_mswin.c" />
+    <ClCompile Include="mswin\fg_init_mswin.c" />
+    <ClCompile Include="mswin\fg_input_devices_mswin.c" />
+    <ClCompile Include="mswin\fg_joystick_mswin.c" />
+    <ClCompile Include="mswin\fg_main_mswin.c" />
+    <ClCompile Include="mswin\fg_menu_mswin.c" />
+    <ClCompile Include="mswin\fg_spaceball_mswin.c" />
+    <ClCompile Include="mswin\fg_state_mswin.c" />
+    <ClCompile Include="mswin\fg_structure_mswin.c" />
+    <ClCompile Include="mswin\fg_window_mswin.c" />
+    <ClCompile Include="util\xparsegeometry_repl.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Include\GL\freeglut.h" />
+    <ClInclude Include="..\..\Include\GL\freeglut_ext.h" />
+    <ClInclude Include="..\..\Include\GL\freeglut_std.h" />
+    <ClInclude Include="..\..\Include\GL\freeglut_ucall.h" />
+    <ClInclude Include="fg_callback_macros.h" />
+    <ClInclude Include="fg_gl2.h" />
+    <ClInclude Include="fg_init.h" />
+    <ClInclude Include="fg_internal.h" />
+    <ClInclude Include="fg_teapot_data.h" />
+    <ClInclude Include="fg_version.h" />
+    <ClInclude Include="mswin\fg_internal_mswin.h" />
+    <ClInclude Include="util\xparsegeometry_repl.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -76,7 +130,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>freeglut</TargetName>
-    <OutDir>$(LIB_DIR)\$(Configuration)\x86\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
     <IntDir>tmp\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,7 +138,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(LIB_DIR)\$(Configuration)\$(Platform)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -123,13 +177,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_USRDLL;FREEGLUT_EXPORTS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;FREEGLUT_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0601;WINVER=0x0601;HAVE_CONFIG_H;CMAKE_INTDIR="Debug";freeglut_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName)d.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,39 +203,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="freeglut_callbacks.c" />
-    <ClCompile Include="freeglut_cursor.c" />
-    <ClCompile Include="freeglut_display.c" />
-    <ClCompile Include="freeglut_ext.c" />
-    <ClCompile Include="freeglut_font.c" />
-    <ClCompile Include="freeglut_font_data.c" />
-    <ClCompile Include="freeglut_gamemode.c" />
-    <ClCompile Include="freeglut_geometry.c" />
-    <ClCompile Include="freeglut_glutfont_definitions.c" />
-    <ClCompile Include="freeglut_init.c" />
-    <ClCompile Include="freeglut_input_devices.c" />
-    <ClCompile Include="freeglut_joystick.c" />
-    <ClCompile Include="freeglut_main.c" />
-    <ClCompile Include="freeglut_menu.c" />
-    <ClCompile Include="freeglut_misc.c" />
-    <ClCompile Include="freeglut_overlay.c" />
-    <ClCompile Include="freeglut_state.c" />
-    <ClCompile Include="freeglut_stroke_mono_roman.c" />
-    <ClCompile Include="freeglut_stroke_roman.c" />
-    <ClCompile Include="freeglut_structure.c" />
-    <ClCompile Include="freeglut_teapot.c" />
-    <ClCompile Include="freeglut_videoresize.c" />
-    <ClCompile Include="freeglut_window.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Include\GL\freeglut.h" />
-    <ClInclude Include="..\..\Include\GL\freeglut_ext.h" />
-    <ClInclude Include="..\..\Include\GL\freeglut_std.h" />
-    <ClInclude Include="..\..\Include\GL\glut.h" />
-    <ClInclude Include="freeglut_internal.h" />
-    <ClInclude Include="freeglut_teapot_data.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

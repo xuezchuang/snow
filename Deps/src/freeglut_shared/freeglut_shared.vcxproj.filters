@@ -13,83 +13,149 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="mswin">
+      <UniqueIdentifier>{19fb4650-f97e-477c-805a-05e2d065d8e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="freeglut_callbacks.c">
+    <ClCompile Include="fg_init.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_cursor.c">
+    <ClCompile Include="fg_input_devices.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_display.c">
+    <ClCompile Include="fg_joystick.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_ext.c">
+    <ClCompile Include="fg_main.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_font.c">
+    <ClCompile Include="fg_menu.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_font_data.c">
+    <ClCompile Include="fg_misc.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_gamemode.c">
+    <ClCompile Include="fg_overlay.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_geometry.c">
+    <ClCompile Include="fg_spaceball.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_glutfont_definitions.c">
+    <ClCompile Include="fg_state.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_init.c">
+    <ClCompile Include="fg_stroke_mono_roman.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_input_devices.c">
+    <ClCompile Include="fg_stroke_roman.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_joystick.c">
+    <ClCompile Include="fg_structure.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_main.c">
+    <ClCompile Include="fg_teapot.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_menu.c">
+    <ClCompile Include="fg_videoresize.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_misc.c">
+    <ClCompile Include="fg_window.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_overlay.c">
+    <ClCompile Include="fg_callbacks.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_state.c">
+    <ClCompile Include="fg_cursor.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_stroke_mono_roman.c">
+    <ClCompile Include="fg_display.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_stroke_roman.c">
+    <ClCompile Include="fg_ext.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_structure.c">
+    <ClCompile Include="fg_font.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_teapot.c">
+    <ClCompile Include="fg_font_data.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_videoresize.c">
+    <ClCompile Include="fg_gamemode.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeglut_window.c">
+    <ClCompile Include="fg_geometry.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fg_gl2.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_init_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_input_devices_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_joystick_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_main_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_menu_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_spaceball_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_state_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_structure_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_window_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_cursor_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_display_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_ext_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="mswin\fg_gamemode_mswin.c">
+      <Filter>mswin</Filter>
+    </ClCompile>
+    <ClCompile Include="util\xparsegeometry_repl.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="freeglut_internal.h">
+    <ClInclude Include="fg_internal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="freeglut_teapot_data.h">
+    <ClInclude Include="fg_teapot_data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fg_version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fg_callback_macros.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fg_gl2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fg_init.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\GL\freeglut_std.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\GL\freeglut_ucall.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\GL\freeglut.h">
@@ -98,10 +164,10 @@
     <ClInclude Include="..\..\Include\GL\freeglut_ext.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\GL\freeglut_std.h">
+    <ClInclude Include="mswin\fg_internal_mswin.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\GL\glut.h">
+    <ClInclude Include="util\xparsegeometry_repl.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
