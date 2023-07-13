@@ -10,3 +10,8 @@
 *.obj
 *.pdb
 
+.vs
+packages
+*.user
+Debug
+Debug64

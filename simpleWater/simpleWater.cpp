@@ -112,7 +112,7 @@ bool initApp()
     //
     // texture
     //
-    gSimpleWater.mTexture = SOIL_load_OGL_texture("H:\\Game\\3d\\bin\\Debug\\x64\\data\\checkerboard.jpg", SOIL_LOAD_AUTO,
+	gSimpleWater.mTexture = SOIL_load_OGL_texture(".\\data\\checkerboard.jpg", SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_GL_MIPMAPS | SOIL_FLAG_INVERT_Y);
     if (gSimpleWater.mTexture == 0)

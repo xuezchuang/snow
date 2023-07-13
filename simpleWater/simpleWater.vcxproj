@@ -53,6 +53,20 @@
   <ItemGroup>
     <Image Include="data\checkerboard.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Deps\Include\SOIL\soil\build\soil.vcxproj">
+      <Project>{d0d71d60-ac41-39fe-984c-a328d151003b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Deps\src\AntTweakBar\src\AntTweakBar.vcxproj">
+      <Project>{b99e1fa1-c30a-45f2-9d57-9e9c21b2df42}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Deps\src\freeglut_shared\freeglut_shared.vcxproj">
+      <Project>{60ab969e-fb0e-4a20-8815-a1ebe03e7bf0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Deps\src\glew_shared\glew_shared.vcxproj">
+      <Project>{74219373-92f3-43df-9d75-4d9fb7a722fc}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED530EDA-5640-457A-AFB9-FE88229BA624}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
