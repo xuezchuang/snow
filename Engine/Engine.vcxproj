@@ -193,6 +193,11 @@
     <ClCompile Include="Rigidbody.cpp" />
     <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Deps\src\glew_shared\glew_shared.vcxproj">
+      <Project>{74219373-92f3-43df-9d75-4d9fb7a722fc}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

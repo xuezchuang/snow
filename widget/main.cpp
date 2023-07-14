@@ -184,7 +184,8 @@ void _InitVAO()
 #include "LoadShaders.h"
 #include "vmath.h"
 using namespace vmath;
-int main() {
+int main() 
+{
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -213,7 +214,8 @@ int main() {
 	_InitVAO();
 
 	//主循环
-	while (!glfwWindowShouldClose(window)) {
+	while (!glfwWindowShouldClose(window))
+	{
 		wm_draw_update();
 	}
 
@@ -239,7 +241,8 @@ BLI_INLINE float BLI_rctf_size_y(const struct rctf* rct)
 	return (rct->ymax - rct->ymin);
 }
 
-void processInput(GLFWwindow* window) {
+void processInput(GLFWwindow* window) 
+{
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
@@ -280,7 +283,8 @@ bool mask_leftdown = false;
 rctf m_CrupRect;
 float mval[2];
 bool bmoveing = false;
-void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
+void mouse_callback(GLFWwindow* window, double xPos, double yPos) 
+{
 	float viewport_size[4];
 	glGetFloatv(GL_VIEWPORT, viewport_size);
 	double x, y;
@@ -354,12 +358,14 @@ void mouseButton_callback(GLFWwindow* window, int button, int action, int mode)
 }
 
 //鼠标滚轮消息回调
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
 	m_camera.ProcessMouseScroll(float(yoffset));
 	bredraw = true;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) 
+{
 	glViewport(0, 0, width, height);
 	aspect = float(height) / float(width);
 	SCR_WIDTH = width;
@@ -368,7 +374,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 //加载纹理
-unsigned int loadTexture(char const* path) {
+unsigned int loadTexture(char const* path) 
+{
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 

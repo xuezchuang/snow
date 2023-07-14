@@ -15,3 +15,5 @@ packages
 *.user
 Debug
 Debug64
+*.aps
+/OrbitCamera/src/*.txt

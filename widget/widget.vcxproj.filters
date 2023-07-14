@@ -119,5 +119,8 @@
     <Filter Include="interface">
       <UniqueIdentifier>{5f33a6fa-07cf-494c-ad7b-04202a9a7914}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{107fc379-751b-4c35-be3f-1ab7ac24ef8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
