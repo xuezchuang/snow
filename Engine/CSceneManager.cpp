@@ -258,77 +258,77 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 
 	// TODO: now that we have multiple scene managers, these should be
 	// shallow copies from the previous manager if there is one.
-//
-//#ifdef _IRR_COMPILE_WITH_STL_LOADER_
-//	MeshLoaderList.push_back(new CSTLMeshFileLoader());
-//#endif
-//#ifdef _IRR_COMPILE_WITH_PLY_LOADER_
-//	MeshLoaderList.push_back(new CPLYMeshFileLoader(this));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_SMF_LOADER_
-//	MeshLoaderList.push_back(new CSMFMeshFileLoader(FileSystem, Driver));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_OCT_LOADER_
-//	MeshLoaderList.push_back(new COCTLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_CSM_LOADER_
-//	MeshLoaderList.push_back(new CCSMLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_LMTS_LOADER_
-//	MeshLoaderList.push_back(new CLMTSMeshFileLoader(FileSystem, Driver, Parameters));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_MY3D_LOADER_
-//	MeshLoaderList.push_back(new CMY3DMeshFileLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_DMF_LOADER_
-//	MeshLoaderList.push_back(new CDMFLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_OGRE_LOADER_
-//	MeshLoaderList.push_back(new COgreMeshFileLoader(FileSystem, Driver));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_HALFLIFE_LOADER_
-//	MeshLoaderList.push_back(new CHalflifeMDLMeshFileLoader(this));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_MD3_LOADER_
-//	MeshLoaderList.push_back(new CMD3MeshFileLoader(this));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_LWO_LOADER_
-//	MeshLoaderList.push_back(new CLWOMeshFileLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_MD2_LOADER_
-//	MeshLoaderList.push_back(new CMD2MeshFileLoader());
-//#endif
-//#ifdef _IRR_COMPILE_WITH_IRR_MESH_LOADER_
-//	MeshLoaderList.push_back(new CIrrMeshFileLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_BSP_LOADER_
-//	MeshLoaderList.push_back(new CBSPMeshFileLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_COLLADA_LOADER_
-//	MeshLoaderList.push_back(new CColladaFileLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_3DS_LOADER_
-//	MeshLoaderList.push_back(new C3DSMeshFileLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_X_LOADER_
-//	MeshLoaderList.push_back(new CXMeshFileLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_MS3D_LOADER_
-//	MeshLoaderList.push_back(new CMS3DMeshFileLoader(Driver));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_OBJ_LOADER_
-//	MeshLoaderList.push_back(new COBJMeshFileLoader(this, FileSystem));
-//#endif
-//#ifdef _IRR_COMPILE_WITH_B3D_LOADER_
-//	MeshLoaderList.push_back(new CB3DMeshFileLoader(this));
-//#endif
-//
-//	// scene loaders
-//#ifdef _IRR_COMPILE_WITH_IRR_SCENE_LOADER_
-//	SceneLoaderList.push_back(new CSceneLoaderIrr(this, FileSystem));
-//#endif
 
-	// factories
+#ifdef _IRR_COMPILE_WITH_STL_LOADER_
+	MeshLoaderList.push_back(new CSTLMeshFileLoader());
+#endif
+#ifdef _IRR_COMPILE_WITH_PLY_LOADER_
+	MeshLoaderList.push_back(new CPLYMeshFileLoader(this));
+#endif
+#ifdef _IRR_COMPILE_WITH_SMF_LOADER_
+	MeshLoaderList.push_back(new CSMFMeshFileLoader(FileSystem, Driver));
+#endif
+#ifdef _IRR_COMPILE_WITH_OCT_LOADER_
+	MeshLoaderList.push_back(new COCTLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_CSM_LOADER_
+	MeshLoaderList.push_back(new CCSMLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_LMTS_LOADER_
+	MeshLoaderList.push_back(new CLMTSMeshFileLoader(FileSystem, Driver, Parameters));
+#endif
+#ifdef _IRR_COMPILE_WITH_MY3D_LOADER_
+	MeshLoaderList.push_back(new CMY3DMeshFileLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_DMF_LOADER_
+	MeshLoaderList.push_back(new CDMFLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_OGRE_LOADER_
+	MeshLoaderList.push_back(new COgreMeshFileLoader(FileSystem, Driver));
+#endif
+#ifdef _IRR_COMPILE_WITH_HALFLIFE_LOADER_
+	MeshLoaderList.push_back(new CHalflifeMDLMeshFileLoader(this));
+#endif
+#ifdef _IRR_COMPILE_WITH_MD3_LOADER_
+	MeshLoaderList.push_back(new CMD3MeshFileLoader(this));
+#endif
+#ifdef _IRR_COMPILE_WITH_LWO_LOADER_
+	MeshLoaderList.push_back(new CLWOMeshFileLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_MD2_LOADER_
+	MeshLoaderList.push_back(new CMD2MeshFileLoader());
+#endif
+#ifdef _IRR_COMPILE_WITH_IRR_MESH_LOADER_
+	MeshLoaderList.push_back(new CIrrMeshFileLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_BSP_LOADER_
+	MeshLoaderList.push_back(new CBSPMeshFileLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_COLLADA_LOADER_
+	MeshLoaderList.push_back(new CColladaFileLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_3DS_LOADER_
+	MeshLoaderList.push_back(new C3DSMeshFileLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_X_LOADER_
+	MeshLoaderList.push_back(new CXMeshFileLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_MS3D_LOADER_
+	MeshLoaderList.push_back(new CMS3DMeshFileLoader(Driver));
+#endif
+#ifdef _IRR_COMPILE_WITH_OBJ_LOADER_
+	MeshLoaderList.push_back(new COBJMeshFileLoader(this, FileSystem));
+#endif
+#ifdef _IRR_COMPILE_WITH_B3D_LOADER_
+	MeshLoaderList.push_back(new CB3DMeshFileLoader(this));
+#endif
+	//
+	//	// scene loaders
+	//#ifdef _IRR_COMPILE_WITH_IRR_SCENE_LOADER_
+	//	SceneLoaderList.push_back(new CSceneLoaderIrr(this, FileSystem));
+	//#endif
+
+		// factories
 	ISceneNodeFactory* factory = new CDefaultSceneNodeFactory(this);
 	registerSceneNodeFactory(factory);
 	factory->drop();
@@ -689,18 +689,16 @@ IAnimatedMeshSceneNode* CSceneManager::addAnimatedMeshSceneNode(IAnimatedMesh* m
 																const core::vector3df& position, const core::vector3df& rotation,
 																const core::vector3df& scale, bool alsoAddIfMeshPointerZero)
 {
-	return 0;
-	//if (!alsoAddIfMeshPointerZero && !mesh)
-	//	return 0;
+	if (!alsoAddIfMeshPointerZero && !mesh)
+		return 0;
 
-	//if (!parent)
-	//	parent = this;
+	if (!parent)
+		parent = this;
 
-	//IAnimatedMeshSceneNode* node =
-	//	new CAnimatedMeshSceneNode(mesh, parent, this, id, position, rotation, scale);
-	//node->drop();
+	IAnimatedMeshSceneNode* node = new CAnimatedMeshSceneNode(mesh, parent, this, id, position, rotation, scale);
+	node->drop();
 
-	//return node;
+	return node;
 }
 
 
@@ -2625,47 +2623,47 @@ ISkinnedMesh* CSceneManager::createSkinnedMesh()
 //! Returns a mesh writer implementation if available
 IMeshWriter* CSceneManager::createMeshWriter(EMESH_WRITER_TYPE type)
 {
-//	switch (type)
-//	{
-//	case EMWT_IRR_MESH:
-//#ifdef _IRR_COMPILE_WITH_IRR_WRITER_
-//		return new CIrrMeshWriter(Driver, FileSystem);
-//#else
-//		return 0;
-//#endif
-//	case EMWT_COLLADA:
-//#ifdef _IRR_COMPILE_WITH_COLLADA_WRITER_
-//		return new CColladaMeshWriter(this, Driver, FileSystem);
-//#else
-//		return 0;
-//#endif
-//	case EMWT_STL:
-//#ifdef _IRR_COMPILE_WITH_STL_WRITER_
-//		return new CSTLMeshWriter(this);
-//#else
-//		return 0;
-//#endif
-//	case EMWT_OBJ:
-//#ifdef _IRR_COMPILE_WITH_OBJ_WRITER_
-//		return new COBJMeshWriter(this, FileSystem);
-//#else
-//		return 0;
-//#endif
-//
-//	case EMWT_PLY:
-//#ifdef _IRR_COMPILE_WITH_PLY_WRITER_
-//		return new CPLYMeshWriter();
-//#else
-//		return 0;
-//#endif
-//
-//	case EMWT_B3D:
-//#ifdef _IRR_COMPILE_WITH_B3D_WRITER_
-//		return new CB3DMeshWriter();
-//#else
-//		return 0;
-//#endif
-//	}
+	//	switch (type)
+	//	{
+	//	case EMWT_IRR_MESH:
+	//#ifdef _IRR_COMPILE_WITH_IRR_WRITER_
+	//		return new CIrrMeshWriter(Driver, FileSystem);
+	//#else
+	//		return 0;
+	//#endif
+	//	case EMWT_COLLADA:
+	//#ifdef _IRR_COMPILE_WITH_COLLADA_WRITER_
+	//		return new CColladaMeshWriter(this, Driver, FileSystem);
+	//#else
+	//		return 0;
+	//#endif
+	//	case EMWT_STL:
+	//#ifdef _IRR_COMPILE_WITH_STL_WRITER_
+	//		return new CSTLMeshWriter(this);
+	//#else
+	//		return 0;
+	//#endif
+	//	case EMWT_OBJ:
+	//#ifdef _IRR_COMPILE_WITH_OBJ_WRITER_
+	//		return new COBJMeshWriter(this, FileSystem);
+	//#else
+	//		return 0;
+	//#endif
+	//
+	//	case EMWT_PLY:
+	//#ifdef _IRR_COMPILE_WITH_PLY_WRITER_
+	//		return new CPLYMeshWriter();
+	//#else
+	//		return 0;
+	//#endif
+	//
+	//	case EMWT_B3D:
+	//#ifdef _IRR_COMPILE_WITH_B3D_WRITER_
+	//		return new CB3DMeshWriter();
+	//#else
+	//		return 0;
+	//#endif
+	//	}
 
 	return 0;
 }

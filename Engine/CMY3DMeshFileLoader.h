@@ -19,9 +19,7 @@
 // This tool created by ZDimitor everyone can use it as wants
 //--------------------------------------------------------------------------------
 
-#ifndef __CMY3D_MESH_FILE_LOADER_H_INCLUDED__
-#define __CMY3D_MESH_FILE_LOADER_H_INCLUDED__
-
+#pragma once
 
 #ifdef _MSC_VER
 #pragma once
@@ -45,23 +43,30 @@ namespace scene
 #include "irrpack.h"
 
 struct SMyColor
-{   SMyColor () {;}
-    SMyColor (s32 __R, s32 __G, s32 __B, s32 __A)
-        : R(__R), G(__G), B(__B), A(__A) {}
-    s32 R, G, B, A;
+{
+	SMyColor()
+	{
+		;
+	}
+	SMyColor(s32 __R, s32 __G, s32 __B, s32 __A)
+		: R(__R), G(__G), B(__B), A(__A)
+	{
+	}
+	s32 R, G, B, A;
 } PACK_STRUCT;
 
 // material header
 struct SMyMaterialHeader
-{   c8  Name[256];           // material name
-    u32 Index;
-    SMyColor AmbientColor;
-    SMyColor DiffuseColor;
-    SMyColor EmissiveColor;
-    SMyColor SpecularColor;
-    f32 Shininess;
-    f32 Transparency;
-    u32 TextureCount;        // texture count
+{
+	c8  Name[256];           // material name
+	u32 Index;
+	SMyColor AmbientColor;
+	SMyColor DiffuseColor;
+	SMyColor EmissiveColor;
+	SMyColor SpecularColor;
+	f32 Shininess;
+	f32 Transparency;
+	u32 TextureCount;        // texture count
 } PACK_STRUCT;
 
 // Default alignment
@@ -70,7 +75,7 @@ struct SMyMaterialHeader
 class CMY3DMeshFileLoader : public IMeshLoader
 {
 public:
-	CMY3DMeshFileLoader(ISceneManager *scmgr, io::IFileSystem* fs);
+	CMY3DMeshFileLoader(ISceneManager* scmgr, io::IFileSystem* fs);
 	virtual ~CMY3DMeshFileLoader();
 
 	virtual bool isALoadableFileExtension(const io::path& filename) const _IRR_OVERRIDE_;
@@ -90,29 +95,35 @@ private:
 
 	struct SMyMaterialEntry
 	{
-		SMyMaterialEntry ()
-		: Texture1FileName("null"), Texture2FileName("null"),
-		Texture1(0), Texture2(0), MaterialType(video::EMT_SOLID) {}
+		SMyMaterialEntry()
+			: Texture1FileName("null"), Texture2FileName("null"),
+			Texture1(0), Texture2(0), MaterialType(video::EMT_SOLID)
+		{
+		}
 
 		SMyMaterialHeader Header;
 		core::stringc Texture1FileName;
 		core::stringc Texture2FileName;
-		video::ITexture *Texture1;
-		video::ITexture *Texture2;
+		video::ITexture* Texture1;
+		video::ITexture* Texture2;
 		video::E_MATERIAL_TYPE MaterialType;
 	};
 
 	struct SMyMeshBufferEntry
 	{
-		SMyMeshBufferEntry() : MaterialIndex(-1), MeshBuffer(0) {}
+		SMyMeshBufferEntry() : MaterialIndex(-1), MeshBuffer(0)
+		{
+		}
 		SMyMeshBufferEntry(s32 mi, SMeshBufferLightMap* mb)
-			: MaterialIndex(mi), MeshBuffer(mb) {}
+			: MaterialIndex(mi), MeshBuffer(mb)
+		{
+		}
 
 		s32 MaterialIndex;
 		SMeshBufferLightMap* MeshBuffer;
 	};
 
-	SMyMaterialEntry*    getMaterialEntryByIndex     (u32 matInd);
+	SMyMaterialEntry* getMaterialEntryByIndex(u32 matInd);
 	SMeshBufferLightMap* getMeshBufferByMaterialIndex(u32 matInd);
 
 	core::array<SMyMaterialEntry>   MaterialEntry;
@@ -126,4 +137,3 @@ private:
 } // end namespace irr
 
 
-#endif // __CMY3D_MESH_FILE_LOADER_H_INCLUDED__

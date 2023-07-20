@@ -18,8 +18,7 @@ Version 1.5 - 15 March 2005
 
 */
 
-#if !defined(__C_LMTS_MESH_FILE_LOADER_H_INCLUDED__)
-#define __C_LMTS_MESH_FILE_LOADER_H_INCLUDED__
+#pragma once
 
 #include "IMeshLoader.h"
 #include "SMesh.h"
@@ -36,7 +35,7 @@ class CLMTSMeshFileLoader : public IMeshLoader
 public:
 
 	CLMTSMeshFileLoader(io::IFileSystem* fs,
-		video::IVideoDriver* driver, io::IAttributes* parameters);
+						video::IVideoDriver* driver, io::IAttributes* parameters);
 
 	virtual ~CLMTSMeshFileLoader();
 
@@ -49,7 +48,7 @@ private:
 	void loadTextures(SMesh* mesh);
 	void cleanup();
 
-// byte-align structures
+	// byte-align structures
 #include "irrpack.h"
 
 	struct SLMTSHeader
@@ -89,7 +88,7 @@ private:
 		f32 V2;
 	} PACK_STRUCT;
 
-// Default alignment
+	// Default alignment
 #include "irrunpack.h"
 
 	SLMTSHeader Header;
@@ -106,4 +105,3 @@ private:
 } // end namespace scene
 } // end namespace irr
 
-#endif // !defined(__C_LMTS_MESH_FILE_LOADER_H_INCLUDED__)

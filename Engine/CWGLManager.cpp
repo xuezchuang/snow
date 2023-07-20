@@ -125,37 +125,33 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 			else
 				continue;
 		}
-		else
-			if (i == 2)
-			{
-				pfd.cDepthBits = 24;
-			}
+		else if (i == 2)
+		{
+			pfd.cDepthBits = 24;
+		}
+		else if (i == 3)
+		{
+			if (Params.Bits != 16)
+				pfd.cDepthBits = 16;
 			else
-				if (i == 3)
-				{
-					if (Params.Bits != 16)
-						pfd.cDepthBits = 16;
-					else
-						continue;
-				}
-				else
-					if (i == 4)
-					{
-						// try single buffer
-						if (Params.Doublebuffer)
-							pfd.dwFlags &= ~PFD_DOUBLEBUFFER;
-						else
-							continue;
-					}
-					else
-						if (i == 5)
-						{
-							os::Printer::log("Cannot create a GL device context", "No suitable format for temporary window.", ELL_ERROR);
-							ReleaseDC(temporary_wnd, HDc);
-							DestroyWindow(temporary_wnd);
-							UnregisterClass(ClassName, lhInstance);
-							return false;
-						}
+				continue;
+		}
+		else if (i == 4)
+		{
+			// try single buffer
+			if (Params.Doublebuffer)
+				pfd.dwFlags &= ~PFD_DOUBLEBUFFER;
+			else
+				continue;
+		}
+		else if (i == 5)
+		{
+			os::Printer::log("Cannot create a GL device context", "No suitable format for temporary window.", ELL_ERROR);
+			ReleaseDC(temporary_wnd, HDc);
+			DestroyWindow(temporary_wnd);
+			UnregisterClass(ClassName, lhInstance);
+			return false;
+		}
 
 		// choose pixelformat
 		PixelFormat = ChoosePixelFormat(HDc, &pfd);

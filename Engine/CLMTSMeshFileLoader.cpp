@@ -85,13 +85,13 @@ namespace scene
 {
 
 CLMTSMeshFileLoader::CLMTSMeshFileLoader(io::IFileSystem* fs,
-		video::IVideoDriver* driver, io::IAttributes* parameters)
+										 video::IVideoDriver* driver, io::IAttributes* parameters)
 	: Textures(0), Subsets(0), Triangles(0),
 	Parameters(parameters), Driver(driver), FileSystem(fs), FlipEndianess(false)
 {
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	setDebugName("CLMTSMeshFileLoader");
-	#endif
+#endif
 
 	if (Driver)
 		Driver->grab();
@@ -99,7 +99,7 @@ CLMTSMeshFileLoader::CLMTSMeshFileLoader(io::IFileSystem* fs,
 	if (FileSystem)
 		FileSystem->grab();
 
-	TextureLoader = new CMeshTextureLoader( FileSystem, Driver );
+	TextureLoader = new CMeshTextureLoader(FileSystem, Driver);
 }
 
 
@@ -117,24 +117,24 @@ CLMTSMeshFileLoader::~CLMTSMeshFileLoader()
 
 void CLMTSMeshFileLoader::cleanup()
 {
-	delete [] Textures;
+	delete[] Textures;
 	Textures = 0;
-	delete [] Subsets;
+	delete[] Subsets;
 	Subsets = 0;
-	delete [] Triangles;
+	delete[] Triangles;
 	Triangles = 0;
 }
 
 
 bool CLMTSMeshFileLoader::isALoadableFileExtension(const io::path& filename) const
 {
-	return core::hasFileExtension ( filename, "lmts" );
+	return core::hasFileExtension(filename, "lmts");
 }
 
 
 IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 {
-	if ( getMeshTextureLoader() )
+	if (getMeshTextureLoader())
 		getMeshTextureLoader()->setMeshFile(file);
 
 	u32 i;
@@ -155,7 +155,8 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 		Header.SubsetSize = os::Byteswap::byteswap(Header.SubsetSize);
 		Header.VertexSize = os::Byteswap::byteswap(Header.VertexSize);
 	}
-	if (Header.MagicID != 0x53544D4C) { // "LMTS"
+	if (Header.MagicID != 0x53544D4C)
+	{ // "LMTS"
 		os::Printer::log("LMTS ERROR: wrong header magic id!", ELL_ERROR);
 		return 0;
 	}
@@ -163,25 +164,26 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 	//Skip any User Data (arbitrary app specific data)
 
 	const s32 userSize = Header.HeaderSize - sizeof(SLMTSHeader);
-	if (userSize>0)
-		file->seek(userSize,true);
+	if (userSize > 0)
+		file->seek(userSize, true);
 
 	// TEXTURES
 
 	file->read(&id, sizeof(u32));
 	if (FlipEndianess)
 		id = os::Byteswap::byteswap(id);
-	if (id != 0x54584554) { // "TEXT"
+	if (id != 0x54584554)
+	{ // "TEXT"
 		os::Printer::log("LMTS ERROR: wrong texture magic id!", ELL_ERROR);
 		return 0;
 	}
 
 	Textures = new SLMTSTextureInfoEntry[Header.TextureCount];
 
-	file->read(Textures, sizeof(SLMTSTextureInfoEntry)*Header.TextureCount);
+	file->read(Textures, sizeof(SLMTSTextureInfoEntry) * Header.TextureCount);
 	if (FlipEndianess)
 	{
-		for (i=0; i<Header.TextureCount; ++i)
+		for (i = 0; i < Header.TextureCount; ++i)
 			Textures[i].Flags = os::Byteswap::byteswap(Textures[i].Flags);
 	}
 
@@ -200,7 +202,7 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 	Subsets = new SLMTSSubsetInfoEntry[Header.SubsetCount];
 	const s32 subsetUserSize = Header.SubsetSize - sizeof(SLMTSSubsetInfoEntry);
 
-	for (i=0; i<Header.SubsetCount; ++i)
+	for (i = 0; i < Header.SubsetCount; ++i)
 	{
 		file->read(&Subsets[i], sizeof(SLMTSSubsetInfoEntry));
 		if (FlipEndianess)
@@ -210,8 +212,8 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 			Subsets[i].TextID1 = os::Byteswap::byteswap(Subsets[i].TextID1);
 			Subsets[i].TextID2 = os::Byteswap::byteswap(Subsets[i].TextID2);
 		}
-		if (subsetUserSize>0)
-			file->seek(subsetUserSize,true);
+		if (subsetUserSize > 0)
+			file->seek(subsetUserSize, true);
 	}
 
 	// TRIANGLES
@@ -226,10 +228,10 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 		return 0;
 	}
 
-	Triangles = new SLMTSTriangleDataEntry[(Header.TriangleCount*3)];
+	Triangles = new SLMTSTriangleDataEntry[(Header.TriangleCount * 3)];
 	const s32 triUserSize = Header.VertexSize - sizeof(SLMTSTriangleDataEntry);
 
-	for (i=0; i<(Header.TriangleCount*3); ++i)
+	for (i = 0; i < (Header.TriangleCount * 3); ++i)
 	{
 		file->read(&Triangles[i], sizeof(SLMTSTriangleDataEntry));
 		if (FlipEndianess)
@@ -242,8 +244,8 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 			Triangles[i].U2 = os::Byteswap::byteswap(Triangles[i].V1);
 			Triangles[i].V2 = os::Byteswap::byteswap(Triangles[i].V2);
 		}
-		if (triUserSize>0)
-			file->seek(triUserSize,true);
+		if (triUserSize > 0)
+			file->seek(triUserSize, true);
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -268,7 +270,7 @@ IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 
 void CLMTSMeshFileLoader::constructMesh(SMesh* mesh)
 {
-	for (s32 i=0; i<Header.SubsetCount; ++i)
+	for (s32 i = 0; i < Header.SubsetCount; ++i)
 	{
 		scene::SMeshBufferLightMap* meshBuffer = new scene::SMeshBufferLightMap();
 
@@ -281,36 +283,36 @@ void CLMTSMeshFileLoader::constructMesh(SMesh* mesh)
 
 		const u32 offs = Subsets[i].Offset * 3;
 
-		for (u32 sc=0; sc<Subsets[i].Count; sc++)
+		for (u32 sc = 0; sc < Subsets[i].Count; sc++)
 		{
 			const u32 idx = meshBuffer->getVertexCount();
 
-			for (u32 vu=0; vu<3; ++vu)
+			for (u32 vu = 0; vu < 3; ++vu)
 			{
-				const SLMTSTriangleDataEntry& v = Triangles[offs+(3*sc)+vu];
+				const SLMTSTriangleDataEntry& v = Triangles[offs + (3 * sc) + vu];
 				meshBuffer->Vertices.push_back(
-						video::S3DVertex2TCoords(
-							v.X, v.Y, v.Z,
-							video::SColor(255,255,255,255),
-							v.U1, v.V1, v.U2, v.V2));
+					video::S3DVertex2TCoords(
+						v.X, v.Y, v.Z,
+						video::SColor(255, 255, 255, 255),
+						v.U1, v.V1, v.U2, v.V2));
 			}
 			const core::vector3df normal = core::plane3df(
 				meshBuffer->Vertices[idx].Pos,
-				meshBuffer->Vertices[idx+1].Pos,
-				meshBuffer->Vertices[idx+2].Pos).Normal;
+				meshBuffer->Vertices[idx + 1].Pos,
+				meshBuffer->Vertices[idx + 2].Pos).Normal;
 
 			meshBuffer->Vertices[idx].Normal = normal;
-			meshBuffer->Vertices[idx+1].Normal = normal;
-			meshBuffer->Vertices[idx+2].Normal = normal;
+			meshBuffer->Vertices[idx + 1].Normal = normal;
+			meshBuffer->Vertices[idx + 2].Normal = normal;
 
 			meshBuffer->Indices.push_back(idx);
-			meshBuffer->Indices.push_back(idx+1);
-			meshBuffer->Indices.push_back(idx+2);
+			meshBuffer->Indices.push_back(idx + 1);
+			meshBuffer->Indices.push_back(idx + 2);
 		}
 		meshBuffer->drop();
 	}
 
-	for (u32 j=0; j<mesh->MeshBuffers.size(); ++j)
+	for (u32 j = 0; j < mesh->MeshBuffers.size(); ++j)
 		mesh->MeshBuffers[j]->recalculateBoundingBox();
 
 	mesh->recalculateBoundingBox();
@@ -332,17 +334,17 @@ void CLMTSMeshFileLoader::loadTextures(SMesh* mesh)
 	core::array<u32> id2id;
 	id2id.reallocate(Header.TextureCount);
 
-	if ( getMeshTextureLoader() )
+	if (getMeshTextureLoader())
 	{
-		if ( Parameters->existsAttribute(LMTS_TEXTURE_PATH) )
+		if (Parameters->existsAttribute(LMTS_TEXTURE_PATH))
 			getMeshTextureLoader()->setTexturePath(Parameters->getAttributeAsString(LMTS_TEXTURE_PATH));
 	}
 
 	core::stringc s;
-	for (u32 t=0; t<Header.TextureCount; ++t)
+	for (u32 t = 0; t < Header.TextureCount; ++t)
 	{
 		video::ITexture* tmptex = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(Textures[t].Filename) : NULL;
-		if ( !tmptex )
+		if (!tmptex)
 		{
 			os::Printer::log("LMTS WARNING: Texture does not exist", s.c_str(), ELL_WARNING);
 		}
@@ -361,7 +363,7 @@ void CLMTSMeshFileLoader::loadTextures(SMesh* mesh)
 
 	// attach textures to materials.
 
-	for (u32 i=0; i<Header.SubsetCount; ++i)
+	for (u32 i = 0; i < Header.SubsetCount; ++i)
 	{
 		if (Subsets[i].TextID1 < Header.TextureCount && id2id[Subsets[i].TextID1] < tex.size())
 			mesh->getMeshBuffer(i)->getMaterial().setTexture(0, tex[id2id[Subsets[i].TextID1]]);

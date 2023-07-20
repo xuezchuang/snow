@@ -2,8 +2,7 @@
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
-#ifndef __C_OBJ_MESH_FILE_LOADER_H_INCLUDED__
-#define __C_OBJ_MESH_FILE_LOADER_H_INCLUDED__
+#pragma once
 
 #include "IMeshLoader.h"
 #include "IFileSystem.h"
@@ -42,7 +41,7 @@ private:
 
 	struct SObjMtl
 	{
-		SObjMtl() : Meshbuffer(0), Bumpiness (1.0f), Illumination(0),
+		SObjMtl() : Meshbuffer(0), Bumpiness(1.0f), Illumination(0),
 			RecalculateNormals(false)
 		{
 			Meshbuffer = new SMeshBuffer();
@@ -62,7 +61,7 @@ private:
 		}
 
 		core::map<video::S3DVertex, int> VertMap;
-		scene::SMeshBuffer *Meshbuffer;
+		scene::SMeshBuffer* Meshbuffer;
 		core::stringc Name;
 		core::stringc Group;
 		f32 Bumpiness;
@@ -74,9 +73,9 @@ private:
 	const c8* readTextures(const c8* bufPtr, const c8* const bufEnd, SObjMtl* currMaterial, const io::path& relPath);
 
 	// returns a pointer to the first printable character available in the buffer
-	const c8* goFirstWord(const c8* buf, const c8* const bufEnd, bool acrossNewlines=true);
+	const c8* goFirstWord(const c8* buf, const c8* const bufEnd, bool acrossNewlines = true);
 	// returns a pointer to the first printable character after the first non-printable
-	const c8* goNextWord(const c8* buf, const c8* const bufEnd, bool acrossNewlines=true);
+	const c8* goNextWord(const c8* buf, const c8* const bufEnd, bool acrossNewlines = true);
 	// returns a pointer to the next printable character after the first line break
 	const c8* goNextLine(const c8* buf, const c8* const bufEnd);
 	// copies the current word from the inBuf to the outBuf
@@ -118,5 +117,4 @@ private:
 } // end namespace scene
 } // end namespace irr
 
-#endif
 

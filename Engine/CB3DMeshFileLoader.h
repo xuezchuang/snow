@@ -8,8 +8,7 @@
 
 #include "IrrCompileConfig.h"
 
-#ifndef __C_B3D_MESH_LOADER_H_INCLUDED__
-#define __C_B3D_MESH_LOADER_H_INCLUDED__
+#pragma once
 
 #include "IMeshLoader.h"
 #include "ISceneManager.h"
@@ -47,7 +46,7 @@ private:
 	bool readChunkNODE(CSkinnedMesh::SJoint* InJoint);
 	bool readChunkMESH(CSkinnedMesh::SJoint* InJoint);
 	bool readChunkVRTS(CSkinnedMesh::SJoint* InJoint);
-	bool readChunkTRIS(scene::SSkinMeshBuffer *MeshBuffer, u32 MeshBufferID, s32 Vertices_Start);
+	bool readChunkTRIS(scene::SSkinMeshBuffer* MeshBuffer, u32 MeshBufferID, s32 Vertices_Start);
 	bool readChunkBONE(CSkinnedMesh::SJoint* InJoint);
 	bool readChunkKEYS(CSkinnedMesh::SJoint* InJoint);
 	bool readChunkANIM();
@@ -70,9 +69,9 @@ private:
 
 	core::array<video::S3DVertex2TCoords> BaseVertices;
 
-	ISceneManager*	SceneManager;
-	CSkinnedMesh*	AnimatedMesh;
-	io::IReadFile*	B3DFile;
+	ISceneManager* SceneManager;
+	CSkinnedMesh* AnimatedMesh;
+	io::IReadFile* B3DFile;
 
 	//B3Ds have Vertex ID's local within the mesh I don't want this
 	// Variable needs to be class member due to recursion in calls
@@ -87,5 +86,4 @@ private:
 } // end namespace scene
 } // end namespace irr
 
-#endif // __C_B3D_MESH_LOADER_H_INCLUDED__
 

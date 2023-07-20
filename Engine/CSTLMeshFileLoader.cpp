@@ -25,7 +25,7 @@ namespace scene
 //! based on the file extension (e.g. ".bsp")
 bool CSTLMeshFileLoader::isALoadableFileExtension(const io::path& filename) const
 {
-	return core::hasFileExtension ( filename, "stl" );
+	return core::hasFileExtension(filename, "stl");
 }
 
 
@@ -65,7 +65,7 @@ IAnimatedMesh* CSTLMeshFileLoader::createMesh(io::IReadFile* file)
 	else
 		goNextLine(file);
 
-	u16 attrib=0;
+	u16 attrib = 0;
 	token.reserve(32);
 
 	while (file->getPos() < filesize)
@@ -74,7 +74,7 @@ IAnimatedMesh* CSTLMeshFileLoader::createMesh(io::IReadFile* file)
 		{
 			if (getNextToken(file, token) != "facet")
 			{
-				if (token=="endsolid")
+				if (token == "endsolid")
 					break;
 				mesh->drop();
 				return 0;
@@ -99,7 +99,7 @@ IAnimatedMesh* CSTLMeshFileLoader::createMesh(io::IReadFile* file)
 				return 0;
 			}
 		}
-		for (u32 i=0; i<3; ++i)
+		for (u32 i = 0; i < 3; ++i)
 		{
 			if (!binary)
 			{
@@ -132,25 +132,25 @@ IAnimatedMesh* CSTLMeshFileLoader::createMesh(io::IReadFile* file)
 #endif
 		}
 
-		SMeshBuffer* mb = reinterpret_cast<SMeshBuffer*>(mesh->getMeshBuffer(mesh->getMeshBufferCount()-1));
+		SMeshBuffer* mb = reinterpret_cast<SMeshBuffer*>(mesh->getMeshBuffer(mesh->getMeshBufferCount() - 1));
 		u32 vCount = mb->getVertexCount();
 		video::SColor color(0xffffffff);
 		if (attrib & 0x8000)
 			color = video::A1R5G5B5toA8R8G8B8(attrib);
-		if (normal==core::vector3df())
-			normal=core::plane3df(vertex[2],vertex[1],vertex[0]).Normal;
-		mb->Vertices.push_back(video::S3DVertex(vertex[2],normal,color, core::vector2df()));
-		mb->Vertices.push_back(video::S3DVertex(vertex[1],normal,color, core::vector2df()));
-		mb->Vertices.push_back(video::S3DVertex(vertex[0],normal,color, core::vector2df()));
+		if (normal == core::vector3df())
+			normal = core::plane3df(vertex[2], vertex[1], vertex[0]).Normal;
+		mb->Vertices.push_back(video::S3DVertex(vertex[2], normal, color, core::vector2df()));
+		mb->Vertices.push_back(video::S3DVertex(vertex[1], normal, color, core::vector2df()));
+		mb->Vertices.push_back(video::S3DVertex(vertex[0], normal, color, core::vector2df()));
 		mb->Indices.push_back(vCount);
-		mb->Indices.push_back(vCount+1);
-		mb->Indices.push_back(vCount+2);
+		mb->Indices.push_back(vCount + 1);
+		mb->Indices.push_back(vCount + 2);
 	}	// end while (file->getPos() < filesize)
 	mesh->getMeshBuffer(0)->recalculateBoundingBox();
 
 	// Create the Animated mesh if there's anything in the mesh
 	SAnimatedMesh* pAM = 0;
-	if ( 0 != mesh->getMeshBufferCount() )
+	if (0 != mesh->getMeshBufferCount())
 	{
 		mesh->recalculateBoundingBox();
 		pAM = new SAnimatedMesh();
@@ -191,7 +191,7 @@ void CSTLMeshFileLoader::getNextVector(io::IReadFile* file, core::vector3df& vec
 		getNextToken(file, tmp);
 		core::fast_atof_move(tmp.c_str(), vec.Z);
 	}
-	vec.X=-vec.X;
+	vec.X = -vec.X;
 }
 
 
@@ -201,7 +201,7 @@ const core::stringc& CSTLMeshFileLoader::getNextToken(io::IReadFile* file, core:
 	goNextWord(file);
 	u8 c;
 	token = "";
-	while(file->getPos() != file->getSize())
+	while (file->getPos() != file->getSize())
 	{
 		file->read(&c, 1);
 		// found it, so leave
@@ -217,7 +217,7 @@ const core::stringc& CSTLMeshFileLoader::getNextToken(io::IReadFile* file, core:
 void CSTLMeshFileLoader::goNextWord(io::IReadFile* file) const
 {
 	u8 c;
-	while(file->getPos() != file->getSize())
+	while (file->getPos() != file->getSize())
 	{
 		file->read(&c, 1);
 		// found it, so leave
@@ -235,11 +235,11 @@ void CSTLMeshFileLoader::goNextLine(io::IReadFile* file) const
 {
 	u8 c;
 	// look for newline characters
-	while(file->getPos() != file->getSize())
+	while (file->getPos() != file->getSize())
 	{
 		file->read(&c, 1);
 		// found it, so leave
-		if (c=='\n' || c=='\r')
+		if (c == '\n' || c == '\r')
 			break;
 	}
 }

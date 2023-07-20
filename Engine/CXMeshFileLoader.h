@@ -2,8 +2,7 @@
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
-#ifndef __C_X_MESH_FILE_LOADER_H_INCLUDED__
-#define __C_X_MESH_FILE_LOADER_H_INCLUDED__
+#pragma once
 
 #include "IMeshLoader.h"
 #include "irrString.h"
@@ -14,8 +13,8 @@ namespace irr
 {
 namespace io
 {
-	class IFileSystem;
-	class IReadFile;
+class IFileSystem;
+class IReadFile;
 } // end namespace io
 namespace scene
 {
@@ -47,7 +46,9 @@ public:
 
 	struct SXMesh
 	{
-		SXMesh() : MaxSkinWeightsPerVertex(0), MaxSkinWeightsPerFace(0), BoneCount(0),AttachedJointID(-1),HasSkinning(false), HasVertexColors(false) {}
+		SXMesh() : MaxSkinWeightsPerVertex(0), MaxSkinWeightsPerFace(0), BoneCount(0), AttachedJointID(-1), HasSkinning(false), HasVertexColors(false)
+		{
+		}
 		// this mesh contains triangulated texture data.
 		// because in an .x file, faces can be made of more than 3
 		// vertices, the indices data structure is triangulated during the
@@ -96,23 +97,23 @@ private:
 
 	bool parseDataObjectTemplate();
 
-	bool parseDataObjectFrame(CSkinnedMesh::SJoint *parent);
+	bool parseDataObjectFrame(CSkinnedMesh::SJoint* parent);
 
-	bool parseDataObjectTransformationMatrix(core::matrix4 &mat);
+	bool parseDataObjectTransformationMatrix(core::matrix4& mat);
 
-	bool parseDataObjectMesh(SXMesh &mesh);
+	bool parseDataObjectMesh(SXMesh& mesh);
 
-	bool parseDataObjectSkinWeights(SXMesh &mesh);
+	bool parseDataObjectSkinWeights(SXMesh& mesh);
 
-	bool parseDataObjectSkinMeshHeader(SXMesh &mesh);
+	bool parseDataObjectSkinMeshHeader(SXMesh& mesh);
 
-	bool parseDataObjectMeshNormals(SXMesh &mesh);
+	bool parseDataObjectMeshNormals(SXMesh& mesh);
 
-	bool parseDataObjectMeshTextureCoords(SXMesh &mesh);
+	bool parseDataObjectMeshTextureCoords(SXMesh& mesh);
 
-	bool parseDataObjectMeshVertexColors(SXMesh &mesh);
+	bool parseDataObjectMeshVertexColors(SXMesh& mesh);
 
-	bool parseDataObjectMeshMaterialList(SXMesh &mesh);
+	bool parseDataObjectMeshMaterialList(SXMesh& mesh);
 
 	bool parseDataObjectMaterial(video::SMaterial& material);
 
@@ -122,7 +123,7 @@ private:
 
 	bool parseDataObjectAnimation();
 
-	bool parseDataObjectAnimationKey(ISkinnedMesh::SJoint *joint);
+	bool parseDataObjectAnimationKey(ISkinnedMesh::SJoint* joint);
 
 	bool parseDataObjectTextureFilename(core::stringc& texturename);
 
@@ -141,7 +142,7 @@ private:
 	//! reads header of dataobject including the opening brace.
 	//! returns false if error happened, and writes name of object
 	//! if there is one
-	bool readHeadOfDataObject(core::stringc* outname=0);
+	bool readHeadOfDataObject(core::stringc* outname = 0);
 
 	//! checks for closing curly brace, returns false if not there
 	bool checkForClosingBrace();
@@ -180,7 +181,7 @@ private:
 	u32 Line;
 	io::path FilePath;
 
-	CSkinnedMesh::SJoint *CurFrame;
+	CSkinnedMesh::SJoint* CurFrame;
 
 	core::array<SXMesh*> Meshes;
 
@@ -195,4 +196,3 @@ private:
 } // end namespace scene
 } // end namespace irr
 
-#endif

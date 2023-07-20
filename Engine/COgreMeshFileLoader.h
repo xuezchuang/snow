@@ -3,8 +3,7 @@
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 // originally written by Christian Stehno, modified by Nikolaus Gebhardt
 
-#ifndef __C_OGRE_MESH_FILE_LOADER_H_INCLUDED__
-#define __C_OGRE_MESH_FILE_LOADER_H_INCLUDED__
+#pragma once
 
 #include "IMeshLoader.h"
 #include "IFileSystem.h"
@@ -46,7 +45,7 @@ public:
 
 private:
 
-// byte-align structures
+	// byte-align structures
 #include "irrpack.h"
 
 	struct ChunkHeader
@@ -55,13 +54,15 @@ private:
 		u32 length;
 	} PACK_STRUCT;
 
-// Default alignment
+	// Default alignment
 #include "irrunpack.h"
 
 
 	struct ChunkData
 	{
-		ChunkData() : read(0) {}
+		ChunkData() : read(0)
+		{
+		}
 
 		ChunkHeader header;
 		u32 read;
@@ -82,7 +83,9 @@ private:
 			DiffuseTokenColor(false), SpecularTokenColor(false),
 			EmissiveTokenColor(false),
 			MaxLights(8), PointSize(1.0f), PointSprites(false),
-			PointSizeMin(0), PointSizeMax(0) {}
+			PointSizeMin(0), PointSizeMax(0)
+		{
+		}
 
 		video::SMaterial Material;
 		OgreTexture Texture;
@@ -99,7 +102,9 @@ private:
 
 	struct OgreTechnique
 	{
-		OgreTechnique() : Name(""), LODIndex(0) {}
+		OgreTechnique() : Name(""), LODIndex(0)
+		{
+		}
 
 		core::stringc Name;
 		core::stringc Scheme;
@@ -110,7 +115,9 @@ private:
 	struct OgreMaterial
 	{
 		OgreMaterial() : Name(""), ReceiveShadows(true),
-			TransparencyCastsShadows(false) {}
+			TransparencyCastsShadows(false)
+		{
+		}
 
 		core::stringc Name;
 		bool ReceiveShadows;
@@ -121,7 +128,9 @@ private:
 
 	struct OgreVertexBuffer
 	{
-		OgreVertexBuffer() : BindIndex(0), VertexSize(0), Data(0) {}
+		OgreVertexBuffer() : BindIndex(0), VertexSize(0), Data(0)
+		{
+		}
 
 		u16 BindIndex;
 		u16 VertexSize;
@@ -131,10 +140,10 @@ private:
 	struct OgreVertexElement
 	{
 		u16 Source,
-		Type,
-		Semantic,
-		Offset,
-		Index;
+			Type,
+			Semantic,
+			Offset,
+			Index;
 	};
 
 	struct OgreGeometry
@@ -150,8 +159,12 @@ private:
 
 	struct OgreTextureAlias
 	{
-		OgreTextureAlias() {};
-		OgreTextureAlias(const core::stringc& a, const core::stringc& b) : Texture(a), Alias(b) {};
+		OgreTextureAlias()
+		{
+		};
+		OgreTextureAlias(const core::stringc& a, const core::stringc& b) : Texture(a), Alias(b)
+		{
+		};
 		core::stringc Texture;
 		core::stringc Alias;
 	};
@@ -228,9 +241,9 @@ private:
 	void readChunkData(io::IReadFile* file, ChunkData& data);
 	void readString(io::IReadFile* file, ChunkData& data, core::stringc& out);
 	void readBool(io::IReadFile* file, ChunkData& data, bool& out);
-	void readInt(io::IReadFile* file, ChunkData& data, s32* out, u32 num=1);
-	void readShort(io::IReadFile* file, ChunkData& data, u16* out, u32 num=1);
-	void readFloat(io::IReadFile* file, ChunkData& data, f32* out, u32 num=1);
+	void readInt(io::IReadFile* file, ChunkData& data, s32* out, u32 num = 1);
+	void readShort(io::IReadFile* file, ChunkData& data, u16* out, u32 num = 1);
+	void readFloat(io::IReadFile* file, ChunkData& data, f32* out, u32 num = 1);
 	void readVector(io::IReadFile* file, ChunkData& data, core::vector3df& out);
 	void readQuaternion(io::IReadFile* file, ChunkData& data, core::quaternion& out);
 
@@ -240,7 +253,7 @@ private:
 	scene::IMeshBuffer* composeMeshBufferSkinned(scene::CSkinnedMesh& mesh, const core::array<s32>& indices, const OgreGeometry& geom);
 	void composeObject(void);
 	bool readColor(io::IReadFile* meshFile, video::SColor& col);
-	void getMaterialToken(io::IReadFile* file, core::stringc& token, bool noNewLine=false);
+	void getMaterialToken(io::IReadFile* file, core::stringc& token, bool noNewLine = false);
 	void readTechnique(io::IReadFile* meshFile, OgreMaterial& mat);
 	void readPass(io::IReadFile* file, OgreTechnique& technique);
 	void loadMaterials(io::IReadFile* file);
@@ -265,5 +278,4 @@ private:
 } // end namespace scene
 } // end namespace irr
 
-#endif
 

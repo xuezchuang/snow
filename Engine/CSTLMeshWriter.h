@@ -2,8 +2,7 @@
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
-#ifndef __IRR_STL_MESH_WRITER_H_INCLUDED__
-#define __IRR_STL_MESH_WRITER_H_INCLUDED__
+#pragma once
 
 #include "IMeshWriter.h"
 #include "S3DVertex.h"
@@ -13,43 +12,42 @@ namespace irr
 {
 namespace scene
 {
-	class IMeshBuffer;
-	class ISceneManager;
+class IMeshBuffer;
+class ISceneManager;
 
-	//! class to write meshes, implementing a STL writer
-	class CSTLMeshWriter : public IMeshWriter
-	{
-	public:
+//! class to write meshes, implementing a STL writer
+class CSTLMeshWriter : public IMeshWriter
+{
+public:
 
-		CSTLMeshWriter(scene::ISceneManager* smgr);
-		virtual ~CSTLMeshWriter();
+	CSTLMeshWriter(scene::ISceneManager* smgr);
+	virtual ~CSTLMeshWriter();
 
-		//! Returns the type of the mesh writer
-		virtual EMESH_WRITER_TYPE getType() const _IRR_OVERRIDE_;
+	//! Returns the type of the mesh writer
+	virtual EMESH_WRITER_TYPE getType() const _IRR_OVERRIDE_;
 
-		//! writes a mesh
-		virtual bool writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 flags=EMWF_NONE) _IRR_OVERRIDE_;
+	//! writes a mesh
+	virtual bool writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 flags = EMWF_NONE) _IRR_OVERRIDE_;
 
-	protected:
-		// write binary format
-		bool writeMeshBinary(io::IWriteFile* file, scene::IMesh* mesh, s32 flags);
+protected:
+	// write binary format
+	bool writeMeshBinary(io::IWriteFile* file, scene::IMesh* mesh, s32 flags);
 
-		// write text format
-		bool writeMeshASCII(io::IWriteFile* file, scene::IMesh* mesh, s32 flags);
+	// write text format
+	bool writeMeshASCII(io::IWriteFile* file, scene::IMesh* mesh, s32 flags);
 
-		// create vector output with line end into string
-		void getVectorAsStringLine(const core::vector3df& v,
-				core::stringc& s) const;
+	// create vector output with line end into string
+	void getVectorAsStringLine(const core::vector3df& v,
+							   core::stringc& s) const;
 
-		// write face information to file
-		void writeFace(io::IWriteFile* file, const core::vector3df& v1,
-				const core::vector3df& v2, const core::vector3df& v3);
+	// write face information to file
+	void writeFace(io::IWriteFile* file, const core::vector3df& v1,
+				   const core::vector3df& v2, const core::vector3df& v3);
 
-		scene::ISceneManager* SceneManager;
-	};
+	scene::ISceneManager* SceneManager;
+};
 
 } // end namespace
 } // end namespace
 
-#endif
 

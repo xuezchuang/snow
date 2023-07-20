@@ -2,8 +2,7 @@
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
-#ifndef __C_LWO_MESH_FILE_LOADER_H_INCLUDED__
-#define __C_LWO_MESH_FILE_LOADER_H_INCLUDED__
+#pragma once
 
 #include "IMeshLoader.h"
 #include "SMeshBuffer.h"
@@ -13,14 +12,14 @@ namespace irr
 {
 namespace io
 {
-	class IReadFile;
-	class IFileSystem;
+class IReadFile;
+class IFileSystem;
 } // end namespace io
 namespace scene
 {
 
-	struct SMesh;
-	class ISceneManager;
+struct SMesh;
+class ISceneManager;
 
 //! Meshloader capable of loading Lightwave 3D meshes.
 class CLWOMeshFileLoader : public IMeshLoader
@@ -52,10 +51,10 @@ private:
 	void readObj1(u32 size);
 	void readTagMapping(u32 size);
 	void readVertexMapping(u32 size);
-	void readDiscVertexMapping (u32 size);
+	void readDiscVertexMapping(u32 size);
 	void readObj2(u32 size);
 	void readMat(u32 size);
-	u32 readString(core::stringc& name, u32 size=0);
+	u32 readString(core::stringc& name, u32 size = 0);
 	u32 readVec(core::vector3df& vec);
 	u32 readVX(u32& num);
 	u32 readColor(video::SColor& color);
@@ -84,4 +83,3 @@ private:
 } // end namespace scene
 } // end namespace irr
 
-#endif

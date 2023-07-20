@@ -22,7 +22,7 @@ namespace scene
 
 CSMFMeshFileLoader::CSMFMeshFileLoader(irr::io::IFileSystem* fs, video::IVideoDriver* driver)
 {
-	TextureLoader = new CMeshTextureLoader( fs, driver );
+	TextureLoader = new CMeshTextureLoader(fs, driver);
 }
 
 //! Returns true if the file might be loaded by this class.
@@ -34,14 +34,14 @@ bool CSMFMeshFileLoader::isALoadableFileExtension(const io::path& filename) cons
 //! Creates/loads an animated mesh from the file.
 IAnimatedMesh* CSMFMeshFileLoader::createMesh(io::IReadFile* file)
 {
-	if ( !file )
+	if (!file)
 		return 0;
 
-	if ( getMeshTextureLoader() )
+	if (getMeshTextureLoader())
 		getMeshTextureLoader()->setMeshFile(file);
 
 	// create empty mesh
-	SMesh *mesh = new SMesh();
+	SMesh* mesh = new SMesh();
 
 	// load file
 	u16 version;
@@ -55,15 +55,15 @@ IAnimatedMesh* CSMFMeshFileLoader::createMesh(io::IReadFile* file)
 
 	// load mesh data
 	core::matrix4 identity;
-	for (i=0; i < limbCount; ++i)
+	for (i = 0; i < limbCount; ++i)
 		loadLimb(file, mesh, identity);
 
 	// recalculate buffer bounding boxes
-	for (i=0; i < (s32)mesh->getMeshBufferCount(); ++i)
+	for (i = 0; i < (s32)mesh->getMeshBufferCount(); ++i)
 		mesh->getMeshBuffer(i)->recalculateBoundingBox();
 
 	mesh->recalculateBoundingBox();
-	SAnimatedMesh *am = new SAnimatedMesh();
+	SAnimatedMesh* am = new SAnimatedMesh();
 	am->addMesh(mesh);
 	mesh->drop();
 	am->recalculateBoundingBox();
@@ -71,7 +71,7 @@ IAnimatedMesh* CSMFMeshFileLoader::createMesh(io::IReadFile* file)
 	return am;
 }
 
-void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::matrix4 &parentTransformation)
+void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::matrix4& parentTransformation)
 {
 	core::matrix4 transformation;
 
@@ -96,9 +96,9 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	// attempt to load texture using known formats
 	video::ITexture* texture = 0;
 
-	const c8* extensions[] = {".jpg", ".png", ".tga", ".bmp", 0};
+	const c8* extensions[] = { ".jpg", ".png", ".tga", ".bmp", 0 };
 
-	for (const c8 **ext = extensions; !texture && *ext; ++ext)
+	for (const c8** ext = extensions; !texture && *ext; ++ext)
 	{
 		texture = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(textureName + *ext) : NULL;
 		if (texture)
@@ -109,7 +109,7 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	}
 	// find the correct mesh buffer
 	u32 i;
-	for (i=0; i<mesh->MeshBuffers.size(); ++i)
+	for (i = 0; i < mesh->MeshBuffers.size(); ++i)
 		if (mesh->MeshBuffers[i]->getMaterial().TextureLayer[0].Texture == texture)
 			break;
 
@@ -136,7 +136,7 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	mb->Vertices.reallocate(mb->Vertices.size() + vertexCount);
 
 	// add vertices and set positions
-	for (i=0; i<vertexCount; ++i)
+	for (i = 0; i < vertexCount; ++i)
 	{
 		core::vector3df pos;
 		io::BinaryFile::read(file, pos);
@@ -148,7 +148,7 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	}
 
 	// set vertex normals
-	for (i=0; i < vertexCount; ++i)
+	for (i = 0; i < vertexCount; ++i)
 	{
 		core::vector3df normal;
 		io::BinaryFile::read(file, normal);
@@ -157,7 +157,7 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	}
 	// set texture coordinates
 
-	for (i=0; i < vertexCount; ++i)
+	for (i = 0; i < vertexCount; ++i)
 	{
 		core::vector2df tcoords;
 		io::BinaryFile::read(file, tcoords);
@@ -168,10 +168,10 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	u32 triangleCount;
 	// vertexCount used as temporary
 	io::BinaryFile::read(file, vertexCount);
-	triangleCount=3*vertexCount;
+	triangleCount = 3 * vertexCount;
 	mb->Indices.reallocate(mb->Indices.size() + triangleCount);
 
-	for (i=0; i < triangleCount; ++i)
+	for (i = 0; i < triangleCount; ++i)
 	{
 		u16 index;
 		io::BinaryFile::read(file, index);
@@ -182,7 +182,7 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	s32 limbCount;
 	io::BinaryFile::read(file, limbCount);
 
-	for (s32 l=0; l < limbCount; ++l)
+	for (s32 l = 0; l < limbCount; ++l)
 		loadLimb(file, mesh, transformation);
 }
 
@@ -199,7 +199,7 @@ namespace io
 #endif
 
 template <class T>
-void BinaryFile::read(io::IReadFile* file, T &out, bool bigEndian)
+void BinaryFile::read(io::IReadFile* file, T& out, bool bigEndian)
 {
 	file->read((void*)&out, sizeof(out));
 	if (bigEndian != (_SYSTEM_BIG_ENDIAN_))
@@ -207,7 +207,7 @@ void BinaryFile::read(io::IReadFile* file, T &out, bool bigEndian)
 }
 
 //! reads a 3d vector from the file, moving the file pointer along
-void BinaryFile::read(io::IReadFile* file, core::vector3df &outVector2d, bool bigEndian)
+void BinaryFile::read(io::IReadFile* file, core::vector3df& outVector2d, bool bigEndian)
 {
 	BinaryFile::read(file, outVector2d.X, bigEndian);
 	BinaryFile::read(file, outVector2d.Y, bigEndian);
@@ -215,14 +215,14 @@ void BinaryFile::read(io::IReadFile* file, core::vector3df &outVector2d, bool bi
 }
 
 //! reads a 2d vector from the file, moving the file pointer along
-void BinaryFile::read(io::IReadFile* file, core::vector2df &outVector2d, bool bigEndian)
+void BinaryFile::read(io::IReadFile* file, core::vector2df& outVector2d, bool bigEndian)
 {
 	BinaryFile::read(file, outVector2d.X, bigEndian);
 	BinaryFile::read(file, outVector2d.Y, bigEndian);
 }
 
 //! reads a null terminated string from the file, moving the file pointer along
-void BinaryFile::read(io::IReadFile* file, core::stringc &outString, bool bigEndian)
+void BinaryFile::read(io::IReadFile* file, core::stringc& outString, bool bigEndian)
 {
 	c8 c;
 	file->read((void*)&c, 1);
