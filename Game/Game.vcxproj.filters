@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="framebufferObject.cpp">
+      <Filter>99</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelGenerator.cpp">
+      <Filter>99</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>99</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager.cpp">
+      <Filter>99</Filter>
+    </ClCompile>
+    <ClCompile Include="renderbuffer.cpp">
+      <Filter>99</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>99</Filter>
+    </ClInclude>
+    <ClInclude Include="framebufferObject.h">
+      <Filter>99</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelGenerator.h">
+      <Filter>99</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager.h">
+      <Filter>99</Filter>
+    </ClInclude>
+    <ClInclude Include="renderbuffer.h">
+      <Filter>99</Filter>
+    </ClInclude>
+    <ClInclude Include="Externs.h">
+      <Filter>99</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Assets\Man.png">
+      <Filter>99</Filter>
+    </Image>
+    <Image Include="..\Assets\Checker.png">
+      <Filter>99</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="fragment.txt">
+      <Filter>99</Filter>
+    </Text>
+    <Text Include="vertex.txt">
+      <Filter>99</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="99">
+      <UniqueIdentifier>{dad4798f-cf38-47ff-bcc9-5cd41c14462d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

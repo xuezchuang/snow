@@ -26,7 +26,7 @@ void pGraphics::createBuffers()
 {
 	//Load all textures
 	//Find the number of textures needed
-	total_textures = Graphics.all_textures.size();
+	total_textures = (GLuint)Graphics.all_textures.size();
 
 	//Create the right number of buffers
 	GLuint* texture_ids = new GLuint[total_textures];

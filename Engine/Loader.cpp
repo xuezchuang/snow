@@ -62,8 +62,8 @@ Mesh cLoader::loadModel(const char* path)
 	for (size_t i = 0; i < model.indices.size(); i++) indicies[i] = model.indices[i];
 
 	//Find size of a dynamic array
-	int vertex_byte_size = sizeof(GLfloat) * vec_verts.size();
-	int indicies_byte_size = sizeof(GLushort) * model.indices.size();
+	int vertex_byte_size = sizeof(GLfloat) * (int)vec_verts.size();
+	int indicies_byte_size = sizeof(GLushort) * (int)model.indices.size();
 
 	//Create
 	Mesh mesh;

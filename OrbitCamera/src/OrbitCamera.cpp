@@ -621,18 +621,18 @@ void OrbitCamera::shiftTo(const Vector3& to, float duration, Gil::AnimationMode 
 ///////////////////////////////////////////////////////////////////////////////
 void OrbitCamera::shift(const Vector2& delta, float duration, Gil::AnimationMode mode)
 {
-    // get left & up vectors of camera
-    Vector3 cameraLeft(-matrix[0], -matrix[4], -matrix[8]);
-    Vector3 cameraUp(-matrix[1], -matrix[5], -matrix[9]);
+	// get left & up vectors of camera
+	Vector3 cameraLeft(-matrix[0], -matrix[4], -matrix[8]);
+	Vector3 cameraUp(-matrix[1], -matrix[5], -matrix[9]);
 
-    // compute delta movement
-    Vector3 deltaMovement = delta.x * cameraLeft;
-    deltaMovement += -delta.y * cameraUp;   // reverse up direction
+	// compute delta movement
+	Vector3 deltaMovement = delta.x * cameraLeft;
+	deltaMovement += -delta.y * cameraUp;   // reverse up direction
 
-    // find new target position
-    Vector3 newTarget = target + deltaMovement;
+	// find new target position
+	Vector3 newTarget = target + deltaMovement;
 
-    shiftTo(newTarget, duration, mode);
+	shiftTo(newTarget, duration, mode);
 }
 
 
@@ -642,24 +642,24 @@ void OrbitCamera::shift(const Vector2& delta, float duration, Gil::AnimationMode
 // It takes shift direction vector and acceleration per squared sec.
 // acceleration should be always positive.
 ///////////////////////////////////////////////////////////////////////////////
-void OrbitCamera::startShift(const Vector2& shiftVector, float accel)
+void OrbitCamera::startShift(const Vector2& shiftVector,float accel)
 {
-    // get left & up vectors of camera
-    Vector3 cameraLeft(-matrix[0], -matrix[4], -matrix[8]);
-    Vector3 cameraUp(-matrix[1], -matrix[5], -matrix[9]);
+	// get left & up vectors of camera
+	Vector3 cameraLeft(-matrix[0], -matrix[4], -matrix[8]);
+	Vector3 cameraUp(-matrix[1], -matrix[5], -matrix[9]);
 
-    // compute new target vector
-    Vector3 vector = shiftVector.x * cameraLeft;
-    vector += -shiftVector.y * cameraUp;   // reverse up direction
+	// compute new target vector
+	Vector3 vector = shiftVector.x * cameraLeft;
+	vector += -shiftVector.y * cameraUp;   // reverse up direction
 
-    shiftingMaxSpeed = shiftVector.length();
-    shiftingVector = vector;
-    shiftingVector.normalize();
-    shiftingSpeed = 0;
-    shiftingAccel = accel;
-    shiftingTime = 0;
-    shiftingDuration = 0;
-    shifting = true;
+	shiftingMaxSpeed = shiftVector.length();
+	shiftingVector = vector;
+	shiftingVector.normalize();
+	shiftingSpeed = 0;
+	shiftingAccel = accel;
+	shiftingTime = 0;
+	shiftingDuration = 0;
+	shifting = true;
 }
 
 void OrbitCamera::stopShift()

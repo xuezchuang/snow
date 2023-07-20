@@ -1,0 +1,1587 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Irrlicht.cpp">
+      <Filter>Irrlicht</Filter>
+    </ClCompile>
+    <ClCompile Include="CIrrDeviceWin32.cpp">
+      <Filter>Irrlicht\device</Filter>
+    </ClCompile>
+    <ClCompile Include="os.cpp">
+      <Filter>Irrlicht\irr</Filter>
+    </ClCompile>
+    <ClCompile Include="CVideoModeList.cpp">
+      <Filter>Irrlicht\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\irrlicht\source\Irrlicht\COSOperator.cpp">
+      <Filter>Irrlicht\irr</Filter>
+    </ClCompile>
+    <ClCompile Include="CWGLManager.cpp">
+      <Filter>Irrlicht\video\Opengl\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="CIrrDeviceConsole.cpp">
+      <Filter>Irrlicht\device</Filter>
+    </ClCompile>
+    <ClCompile Include="CIrrDeviceStub.cpp">
+      <Filter>Irrlicht\device</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogger.cpp">
+      <Filter>Irrlicht</Filter>
+    </ClCompile>
+    <ClCompile Include="leakHunter.cpp">
+      <Filter>Irrlicht</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoftwareDriver.cpp">
+      <Filter>Irrlicht\video\Software</Filter>
+    </ClCompile>
+    <ClCompile Include="CNullDriver.cpp">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClCompile>
+    <ClCompile Include="CFPSCounter.cpp">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClCompile>
+    <ClCompile Include="CImage.cpp">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClCompile>
+    <ClCompile Include="CColorConverter.cpp">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoftwareTexture2.cpp">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClCompile>
+    <ClCompile Include="CAttributes.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoftwareTexture.cpp">
+      <Filter>Irrlicht\video\Software</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\irrlicht\source\Irrlicht\CMeshManipulator.cpp">
+      <Filter>Irrlicht\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoftwareDriver2.cpp">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClCompile>
+    <ClCompile Include="IBurningShader.cpp">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClCompile>
+    <ClCompile Include="CDepthBuffer.cpp">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIEnvironment.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIComboBox.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIColorSelectDialog.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUICheckBox.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIButton.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIWindow.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUITreeView.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIToolBar.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUITable.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUITabControl.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIStaticText.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUISpriteBank.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUISpinBox.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUISkin.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIScrollBar.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIProfiler.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIModalScreen.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIMessageBox.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIMeshViewer.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIMenu.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIListBox.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIInOutFader.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIImageList.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIImage.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIFont.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIFileOpenDialog.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIEditBox.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIContextMenu.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CDefaultGUIElementFactory.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CProfiler.cpp">
+      <Filter>Irrlicht</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneManager.cpp">
+      <Filter>Irrlicht\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshCache.cpp">
+      <Filter>Irrlicht\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CSkinnedMesh.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CBoneSceneNode.cpp">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="CIrrMeshFileLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CBSPMeshFileLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CQ3LevelMesh.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CMD3MeshFileLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CMD2MeshFileLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimatedMeshMD3.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimatedMeshMD2.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimatedMeshHalfLife.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="C3DSMeshFileLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshTextureLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CColladaFileLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CCSMLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CDMFLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileSystem.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileList.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CMountPointReader.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CZipReader.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CWADReader.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CTarReader.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CNPKReader.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\adler32.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\compress.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\crc32.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\deflate.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzclose.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzlib.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzread.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzwrite.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\infback.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inffast.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inflate.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inftrees.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\trees.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\uncompr.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\zutil.c">
+      <Filter>extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\aestab.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\fileenc.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\hmac.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\prng.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\pwd2key.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\sha1.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\sha2.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\aescrypt.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="aesGladman\aeskey.cpp">
+      <Filter>extern\aesGladman</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\huffman.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\mk251.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\randtable.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\spewG.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\unzcrash.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\blocksort.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\bzcompress.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\bzip2recover.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\bzlib.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\crctable.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="bzip2\decompress.c">
+      <Filter>extern\bzip2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\irrlicht\source\Irrlicht\lzma\LzmaDec.c">
+      <Filter>extern</Filter>
+    </ClCompile>
+    <ClCompile Include="CPakReader.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CXMLReader.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CXMLWriter.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CReadFile.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CMemoryFile.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CLimitReadFile.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CWriteFile.cpp">
+      <Filter>Irrlicht\io</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLDriver.cpp">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderJPG.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderPCX.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderPNG.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderPPM.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderPSD.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderPVR.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderRGB.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderTGA.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderWAL.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderBMP.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderDDS.cpp">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\cdjpeg.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\cjpeg.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\ckconfig.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\djpeg.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\example.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jaricom.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcapimin.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcapistd.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcarith.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jccoefct.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jccolor.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcdctmgr.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jchuff.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcinit.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcmainct.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcmarker.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcmaster.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcomapi.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcparam.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcprepct.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcsample.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jctrans.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdapimin.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdapistd.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdarith.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdatadst.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdatasrc.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdcoefct.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdcolor.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jddctmgr.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdhuff.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdinput.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmainct.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmarker.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmaster.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmerge.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdpostct.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdsample.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdtrans.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jerror.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jfdctflt.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jfdctfst.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jfdctint.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctflt.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctfst.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctint.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemansi.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemdos.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemmac.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemmgr.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemname.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemnobs.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jpegtran.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jquant1.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jquant2.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jutils.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\rdbmp.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\rdcolmap.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\rdgif.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\rdjpgcom.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\rdppm.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\rdrle.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\rdswitch.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\rdtarga.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\transupp.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\wrbmp.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\wrgif.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\wrjpgcom.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\wrppm.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\wrrle.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\wrtarga.c">
+      <Filter>extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\example.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\png.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngerror.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngget.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngmem.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngpread.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngread.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngrio.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngrtran.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngrutil.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngset.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngtest.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngtrans.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngwio.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngwrite.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngwtran.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngwutil.c">
+      <Filter>extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageWriterPCX.cpp">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageWriterPNG.cpp">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageWriterPPM.cpp">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageWriterPSD.cpp">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageWriterTGA.cpp">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageWriterBMP.cpp">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageWriterJPG.cpp">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLExtensionHandler.cpp">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="CDefaultSceneNodeFactory.cpp">
+      <Filter>Irrlicht\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CGeometryCreator.cpp">
+      <Filter>Irrlicht\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CDefaultSceneNodeAnimatorFactory.cpp">
+      <Filter>Irrlicht\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorCameraMaya.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorCameraFPS.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorFollowSpline.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorRotation.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorTexture.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorFlyCircle.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorFlyStraight.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorDelete.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneNodeAnimatorCollisionResponse.cpp">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClCompile>
+    <ClCompile Include="CTerrainSceneNode.cpp">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLShaderMaterialRenderer.cpp">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLSLMaterialRenderer.cpp">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLNormalMapRenderer.cpp">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLParallaxMapRenderer.cpp">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLCacheHandler.cpp">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\position2d.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dimension2d.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rect.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\heapsort.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SColor.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EDriverTypes.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EDriverFeatures.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IImage.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\path.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\irrString.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vector2d.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\matrix4.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vector3d.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\plane3d.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aabbox3d.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\line3d.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IMeshBuffer.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EMaterialTypes.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EMaterialFlags.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SMaterial.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\S3DVertex.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SVertexIndex.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EHardwareBufferFlags.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EPrimitiveTypes.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\triangle3d.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SOverrideMaterial.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="CIrrDeviceWin32.h">
+      <Filter>Irrlicht\device</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimer.h">
+      <Filter>Irrlicht\irr</Filter>
+    </ClInclude>
+    <ClInclude Include="os.h">
+      <Filter>Irrlicht\irr</Filter>
+    </ClInclude>
+    <ClInclude Include="CVideoModeList.h">
+      <Filter>Irrlicht\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IVideoModeList.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IContextManager.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ICursorControl.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="IImagePresenter.h">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ISceneManager.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ESceneNodeTypes.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ETerrainElements.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EMeshWriterEnums.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ESceneNodeAnimatorTypes.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneParameters.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IGeometryCreator.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IMesh.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ISkinnedMesh.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IBoneSceneNode.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IAnimatedMesh.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SSkinMeshBuffer.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\irrlicht\source\Irrlicht\COSOperator.h">
+      <Filter>Irrlicht\irr</Filter>
+    </ClInclude>
+    <ClInclude Include="CWGLManager.h">
+      <Filter>Irrlicht\video\Opengl\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="CIrrDeviceConsole.h">
+      <Filter>Irrlicht\device</Filter>
+    </ClInclude>
+    <ClInclude Include="CIrrDeviceStub.h">
+      <Filter>Irrlicht\device</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogger.h">
+      <Filter>Irrlicht</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoftwareDriver.h">
+      <Filter>Irrlicht\video\Software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\irrlicht\source\Irrlicht\ITriangleRenderer.h">
+      <Filter>Irrlicht\video\Software</Filter>
+    </ClInclude>
+    <ClInclude Include="S2DVertex.h">
+      <Filter>Irrlicht\video\Software</Filter>
+    </ClInclude>
+    <ClInclude Include="IZBuffer.h">
+      <Filter>Irrlicht\video\Software</Filter>
+    </ClInclude>
+    <ClInclude Include="CNullDriver.h">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="CFPSCounter.h">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SLight.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="CImage.h">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="CColorConverter.h">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="CBlit.h">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="SoftwareDriver2_helper.h">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="SoftwareDriver2_compile_config.h">
+      <Filter>Irrlicht\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoftwareTexture2.h">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClInclude>
+    <ClInclude Include="CAttributes.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IAttributes.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\irrArray.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\irrAllocator.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SIrrCreationParameters.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EDeviceTypes.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IEventReceiver.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ILogger.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IOSOperator.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IReferenceCounted.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IrrCompileConfig.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\irrlicht.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IrrlichtDevice.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\irrMath.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\irrTypes.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ITimer.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IVideoDriver.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Keycodes.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\leakHunter.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SExposedVideoData.h">
+      <Filter>include\00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ITexture.h">
+      <Filter>include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IXMLReader.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IXMLWriter.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\irrXML.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EAttributes.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="IAttribute.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CAttributeImpl.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoftwareTexture.h">
+      <Filter>Irrlicht\video\Software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\irrlicht\source\Irrlicht\CMeshManipulator.h">
+      <Filter>Irrlicht\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoftwareDriver2.h">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClInclude>
+    <ClInclude Include="IBurningShader.h">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClInclude>
+    <ClInclude Include="CDepthBuffer.h">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClInclude>
+    <ClInclude Include="IDepthBuffer.h">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClInclude>
+    <ClInclude Include="S4DVertex.h">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoftware2MaterialRenderer.h">
+      <Filter>Irrlicht\video\Burning Video</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIEnvironment.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIColorSelectDialog.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUICheckBox.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIButton.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIWindow.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUITreeView.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIToolBar.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUITable.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUITabControl.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIStaticText.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUISpriteBank.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUISpinBox.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUISkin.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIScrollBar.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIProfiler.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIModalScreen.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIMessageBox.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIMeshViewer.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIMenu.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIListBox.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIInOutFader.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIImageList.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIImage.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIFont.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIFileOpenDialog.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIEditBox.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIContextMenu.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIComboBox.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CDefaultGUIElementFactory.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="BuiltInFont.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CProfiler.h">
+      <Filter>Irrlicht</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneManager.h">
+      <Filter>Irrlicht\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshCache.h">
+      <Filter>Irrlicht\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EProfileIDs.h">
+      <Filter>Irrlicht\irr</Filter>
+    </ClInclude>
+    <ClInclude Include="CSkinnedMesh.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CBoneSceneNode.h">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="CIrrMeshFileLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CBSPMeshFileLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CQ3LevelMesh.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CMD2MeshFileLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CMD3MeshFileLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimatedMeshMD2.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimatedMeshMD3.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimatedMeshHalfLife.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="C3DSMeshFileLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshTextureLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CColladaFileLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CCSMLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CDMFLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="SB3DStructs.h">
+      <Filter>Irrlicht\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileSystem.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileList.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CMountPointReader.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CZipReader.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CWADReader.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CTarReader.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CNPKReader.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inflate.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inftrees.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\trees.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zconf.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zlib.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zutil.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\crc32.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\deflate.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\gzguts.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffast.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffixed.h">
+      <Filter>extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="aesGladman\aes.h">
+      <Filter>extern\aesGladman</Filter>
+    </ClInclude>
+    <ClInclude Include="aesGladman\aesopt.h">
+      <Filter>extern\aesGladman</Filter>
+    </ClInclude>
+    <ClInclude Include="aesGladman\fileenc.h">
+      <Filter>extern\aesGladman</Filter>
+    </ClInclude>
+    <ClInclude Include="aesGladman\hmac.h">
+      <Filter>extern\aesGladman</Filter>
+    </ClInclude>
+    <ClInclude Include="aesGladman\prng.h">
+      <Filter>extern\aesGladman</Filter>
+    </ClInclude>
+    <ClInclude Include="aesGladman\pwd2key.h">
+      <Filter>extern\aesGladman</Filter>
+    </ClInclude>
+    <ClInclude Include="aesGladman\sha1.h">
+      <Filter>extern\aesGladman</Filter>
+    </ClInclude>
+    <ClInclude Include="aesGladman\sha2.h">
+      <Filter>extern\aesGladman</Filter>
+    </ClInclude>
+    <ClInclude Include="bzip2\bzlib.h">
+      <Filter>extern\bzip2</Filter>
+    </ClInclude>
+    <ClInclude Include="bzip2\bzlib_private.h">
+      <Filter>extern\bzip2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\irrlicht\source\Irrlicht\lzma\Types.h">
+      <Filter>extern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\irrlicht\source\Irrlicht\lzma\LzmaDec.h">
+      <Filter>extern</Filter>
+    </ClInclude>
+    <ClInclude Include="CPakReader.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CXMLReaderImpl.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CXMLReader.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CXMLWriter.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CReadFile.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CMemoryFile.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CLimitReadFile.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CWriteFile.h">
+      <Filter>Irrlicht\io</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLDriver.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderDDS.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderJPG.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderPCX.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderPNG.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderPPM.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderPSD.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderPVR.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderRGB.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderTGA.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderWAL.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderBMP.h">
+      <Filter>Irrlicht\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jpegint.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jpeglib.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jversion.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\transupp.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\cderror.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\cdjpeg.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jconfig.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jdct.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jerror.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jinclude.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jmemsys.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jmorecfg.h">
+      <Filter>extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\png.h">
+      <Filter>extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\pngconf.h">
+      <Filter>extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\pngdebug.h">
+      <Filter>extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\pnginfo.h">
+      <Filter>extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\pnglibconf.h">
+      <Filter>extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\pngpriv.h">
+      <Filter>extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\pngstruct.h">
+      <Filter>extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageWriterPCX.h">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageWriterPNG.h">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageWriterPPM.h">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageWriterPSD.h">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageWriterTGA.h">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageWriterBMP.h">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageWriterJPG.h">
+      <Filter>Irrlicht\video\Null\Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLExtensionHandler.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="CDefaultSceneNodeFactory.h">
+      <Filter>Irrlicht\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CGeometryCreator.h">
+      <Filter>Irrlicht\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CDefaultSceneNodeAnimatorFactory.h">
+      <Filter>Irrlicht\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorCameraMaya.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorCameraFPS.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorFlyStraight.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorFollowSpline.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorRotation.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorTexture.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorFlyCircle.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorCollisionResponse.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneNodeAnimatorDelete.h">
+      <Filter>Irrlicht\scene\animators</Filter>
+    </ClInclude>
+    <ClInclude Include="CTerrainSceneNode.h">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLShaderMaterialRenderer.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLSLMaterialRenderer.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLNormalMapRenderer.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLParallaxMapRenderer.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLCacheHandler.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{c0df51ea-cd57-4fea-a493-b9de09ab0717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht">
+      <UniqueIdentifier>{905c423a-7b9a-4e95-8b88-564006b5358a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video">
+      <UniqueIdentifier>{04e0a96e-fa8f-4ceb-a6b7-02e74d6166ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Direct3D9">
+      <UniqueIdentifier>{a89ec918-7bb6-46b0-8386-497d18866823}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Direct3D12">
+      <UniqueIdentifier>{11ca642e-ce6d-4516-8ed8-8f53ee499b10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl">
+      <UniqueIdentifier>{56f82cbc-6489-4d5c-bb9e-40a1da679a91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Burning Video">
+      <UniqueIdentifier>{29bd6f10-43b2-4b21-84c0-be9e77d0c66e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Software">
+      <UniqueIdentifier>{0a4742d1-1bd8-4d78-918a-4d42cff7fd54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\device">
+      <UniqueIdentifier>{d8a0f565-1dee-4af8-8c0c-0b0fdf849c6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\scene">
+      <UniqueIdentifier>{36a5505a-f06c-4a30-862b-f0ba9f4aaf97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\core">
+      <UniqueIdentifier>{f988dd01-adb2-4b41-96cb-0ad1d5e51216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\gui">
+      <UniqueIdentifier>{187c679f-e9f7-4d13-a8fb-0614afdaf6e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\io">
+      <UniqueIdentifier>{553575da-4d4c-40cd-8a80-79c5ff7dfa2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\scene">
+      <UniqueIdentifier>{bf1cf375-fcaf-463f-805e-540506ad1b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\video">
+      <UniqueIdentifier>{f61c4ad2-f6df-4481-9745-9ddb42cd8734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\irr">
+      <UniqueIdentifier>{f6aa0b82-8b07-4410-b227-bca111c27eb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\Core">
+      <UniqueIdentifier>{75f2e361-7187-4bf3-8bd3-fca004b73256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\Context">
+      <UniqueIdentifier>{19960fcf-68d2-4eb7-81c2-37b05fa7e777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99">
+      <UniqueIdentifier>{9695ca60-6b52-457b-8668-2032ae857904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Null">
+      <UniqueIdentifier>{a17f5790-2e0a-4b7f-88e2-74c9f0ca3df0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\io">
+      <UniqueIdentifier>{a2045149-12c0-4d83-8766-51e02d3fd5d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\00">
+      <UniqueIdentifier>{7101f06a-ce49-4726-9fa1-9d26406d0327}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\gui">
+      <UniqueIdentifier>{54c7950c-c5cc-43ee-a0b5-654b700deefd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\scene\animators">
+      <UniqueIdentifier>{fa809000-870b-4a2f-8df8-48bc546e1ef4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\scene\collision">
+      <UniqueIdentifier>{40455c28-7229-418b-b5f3-8d04a4444e77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\scene\particleSystem">
+      <UniqueIdentifier>{8ca4d842-914c-4979-b188-6a270475b2ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\scene\sceneNodes">
+      <UniqueIdentifier>{edf6c7a8-6963-4b58-bbb8-d984f891ea64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\scene\writers">
+      <UniqueIdentifier>{def97337-18a9-42a5-b729-b4ca7f927483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\scene\loaders">
+      <UniqueIdentifier>{76e334af-7899-44d5-8a99-377444431f08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern">
+      <UniqueIdentifier>{60c76030-2db9-4d36-8ede-24ee24dd8f23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\zlib">
+      <UniqueIdentifier>{69077705-be7f-44c0-a0c7-c519b6d65bdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\aesGladman">
+      <UniqueIdentifier>{c727aecd-8328-47e0-ab93-65b5eb4fc491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\bzip2">
+      <UniqueIdentifier>{736e6194-fd95-483b-8abe-1d296673424f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Null\Loader">
+      <UniqueIdentifier>{b8c444cb-582d-4f77-8c5e-805643dba9aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\jpeglib">
+      <UniqueIdentifier>{316c3af8-a01c-4704-99fd-f5f3b63d7e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\libpng">
+      <UniqueIdentifier>{890f1cdc-2102-4038-bb19-492b0663ece1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Null\Writer">
+      <UniqueIdentifier>{88d57173-5bea-4d05-a624-a48c2f866e40}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
