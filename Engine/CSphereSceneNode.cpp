@@ -22,13 +22,13 @@ namespace scene
 
 //! constructor
 CSphereSceneNode::CSphereSceneNode(f32 radius, u32 polyCountX, u32 polyCountY, ISceneNode* parent, ISceneManager* mgr, s32 id,
-			const core::vector3df& position, const core::vector3df& rotation, const core::vector3df& scale)
-: IMeshSceneNode(parent, mgr, id, position, rotation, scale), Mesh(0), Shadow(0),
+								   const core::vector3df& position, const core::vector3df& rotation, const core::vector3df& scale)
+	: IMeshSceneNode(parent, mgr, id, position, rotation, scale), Mesh(0), Shadow(0),
 	Radius(radius), PolyCountX(polyCountX), PolyCountY(polyCountY)
 {
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	setDebugName("CSphereSceneNode");
-	#endif
+#endif
 
 	Mesh = SceneManager->getGeometryCreator()->createSphereMesh(radius, polyCountX, polyCountY);
 }
@@ -58,12 +58,12 @@ void CSphereSceneNode::render()
 			Shadow->updateShadowVolumes();
 
 		driver->drawMeshBuffer(Mesh->getMeshBuffer(0));
-		if ( DebugDataVisible & scene::EDS_BBOX )
+		if (DebugDataVisible & scene::EDS_BBOX)
 		{
 			video::SMaterial m;
 			m.Lighting = false;
 			driver->setMaterial(m);
-			driver->draw3DBox(Mesh->getMeshBuffer(0)->getBoundingBox(), video::SColor(255,255,255,255));
+			driver->draw3DBox(Mesh->getMeshBuffer(0)->getBoundingBox(), video::SColor(255, 255, 255, 255));
 		}
 	}
 }
@@ -87,7 +87,7 @@ bool CSphereSceneNode::removeChild(ISceneNode* child)
 //! Creates shadow volume scene node as child of this node
 //! and returns a pointer to it.
 IShadowVolumeSceneNode* CSphereSceneNode::addShadowVolumeSceneNode(
-		const IMesh* shadowMesh, s32 id, bool zfailmethod, f32 infinity)
+	const IMesh* shadowMesh, s32 id, bool zfailmethod, f32 infinity)
 {
 #ifdef _IRR_COMPILE_WITH_SHADOW_VOLUME_SCENENODE_
 	if (!SceneManager->getVideoDriver()->queryFeature(video::EVDF_STENCIL_BUFFER))
@@ -99,7 +99,7 @@ IShadowVolumeSceneNode* CSphereSceneNode::addShadowVolumeSceneNode(
 	if (Shadow)
 		Shadow->drop();
 
-	Shadow = new CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
+	Shadow = new CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id, zfailmethod, infinity);
 	return Shadow;
 #else
 	return 0;
@@ -130,7 +130,7 @@ void CSphereSceneNode::OnRegisterSceneNode()
 //! to directly modify the material of a scene node.
 video::SMaterial& CSphereSceneNode::getMaterial(u32 i)
 {
-	if (i>0 || !Mesh)
+	if (i > 0 || !Mesh)
 		return ISceneNode::getMaterial(i);
 	else
 		return Mesh->getMeshBuffer(i)->getMaterial();
@@ -167,12 +167,12 @@ void CSphereSceneNode::deserializeAttributes(io::IAttributes* in, io::SAttribute
 	PolyCountY = in->getAttributeAsInt("PolyCountY");
 	// legacy values read for compatibility with older versions
 	u32 polyCount = in->getAttributeAsInt("PolyCount");
-	if (PolyCountX ==0 && PolyCountY == 0)
+	if (PolyCountX == 0 && PolyCountY == 0)
 		PolyCountX = PolyCountY = polyCount;
 
 	Radius = core::max_(Radius, 0.0001f);
 
-	if ( !core::equals(Radius, oldRadius) || PolyCountX != oldPolyCountX || PolyCountY != oldPolyCountY)
+	if (!core::equals(Radius, oldRadius) || PolyCountX != oldPolyCountX || PolyCountY != oldPolyCountY)
 	{
 		if (Mesh)
 			Mesh->drop();
@@ -191,15 +191,15 @@ ISceneNode* CSphereSceneNode::clone(ISceneNode* newParent, ISceneManager* newMan
 		newManager = SceneManager;
 
 	CSphereSceneNode* nb = new CSphereSceneNode(Radius, PolyCountX, PolyCountY, newParent,
-		newManager, ID, RelativeTranslation);
+												newManager, ID, RelativeTranslation);
 
 	nb->cloneMembers(this, newManager);
 	nb->getMaterial(0) = Mesh->getMeshBuffer(0)->getMaterial();
 	nb->Shadow = Shadow;
-	if ( nb->Shadow )
+	if (nb->Shadow)
 		nb->Shadow->grab();
 
-	if ( newParent )
+	if (newParent)
 		nb->drop();
 	return nb;
 }

@@ -21,29 +21,29 @@ namespace irr
 namespace scene
 {
 
-	/*
-        011         111
-          /6,8------/5        y
-         /  |      / |        ^  z
-        /   |     /  |        | /
-    010 3,9-------2  |        |/
-        |   7- - -10,4 101     *---->x
-        |  /      |  /
-        |/        | /
-        0------11,1/
-       000       100
-	*/
+/*
+	011         111
+	  /6,8------/5        y
+	 /  |      / |        ^  z
+	/   |     /  |        | /
+010 3,9-------2  |        |/
+	|   7- - -10,4 101     *---->x
+	|  /      |  /
+	|/        | /
+	0------11,1/
+   000       100
+*/
 
 //! constructor
 CCubeSceneNode::CCubeSceneNode(f32 size, ISceneNode* parent, ISceneManager* mgr,
-		s32 id, const core::vector3df& position,
-		const core::vector3df& rotation, const core::vector3df& scale)
+							   s32 id, const core::vector3df& position,
+							   const core::vector3df& rotation, const core::vector3df& scale)
 	: IMeshSceneNode(parent, mgr, id, position, rotation, scale),
 	Mesh(0), Shadow(0), Size(size)
 {
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	setDebugName("CCubeSceneNode");
-	#endif
+#endif
 
 	setSize();
 }
@@ -89,17 +89,17 @@ void CCubeSceneNode::render()
 	{
 		video::SMaterial m;
 		m.Lighting = false;
-		m.AntiAliasing=0;
+		m.AntiAliasing = 0;
 		driver->setMaterial(m);
 
 		if (DebugDataVisible & scene::EDS_BBOX)
 		{
-			driver->draw3DBox(Mesh->getMeshBuffer(0)->getBoundingBox(), video::SColor(255,255,255,255));
+			driver->draw3DBox(Mesh->getMeshBuffer(0)->getBoundingBox(), video::SColor(255, 255, 255, 255));
 		}
 		if (DebugDataVisible & scene::EDS_BBOX_BUFFERS)
 		{
 			driver->draw3DBox(Mesh->getMeshBuffer(0)->getBoundingBox(),
-					video::SColor(255,190,128,128));
+							  video::SColor(255, 190, 128, 128));
 		}
 		if (DebugDataVisible & scene::EDS_NORMALS)
 		{
@@ -108,7 +108,7 @@ void CCubeSceneNode::render()
 			const video::SColor debugNormalColor = SceneManager->getParameters()->getAttributeAsColor(DEBUG_NORMAL_COLOR);
 			const u32 count = Mesh->getMeshBufferCount();
 
-			for (u32 i=0; i != count; ++i)
+			for (u32 i = 0; i != count; ++i)
 			{
 				driver->drawMeshBufferNormals(Mesh->getMeshBuffer(i), debugNormalLength, debugNormalColor);
 			}
@@ -151,7 +151,7 @@ bool CCubeSceneNode::removeChild(ISceneNode* child)
 //! Creates shadow volume scene node as child of this node
 //! and returns a pointer to it.
 IShadowVolumeSceneNode* CCubeSceneNode::addShadowVolumeSceneNode(
-		const IMesh* shadowMesh, s32 id, bool zfailmethod, f32 infinity)
+	const IMesh* shadowMesh, s32 id, bool zfailmethod, f32 infinity)
 {
 #ifdef _IRR_COMPILE_WITH_SHADOW_VOLUME_SCENENODE_
 	if (!SceneManager->getVideoDriver()->queryFeature(video::EVDF_STENCIL_BUFFER))
@@ -163,7 +163,7 @@ IShadowVolumeSceneNode* CCubeSceneNode::addShadowVolumeSceneNode(
 	if (Shadow)
 		Shadow->drop();
 
-	Shadow = new CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id,  zfailmethod, infinity);
+	Shadow = new CShadowVolumeSceneNode(shadowMesh, this, SceneManager, id, zfailmethod, infinity);
 	return Shadow;
 #else
 	return 0;
@@ -226,15 +226,15 @@ ISceneNode* CCubeSceneNode::clone(ISceneNode* newParent, ISceneManager* newManag
 		newManager = SceneManager;
 
 	CCubeSceneNode* nb = new CCubeSceneNode(Size, newParent,
-		newManager, ID, RelativeTranslation);
+											newManager, ID, RelativeTranslation);
 
 	nb->cloneMembers(this, newManager);
 	nb->getMaterial(0) = getMaterial(0);
 	nb->Shadow = Shadow;
-	if ( nb->Shadow )
+	if (nb->Shadow)
 		nb->Shadow->grab();
 
-	if ( newParent )
+	if (newParent)
 		nb->drop();
 	return nb;
 }

@@ -608,14 +608,13 @@ IMeshSceneNode* CSceneManager::addCubeSceneNode(f32 size, ISceneNode* parent,
 												const core::vector3df& rotation, const core::vector3df& scale)
 {
 #ifdef _IRR_COMPILE_WITH_CUBE_SCENENODE_
-	return 0;
-	//if (!parent)
-	//	parent = this;
+	if (!parent)
+		parent = this;
 
-	//IMeshSceneNode* node = new CCubeSceneNode(size, parent, this, id, position, rotation, scale);
-	//node->drop();
+	IMeshSceneNode* node = new CCubeSceneNode(size, parent, this, id, position, rotation, scale);
+	node->drop();
 
-	//return node;
+	return node;
 #else
 	return 0;
 #endif
@@ -628,14 +627,13 @@ IMeshSceneNode* CSceneManager::addSphereSceneNode(f32 radius, s32 polyCount,
 												  const core::vector3df& rotation, const core::vector3df& scale)
 {
 #ifdef _IRR_COMPILE_WITH_SPHERE_SCENENODE_
-	return 0;
-	//if (!parent)
-	//	parent = this;
+	if (!parent)
+		parent = this;
 
-	//IMeshSceneNode* node = new CSphereSceneNode(radius, polyCount, polyCount, parent, this, id, position, rotation, scale);
-	//node->drop();
+	IMeshSceneNode* node = new CSphereSceneNode(radius, polyCount, polyCount, parent, this, id, position, rotation, scale);
+	node->drop();
 
-	//return node;
+	return node;
 #else
 	return 0;
 #endif // _IRR_COMPILE_WITH_SPHERE_SCENENODE_
@@ -757,17 +755,16 @@ ICameraSceneNode* CSceneManager::addCameraSceneNode(ISceneNode* parent,
 													const core::vector3df& position, const core::vector3df& lookat, s32 id,
 													bool makeActive)
 {
-	return 0;
-	//if (!parent)
-	//	parent = this;
+	if (!parent)
+		parent = this;
 
-	//ICameraSceneNode* node = new CCameraSceneNode(parent, this, id, position, lookat);
+	ICameraSceneNode* node = new CCameraSceneNode(parent, this, id, position, lookat);
 
-	//if (makeActive)
-	//	setActiveCamera(node);
-	//node->drop();
+	if (makeActive)
+		setActiveCamera(node);
+	node->drop();
 
-	//return node;
+	return node;
 }
 
 
@@ -778,19 +775,18 @@ ICameraSceneNode* CSceneManager::addCameraSceneNodeMaya(ISceneNode* parent,
 														f32 rotateSpeed, f32 zoomSpeed, f32 translationSpeed, s32 id, f32 distance,
 														bool makeActive)
 {
-	return 0;
-	//ICameraSceneNode* node = addCameraSceneNode(parent, core::vector3df(),
-	//											core::vector3df(0, 0, 100), id, makeActive);
-	//if (node)
-	//{
-	//	ISceneNodeAnimator* anm = new CSceneNodeAnimatorCameraMaya(CursorControl,
-	//															   rotateSpeed, zoomSpeed, translationSpeed, distance);
+	ICameraSceneNode* node = addCameraSceneNode(parent, core::vector3df(),
+												core::vector3df(0, 0, 100), id, makeActive);
+	if (node)
+	{
+		ISceneNodeAnimator* anm = new CSceneNodeAnimatorCameraMaya(CursorControl,
+																   rotateSpeed, zoomSpeed, translationSpeed, distance);
 
-	//	node->addAnimator(anm);
-	//	anm->drop();
-	//}
+		node->addAnimator(anm);
+		anm->drop();
+	}
 
-	//return node;
+	return node;
 }
 
 
@@ -801,22 +797,21 @@ ICameraSceneNode* CSceneManager::addCameraSceneNodeFPS(ISceneNode* parent,
 													   s32 keyMapSize, bool noVerticalMovement, f32 jumpSpeed,
 													   bool invertMouseY, bool makeActive)
 {
-	return 0;
-	//ICameraSceneNode* node = addCameraSceneNode(parent, core::vector3df(),
-	//											core::vector3df(0, 0, 100), id, makeActive);
-	//if (node)
-	//{
-	//	ISceneNodeAnimator* anm = new CSceneNodeAnimatorCameraFPS(CursorControl,
-	//															  rotateSpeed, moveSpeed, jumpSpeed,
-	//															  keyMapArray, keyMapSize, noVerticalMovement, invertMouseY);
+	ICameraSceneNode* node = addCameraSceneNode(parent, core::vector3df(),
+												core::vector3df(0, 0, 100), id, makeActive);
+	if (node)
+	{
+		ISceneNodeAnimator* anm = new CSceneNodeAnimatorCameraFPS(CursorControl,
+																  rotateSpeed, moveSpeed, jumpSpeed,
+																  keyMapArray, keyMapSize, noVerticalMovement, invertMouseY);
 
-	//	// Bind the node's rotation to its target. This is consistent with 1.4.2 and below.
-	//	node->bindTargetAndRotation(true);
-	//	node->addAnimator(anm);
-	//	anm->drop();
-	//}
+		// Bind the node's rotation to its target. This is consistent with 1.4.2 and below.
+		node->bindTargetAndRotation(true);
+		node->addAnimator(anm);
+		anm->drop();
+	}
 
-	//return node;
+	return node;
 }
 
 

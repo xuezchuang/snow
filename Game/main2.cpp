@@ -55,22 +55,36 @@ int main(int argc, char** argv)
 	}
 
 	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	//smgr->addCameraSceneNodeFPS();
 
+	int lastFPS = -1;
 	while (device->run())
 	{
-		/*
-		Anything can be drawn between a beginScene() and an endScene()
-		call. The beginScene() call clears the screen with a color and
-		the depth buffer, if desired. Then we let the Scene Manager and
-		the GUI Environment draw their content. With the endScene()
-		call everything is presented on the screen.
-		*/
-		driver->beginScene(ECBF_COLOR | ECBF_DEPTH, SColor(255, 100, 101, 140));
+		if (device->isWindowActive())
+		{
+			driver->beginScene(ECBF_COLOR | ECBF_DEPTH, SColor(255, 100, 101, 140));
 
-		smgr->drawAll();
-		guienv->drawAll(); 
+			//smgr->drawAll();
+			guienv->drawAll();
 
-		driver->endScene();
+			driver->endScene();
+
+			int fps = driver->getFPS();
+
+			if (lastFPS != fps)
+			{
+				core::stringw str = L"Irrlicht Engine - example [";
+				str += driver->getName();
+				str += "] FPS:";
+				str += fps;
+
+				device->setWindowCaption(str.c_str());
+				lastFPS = fps;
+			}
+			else
+				device->yield();
+		}
+
 	}
 	device->drop();
 

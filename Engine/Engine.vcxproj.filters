@@ -787,6 +787,15 @@
     <ClCompile Include="CShadowVolumeSceneNode.cpp">
       <Filter>Irrlicht\scene\sceneNodes</Filter>
     </ClCompile>
+    <ClCompile Include="CCameraSceneNode.cpp">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="CCubeSceneNode.cpp">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="CSphereSceneNode.cpp">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\position2d.h">
@@ -1570,6 +1579,27 @@
       <Filter>Irrlicht\scene\sceneNodes</Filter>
     </ClInclude>
     <ClInclude Include="CShadowVolumeSceneNode.h">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CMeshBuffer.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CIndexBuffer.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CVertexBuffer.h">
+      <Filter>include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLMaterialRenderer.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraSceneNode.h">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="CCubeSceneNode.h">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="CSphereSceneNode.h">
       <Filter>Irrlicht\scene\sceneNodes</Filter>
     </ClInclude>
   </ItemGroup>

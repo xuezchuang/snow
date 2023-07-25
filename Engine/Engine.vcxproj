@@ -191,9 +191,11 @@
     <ClInclude Include="CBlit.h" />
     <ClInclude Include="CBoneSceneNode.h" />
     <ClInclude Include="CBSPMeshFileLoader.h" />
+    <ClInclude Include="CCameraSceneNode.h" />
     <ClInclude Include="CColladaFileLoader.h" />
     <ClInclude Include="CColorConverter.h" />
     <ClInclude Include="CCSMLoader.h" />
+    <ClInclude Include="CCubeSceneNode.h" />
     <ClInclude Include="CDefaultGUIElementFactory.h" />
     <ClInclude Include="CDefaultSceneNodeAnimatorFactory.h" />
     <ClInclude Include="CDefaultSceneNodeFactory.h" />
@@ -275,6 +277,7 @@
     <ClInclude Include="COpenGLCacheHandler.h" />
     <ClInclude Include="COpenGLDriver.h" />
     <ClInclude Include="COpenGLExtensionHandler.h" />
+    <ClInclude Include="COpenGLMaterialRenderer.h" />
     <ClInclude Include="COpenGLNormalMapRenderer.h" />
     <ClInclude Include="COpenGLParallaxMapRenderer.h" />
     <ClInclude Include="COpenGLShaderMaterialRenderer.h" />
@@ -303,6 +306,7 @@
     <ClInclude Include="CSoftwareDriver2.h" />
     <ClInclude Include="CSoftwareTexture.h" />
     <ClInclude Include="CSoftwareTexture2.h" />
+    <ClInclude Include="CSphereSceneNode.h" />
     <ClInclude Include="CSTLMeshFileLoader.h" />
     <ClInclude Include="CSTLMeshWriter.h" />
     <ClInclude Include="CTarReader.h" />
@@ -323,6 +327,9 @@
     <ClInclude Include="IDepthBuffer.h" />
     <ClInclude Include="IImagePresenter.h" />
     <ClInclude Include="include\aabbox3d.h" />
+    <ClInclude Include="include\CIndexBuffer.h" />
+    <ClInclude Include="include\CMeshBuffer.h" />
+    <ClInclude Include="include\CVertexBuffer.h" />
     <ClInclude Include="include\dimension2d.h" />
     <ClInclude Include="include\EAttributes.h" />
     <ClInclude Include="include\EDeviceTypes.h" />
@@ -471,9 +478,11 @@
     <ClCompile Include="CB3DMeshFileLoader.cpp" />
     <ClCompile Include="CBoneSceneNode.cpp" />
     <ClCompile Include="CBSPMeshFileLoader.cpp" />
+    <ClCompile Include="CCameraSceneNode.cpp" />
     <ClCompile Include="CColladaFileLoader.cpp" />
     <ClCompile Include="CColorConverter.cpp" />
     <ClCompile Include="CCSMLoader.cpp" />
+    <ClCompile Include="CCubeSceneNode.cpp" />
     <ClCompile Include="CDefaultGUIElementFactory.cpp" />
     <ClCompile Include="CDefaultSceneNodeAnimatorFactory.cpp" />
     <ClCompile Include="CDefaultSceneNodeFactory.cpp" />
@@ -582,6 +591,7 @@
     <ClCompile Include="CSoftwareDriver2.cpp" />
     <ClCompile Include="CSoftwareTexture.cpp" />
     <ClCompile Include="CSoftwareTexture2.cpp" />
+    <ClCompile Include="CSphereSceneNode.cpp" />
     <ClCompile Include="CSTLMeshFileLoader.cpp" />
     <ClCompile Include="CSTLMeshWriter.cpp" />
     <ClCompile Include="CTarReader.cpp" />

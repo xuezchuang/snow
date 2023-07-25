@@ -22,14 +22,14 @@ CCameraSceneNode::CCameraSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 i
 	InputReceiverEnabled(true), TargetAndRotationAreBound(false),
 	HasD3DStyleProjectionMatrix(true)
 {
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	setDebugName("CCameraSceneNode");
-	#endif
+#endif
 
 	// set default projection
 	Fovy = core::PI / 2.5f;	// Field of view, in radians.
 
-	const video::IVideoDriver* const d = mgr?mgr->getVideoDriver():0;
+	const video::IVideoDriver* const d = mgr ? mgr->getVideoDriver() : 0;
 	if (d)
 	{
 		Aspect = (f32)d->getCurrentRenderTargetSize().Width /
@@ -66,7 +66,7 @@ to build a projection matrix. e.g: core::matrix4::buildProjectionMatrixPerspecti
 void CCameraSceneNode::setProjectionMatrix(const core::matrix4& projection, bool isOrthogonal)
 {
 	IsOrthogonal = isOrthogonal;
-	ViewArea.getTransform ( video::ETS_PROJECTION ) = projection;
+	ViewArea.getTransform(video::ETS_PROJECTION) = projection;
 }
 
 
@@ -74,7 +74,7 @@ void CCameraSceneNode::setProjectionMatrix(const core::matrix4& projection, bool
 //! \return Returns the current projection matrix of the camera.
 const core::matrix4& CCameraSceneNode::getProjectionMatrix() const
 {
-	return ViewArea.getTransform ( video::ETS_PROJECTION );
+	return ViewArea.getTransform(video::ETS_PROJECTION);
 }
 
 
@@ -82,7 +82,7 @@ const core::matrix4& CCameraSceneNode::getProjectionMatrix() const
 //! \return Returns the current view matrix of the camera.
 const core::matrix4& CCameraSceneNode::getViewMatrix() const
 {
-	return ViewArea.getTransform ( video::ETS_VIEW );
+	return ViewArea.getTransform(video::ETS_VIEW);
 }
 
 
@@ -132,7 +132,7 @@ void CCameraSceneNode::setTarget(const core::vector3df& pos)
 {
 	Target = pos;
 
-	if(TargetAndRotationAreBound)
+	if (TargetAndRotationAreBound)
 	{
 		const core::vector3df toTarget = Target - getAbsolutePosition();
 		ISceneNode::setRotation(toTarget.getHorizontalAngle());
@@ -147,7 +147,7 @@ then calling this will also change the camera's target to match the rotation.
 \param rotation New rotation of the node in degrees. */
 void CCameraSceneNode::setRotation(const core::vector3df& rotation)
 {
-	if(TargetAndRotationAreBound)
+	if (TargetAndRotationAreBound)
 		Target = getAbsolutePosition() + rotation.rotationToDirection();
 
 	ISceneNode::setRotation(rotation);
@@ -235,7 +235,7 @@ void CCameraSceneNode::setFOV(f32 f)
 void CCameraSceneNode::recalculateProjectionMatrix()
 {
 	video::E_DRIVER_TYPE driverType = SceneManager->getVideoDriver()->getDriverType();
-	ViewArea.getTransform ( video::ETS_PROJECTION ).buildProjectionMatrixPerspectiveFovLH(Fovy, Aspect, ZNear, ZFar, HasD3DStyleProjectionMatrix);
+	ViewArea.getTransform(video::ETS_PROJECTION).buildProjectionMatrixPerspectiveFovLH(Fovy, Aspect, ZNear, ZFar, HasD3DStyleProjectionMatrix);
 	IsOrthogonal = false;
 }
 
@@ -243,7 +243,7 @@ void CCameraSceneNode::recalculateProjectionMatrix()
 //! prerender
 void CCameraSceneNode::OnRegisterSceneNode()
 {
-	if ( SceneManager->getActiveCamera () == this )
+	if (SceneManager->getActiveCamera() == this)
 		SceneManager->registerNodeForRendering(this, ESNRP_CAMERA);
 
 	ISceneNode::OnRegisterSceneNode();
@@ -256,10 +256,10 @@ void CCameraSceneNode::render()
 	updateMatrices();
 
 	video::IVideoDriver* driver = SceneManager->getVideoDriver();
-	if ( driver)
+	if (driver)
 	{
-		driver->setTransform(video::ETS_PROJECTION, ViewArea.getTransform ( video::ETS_PROJECTION) );
-		driver->setTransform(video::ETS_VIEW, ViewArea.getTransform ( video::ETS_VIEW) );
+		driver->setTransform(video::ETS_PROJECTION, ViewArea.getTransform(video::ETS_PROJECTION));
+		driver->setTransform(video::ETS_VIEW, ViewArea.getTransform(video::ETS_VIEW));
 	}
 }
 
@@ -277,7 +277,7 @@ void CCameraSceneNode::updateMatrices()
 
 	f32 dp = tgtv.dotProduct(up);
 
-	if ( core::equals(core::abs_<f32>(dp), 1.f) )
+	if (core::equals(core::abs_<f32>(dp), 1.f))
 	{
 		up.X += 0.5f;
 	}
@@ -310,7 +310,7 @@ void CCameraSceneNode::recalculateViewArea()
 
 	core::matrix4 m(core::matrix4::EM4CONST_NOTHING);
 	m.setbyproduct_nocheck(ViewArea.getTransform(video::ETS_PROJECTION),
-						ViewArea.getTransform(video::ETS_VIEW));
+		ViewArea.getTransform(video::ETS_VIEW));
 	ViewArea.setFrom(m, HasD3DStyleProjectionMatrix);
 }
 
@@ -342,7 +342,7 @@ void CCameraSceneNode::deserializeAttributes(io::IAttributes* in, io::SAttribute
 	ZNear = in->getAttributeAsFloat("ZNear");
 	ZFar = in->getAttributeAsFloat("ZFar");
 	TargetAndRotationAreBound = in->getAttributeAsBool("Binding");
-	if ( in->findAttribute("ReceiveInput") )
+	if (in->findAttribute("ReceiveInput"))
 		InputReceiverEnabled = in->getAttributeAsBool("ReceiveInput");
 
 	recalculateProjectionMatrix();
@@ -391,7 +391,7 @@ ISceneNode* CCameraSceneNode::clone(ISceneNode* newParent, ISceneManager* newMan
 	nb->InputReceiverEnabled = InputReceiverEnabled;
 	nb->TargetAndRotationAreBound = TargetAndRotationAreBound;
 
-	if ( newParent )
+	if (newParent)
 		nb->drop();
 	return nb;
 }
