@@ -1,6 +1,7 @@
 #include "irrlicht.h"
 #include "exampleHelper.h"
 
+
 using namespace irr;
 
 using namespace core;
@@ -9,9 +10,11 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
+
 int main(int argc, char** argv)
 {
 	IrrlichtDevice* device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480), 16, false, false, false, 0);
+	//IrrlichtDevice* device = createDevice(video::EDT_OPENGL_4_6, dimension2d<u32>(640, 480), 16, false, false, false, 0);
 
 	if (!device)
 		return 1;
@@ -31,13 +34,20 @@ int main(int argc, char** argv)
 
 	const io::path mediaPath = getExampleMediaPath();
 
-	IAnimatedMesh* mesh = smgr->getMesh(mediaPath + "sydney.md2");
-	if (!mesh)
+	scene::ISceneNode* CubeNode = smgr->addCubeSceneNode();
+	if (CubeNode)
 	{
-		device->drop();
-		return 1;
+		//CubeNode->setPosition(core::vector3df(0, 0, 60));
+		CubeNode->setMaterialTexture(0, driver->getTexture(mediaPath + "wall.bmp"));
+		CubeNode->setMaterialFlag(video::EMF_LIGHTING, false);
 	}
-	IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(mesh);
+	//IAnimatedMesh* mesh = smgr->getMesh(mediaPath + "sydney.md2");
+	//if (!mesh)
+	//{
+	//	device->drop();
+	//	return 1;
+	//}
+	//IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(mesh);
 
 	/*
 	To let the mesh look a little bit nicer, we change its material. We
@@ -47,12 +57,12 @@ int main(int argc, char** argv)
 	texture to the mesh. Without it the mesh would be drawn using only a
 	color.
 	*/
-	if (node)
-	{
-		node->setMaterialFlag(EMF_LIGHTING, false);
-		node->setMD2Animation(scene::EMAT_STAND);
-		node->setMaterialTexture(0, driver->getTexture(mediaPath + "sydney.bmp"));
-	}
+	//if (node)
+	//{
+	//	node->setMaterialFlag(EMF_LIGHTING, false);
+	//	node->setMD2Animation(scene::EMAT_RUN);
+	//	//node->setMaterialTexture(0, driver->getTexture(mediaPath + "sydney.bmp"));
+	//}
 
 	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
 	//smgr->addCameraSceneNodeFPS();
@@ -60,11 +70,11 @@ int main(int argc, char** argv)
 	int lastFPS = -1;
 	while (device->run())
 	{
-		if (device->isWindowActive())
-		{
+		//if (device->isWindowActive())
+		//{
 			driver->beginScene(ECBF_COLOR | ECBF_DEPTH, SColor(255, 100, 101, 140));
 
-			//smgr->drawAll();
+			smgr->drawAll();
 			guienv->drawAll();
 
 			driver->endScene();
@@ -83,7 +93,7 @@ int main(int argc, char** argv)
 			}
 			else
 				device->yield();
-		}
+		//}
 
 	}
 	device->drop();

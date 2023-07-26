@@ -796,6 +796,24 @@
     <ClCompile Include="CSphereSceneNode.cpp">
       <Filter>Irrlicht\scene\sceneNodes</Filter>
     </ClCompile>
+    <ClCompile Include="COpenGLDriverOld.cpp">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLCacheHandlerOld.cpp">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLNormalMapRendererOld.cpp">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLParallaxMapRendererOld.cpp">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLShaderMaterialRendererOld.cpp">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLSLMaterialRendererOld.cpp">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\position2d.h">
@@ -1602,6 +1620,39 @@
     <ClInclude Include="CSphereSceneNode.h">
       <Filter>Irrlicht\scene\sceneNodes</Filter>
     </ClInclude>
+    <ClInclude Include="COpenGLDriverOld.h">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLCacheHandlerOld.h">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLCoreTexture.h">
+      <Filter>Irrlicht\video\Opengl\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLCoreCacheHandler.h">
+      <Filter>Irrlicht\video\Opengl\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLMaterialRendererOld.h">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLNormalMapRendererOld.h">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLParallaxMapRendererOld.h">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLShaderMaterialRendererOld.h">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLCommon.h">
+      <Filter>Irrlicht\video\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLSLMaterialRendererOld.h">
+      <Filter>Irrlicht\video\Opengl\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLCoreFeature.h">
+      <Filter>Irrlicht\video\Opengl\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">
@@ -1714,6 +1765,9 @@
     </Filter>
     <Filter Include="Irrlicht\video\Null\Writer">
       <UniqueIdentifier>{88d57173-5bea-4d05-a624-a48c2f866e40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\Old">
+      <UniqueIdentifier>{564aa1f7-1721-48ba-abe0-9ffd2f184a7e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

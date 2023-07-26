@@ -196,6 +196,10 @@ namespace video
 	typedef COpenGLCoreRenderTarget<COpenGLDriver, COpenGLTexture> COpenGLRenderTarget;
 	class COpenGLCacheHandler;
 
+	class COpenGLDriverOld;
+	typedef COpenGLCoreTexture<COpenGLDriverOld> COpenGLTextureOld;
+	typedef COpenGLCoreRenderTarget<COpenGLDriverOld, COpenGLTextureOld> COpenGLRenderTargetOld;
+	class COpenGLCacheHandlerOld;
 }
 }
 

@@ -251,7 +251,7 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 	//CollisionManager = new CSceneCollisionManager(this, Driver);
 
 	// create geometry creator
-	//GeometryCreator = new CGeometryCreator();
+	GeometryCreator = new CGeometryCreator();
 
 	// add file format loaders. add the least commonly used ones first,
 	// as these are checked last

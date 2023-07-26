@@ -2,8 +2,7 @@
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
-#ifndef __C_OGLCORE_TEXTURE_H_INCLUDED__
-#define __C_OGLCORE_TEXTURE_H_INCLUDED__
+#pragma once
 
 #include "IrrCompileConfig.h"
 
@@ -51,7 +50,7 @@ public:
 	{
 		_IRR_DEBUG_BREAK_IF(image.size() == 0)
 
-		DriverType = Driver->getDriverType();
+			DriverType = Driver->getDriverType();
 		TextureType = TextureTypeIrrToGL(Type);
 		HasMipMaps = Driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
 		AutoGenerateMipMaps = Driver->queryFeature(EVDF_MIP_MAP_AUTO_UPDATE);
@@ -131,8 +130,8 @@ public:
 		Driver->testGLError(__LINE__);
 	}
 
-	COpenGLCoreTexture(const io::path& name, const core::dimension2d<u32>& size, E_TEXTURE_TYPE type, ECOLOR_FORMAT format, TOpenGLDriver* driver) 
-		: ITexture(name, type), 
+	COpenGLCoreTexture(const io::path& name, const core::dimension2d<u32>& size, E_TEXTURE_TYPE type, ECOLOR_FORMAT format, TOpenGLDriver* driver)
+		: ITexture(name, type),
 		Driver(driver), TextureType(GL_TEXTURE_2D),
 		TextureName(0), InternalFormat(GL_RGBA), PixelFormat(GL_RGBA), PixelType(GL_UNSIGNED_BYTE), Converter(0), LockReadOnly(false), LockImage(0), LockLayer(0), KeepImage(false),
 		AutoGenerateMipMaps(false)
@@ -154,9 +153,9 @@ public:
 
 		Pitch = Size.Width * IImage::getBitsPerPixelFromFormat(ColorFormat) / 8;
 
-		if ( !Driver->getColorFormatParameters(ColorFormat, InternalFormat, PixelFormat, PixelType, &Converter) )
+		if (!Driver->getColorFormatParameters(ColorFormat, InternalFormat, PixelFormat, PixelType, &Converter))
 		{
-			os::Printer::log("COpenGLCoreTexture: Color format is not supported", ColorFormatNames[ColorFormat < ECF_UNKNOWN?ColorFormat:ECF_UNKNOWN], ELL_ERROR);
+			os::Printer::log("COpenGLCoreTexture: Color format is not supported", ColorFormatNames[ColorFormat < ECF_UNKNOWN ? ColorFormat : ECF_UNKNOWN], ELL_ERROR);
 		}
 
 		glGenTextures(1, &TextureName);
@@ -176,7 +175,7 @@ public:
 
 		switch (Type)
 		{
-		case ETT_2D: 
+		case ETT_2D:
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Size.Width, Size.Height, 0, PixelFormat, PixelType, 0);
 			break;
 		case ETT_CUBEMAP:
@@ -205,7 +204,7 @@ public:
 			Image[i]->drop();
 	}
 
-	virtual void* lock(E_TEXTURE_LOCK_MODE mode = ETLM_READ_WRITE, u32 mipmapLevel=0, u32 layer = 0, E_TEXTURE_LOCK_FLAGS lockFlags = ETLF_FLIP_Y_UP_RTT) _IRR_OVERRIDE_
+	virtual void* lock(E_TEXTURE_LOCK_MODE mode = ETLM_READ_WRITE, u32 mipmapLevel = 0, u32 layer = 0, E_TEXTURE_LOCK_FLAGS lockFlags = ETLF_FLIP_Y_UP_RTT) _IRR_OVERRIDE_
 	{
 		if (LockImage)
 			return LockImage->getData();
@@ -220,7 +219,7 @@ public:
 		{
 			_IRR_DEBUG_BREAK_IF(LockLayer > Image.size())
 
-			LockImage = Image[LockLayer];
+				LockImage = Image[LockLayer];
 			LockImage->grab();
 		}
 		else
@@ -242,7 +241,7 @@ public:
 				{
 					_IRR_DEBUG_BREAK_IF(layer > 5)
 
-					tmpTextureType = GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer;
+						tmpTextureType = GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer;
 				}
 
 				glGetTexImage(tmpTextureType, 0, PixelFormat, PixelType, tmpImage->getData());
@@ -390,8 +389,7 @@ public:
 				uploadTexture(true, layer, level, tmpData);
 
 				tmpData += dataSize;
-			}
-			while (width != 1 || height != 1);
+			} while (width != 1 || height != 1);
 		}
 		else
 		{
@@ -468,9 +466,9 @@ protected:
 		OriginalColorFormat = image->getColorFormat();
 		ColorFormat = getBestColorFormat(OriginalColorFormat);
 
-		if ( !Driver->getColorFormatParameters(ColorFormat, InternalFormat, PixelFormat, PixelType, &Converter) )
+		if (!Driver->getColorFormatParameters(ColorFormat, InternalFormat, PixelFormat, PixelType, &Converter))
 		{
-			os::Printer::log("getImageValues: Color format is not supported", ColorFormatNames[ColorFormat < ECF_UNKNOWN?ColorFormat:ECF_UNKNOWN], ELL_ERROR);
+			os::Printer::log("getImageValues: Color format is not supported", ColorFormatNames[ColorFormat < ECF_UNKNOWN ? ColorFormat : ECF_UNKNOWN], ELL_ERROR);
 			// not quitting as it will use some alternative internal format
 		}
 
@@ -523,7 +521,7 @@ protected:
 		{
 			_IRR_DEBUG_BREAK_IF(layer > 5)
 
-			tmpTextureType = GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer;
+				tmpTextureType = GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer;
 		}
 
 		if (!IImage::isCompressedFormat(ColorFormat))
@@ -579,9 +577,9 @@ protected:
 
 	GLenum TextureTypeIrrToGL(E_TEXTURE_TYPE type) const
 	{
-		switch ( type)
+		switch (type)
 		{
-		case ETT_2D: 
+		case ETT_2D:
 			return GL_TEXTURE_2D;
 		case ETT_CUBEMAP:
 			return GL_TEXTURE_CUBE_MAP;
@@ -615,5 +613,4 @@ protected:
 }
 }
 
-#endif
 #endif

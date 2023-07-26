@@ -112,7 +112,7 @@
 //#include "IMeshCache.h"
 //#include "IMeshLoader.h"
 //#include "IMeshManipulator.h"
-//#include "IMeshSceneNode.h"
+#include "IMeshSceneNode.h"
 //#include "IMeshWriter.h"
 //#include "IOctreeSceneNode.h"
 //#include "IColladaMeshWriter.h"

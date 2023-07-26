@@ -2,8 +2,7 @@
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
-#ifndef __C_OGLCORE_CACHE_HANDLER_H_INCLUDED__
-#define __C_OGLCORE_CACHE_HANDLER_H_INCLUDED__
+#pragma once
 
 #include "IrrCompileConfig.h"
 
@@ -11,6 +10,8 @@
 
 #include "SMaterial.h"
 #include "ITexture.h"
+
+#include "COpenGLCoreTexture.h"
 
 namespace irr
 {
@@ -60,7 +61,7 @@ class COpenGLCoreCacheHandler
 			return 0;
 		}
 
-		bool set(u32 index, const ITexture* texture, ESetTextureActive esa=EST_ACTIVE_ALWAYS)
+		bool set(u32 index, const ITexture* texture, ESetTextureActive esa = EST_ACTIVE_ALWAYS)
 		{
 			bool status = false;
 
@@ -68,14 +69,14 @@ class COpenGLCoreCacheHandler
 
 			if (index < MATERIAL_MAX_TEXTURES && index < TextureCount)
 			{
-				if ( esa == EST_ACTIVE_ALWAYS )
+				if (esa == EST_ACTIVE_ALWAYS)
 					CacheHandler.setActiveTexture(GL_TEXTURE0 + index);
 
 				const TOpenGLTexture* prevTexture = Texture[index];
 
 				if (texture != prevTexture)
 				{
-					if ( esa == EST_ACTIVE_ON_CHANGE )
+					if (esa == EST_ACTIVE_ON_CHANGE)
 						CacheHandler.setActiveTexture(GL_TEXTURE0 + index);
 
 					if (texture)
@@ -347,7 +348,7 @@ public:
 	void setBlendFuncIndexed(GLuint index, GLenum source, GLenum destination)
 	{
 		if (index < FrameBufferCount && (BlendSourceRGB[index] != source || BlendDestinationRGB[index] != destination ||
-			BlendSourceAlpha[index] != source || BlendDestinationAlpha[index] != destination))
+										 BlendSourceAlpha[index] != source || BlendDestinationAlpha[index] != destination))
 		{
 			Driver->irrGlBlendFuncIndexed(index, source, destination);
 
@@ -364,7 +365,7 @@ public:
 		if (sourceRGB != sourceAlpha || destinationRGB != destinationAlpha)
 		{
 			if (index < FrameBufferCount && (BlendSourceRGB[index] != sourceRGB || BlendDestinationRGB[index] != destinationRGB ||
-				BlendSourceAlpha[index] != sourceAlpha || BlendDestinationAlpha[index] != destinationAlpha))
+											 BlendSourceAlpha[index] != sourceAlpha || BlendDestinationAlpha[index] != destinationAlpha))
 			{
 				Driver->irrGlBlendFuncSeparateIndexed(index, sourceRGB, destinationRGB, sourceAlpha, destinationAlpha);
 
@@ -495,10 +496,10 @@ public:
 		}
 	}
 
-    void getDepthTest(bool& enable)
-    {
-        enable = DepthTest;
-    }
+	void getDepthTest(bool& enable)
+	{
+		enable = DepthTest;
+	}
 
 	void setDepthTest(bool enable)
 	{
@@ -589,9 +590,9 @@ public:
 	void correctCacheMaterial(irr::video::SMaterial& material)
 	{
 		// Fix textures which got removed
-		for ( u32 i=0; i < MATERIAL_MAX_TEXTURES; ++i )
+		for (u32 i = 0; i < MATERIAL_MAX_TEXTURES; ++i)
 		{
-			if ( material.TextureLayer[i].Texture && !TextureCache[i] )
+			if (material.TextureLayer[i].Texture && !TextureCache[i])
 			{
 				material.TextureLayer[i].Texture = 0;
 			}
@@ -641,5 +642,4 @@ protected:
 }
 }
 
-#endif
 #endif

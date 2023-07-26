@@ -51,6 +51,7 @@ namespace video
 #endif
 
 #ifdef _IRR_COMPILE_WITH_OPENGL_
+IVideoDriver* createOpenGLDriverOld(const irr::SIrrlichtCreationParameters& params, io::IFileSystem* io, IContextManager* contextManager);
 IVideoDriver* createOpenGLDriver(const irr::SIrrlichtCreationParameters& params, io::IFileSystem* io, IContextManager* contextManager);
 #endif
 }
@@ -1180,6 +1181,21 @@ void CIrrDeviceWin32::createDriver()
 #endif
 		break;
 	case video::EDT_OPENGL:
+#ifdef _IRR_COMPILE_WITH_OPENGL_
+		switchToFullScreen();
+
+		ContextManager = new video::CWGLManager();
+		ContextManager->initialize(CreationParams, video::SExposedVideoData(HWnd));
+
+		VideoDriver = video::createOpenGLDriverOld(CreationParams, FileSystem, ContextManager);
+
+		if (!VideoDriver)
+			os::Printer::log("Could not create OpenGL driver.", ELL_ERROR);
+#else
+		os::Printer::log("OpenGL driver was not compiled in.", ELL_ERROR);
+#endif
+		break;
+	case video::EDT_OPENGL_4_6:
 #ifdef _IRR_COMPILE_WITH_OPENGL_
 		switchToFullScreen();
 
