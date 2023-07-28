@@ -9,13 +9,17 @@
 
 #ifdef _IRR_COMPILE_WITH_OPENGL_
 
+
 #if defined(_IRR_WINDOWS_API_)
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
 		#define GL_GLEXT_LEGACY 1
 	#endif
-	#include <GL/gl.h>
+	//#include <GL/gl.h>
+
+#include "gl/glew.h"
+
 	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
 		#include "glext.h"
 	#endif
@@ -24,7 +28,6 @@
 	#ifdef _MSC_VER
 		#pragma comment(lib, "OpenGL32.lib")
 	#endif
-
 #elif defined(_IRR_COMPILE_WITH_OSX_DEVICE_)
 	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
 		#define GL_GLEXT_LEGACY 1

@@ -121,12 +121,13 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>_MBCS;_IRR_COMPILE_WITH_LEAK_HUNTER_;IRRLICHT_EXPORTS;_CRT_SECURE_NO_WARNINGS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;include/;zlib;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;include/;zlib;$(INCLUDE_DIR);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(LIB_DIR)\$(Configuration)\$(PlatformName)\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(LIB_DIR)\$(Configuration)\$(PlatformShortName)\;</AdditionalLibraryDirectories>
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;irrKlang.lib;libnoise.lib;SOIL.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -300,6 +301,7 @@
     <ClInclude Include="CQ3LevelMesh.h" />
     <ClInclude Include="CReadFile.h" />
     <ClInclude Include="CSceneManager.h" />
+    <ClInclude Include="CSceneNodeAnimatorCameraBlender.h" />
     <ClInclude Include="CSceneNodeAnimatorCameraFPS.h" />
     <ClInclude Include="CSceneNodeAnimatorCameraMaya.h" />
     <ClInclude Include="CSceneNodeAnimatorCollisionResponse.h" />
@@ -333,6 +335,8 @@
     <ClInclude Include="CXMLWriter.h" />
     <ClInclude Include="CZipReader.h" />
     <ClInclude Include="EProfileIDs.h" />
+    <ClInclude Include="glext.h" />
+    <ClInclude Include="glxext.h" />
     <ClInclude Include="IAttribute.h" />
     <ClInclude Include="IBurningShader.h" />
     <ClInclude Include="IDepthBuffer.h" />
@@ -366,6 +370,7 @@
     <ClInclude Include="include\ILogger.h" />
     <ClInclude Include="include\IMesh.h" />
     <ClInclude Include="include\IMeshBuffer.h" />
+    <ClInclude Include="include\IOpenGlShader.h" />
     <ClInclude Include="include\IOSOperator.h" />
     <ClInclude Include="include\IReferenceCounted.h" />
     <ClInclude Include="include\irrAllocator.h" />
@@ -378,6 +383,11 @@
     <ClInclude Include="include\irrTypes.h" />
     <ClInclude Include="include\irrXML.h" />
     <ClInclude Include="include\ISceneManager.h" />
+    <ClInclude Include="include\ISceneNode.h" />
+    <ClInclude Include="include\ISceneNodeAnimator.h" />
+    <ClInclude Include="include\ISceneNodeAnimatorCameraEdit.h" />
+    <ClInclude Include="include\ISceneNodeAnimatorCameraFPS.h" />
+    <ClInclude Include="include\ISceneNodeAnimatorCameraMaya.h" />
     <ClInclude Include="include\ISkinnedMesh.h" />
     <ClInclude Include="include\ITexture.h" />
     <ClInclude Include="include\ITimer.h" />
@@ -432,6 +442,7 @@
     <ClInclude Include="S2DVertex.h" />
     <ClInclude Include="S4DVertex.h" />
     <ClInclude Include="SB3DStructs.h" />
+    <ClInclude Include="COpenglShader.h" />
     <ClInclude Include="SoftwareDriver2_compile_config.h" />
     <ClInclude Include="SoftwareDriver2_helper.h" />
     <ClInclude Include="zlib\crc32.h" />
@@ -581,6 +592,7 @@
     <ClCompile Include="COpenGLNormalMapRendererOld.cpp" />
     <ClCompile Include="COpenGLParallaxMapRenderer.cpp" />
     <ClCompile Include="COpenGLParallaxMapRendererOld.cpp" />
+    <ClCompile Include="COpenglShader.cpp" />
     <ClCompile Include="COpenGLShaderMaterialRenderer.cpp" />
     <ClCompile Include="COpenGLShaderMaterialRendererOld.cpp" />
     <ClCompile Include="COpenGLSLMaterialRenderer.cpp" />
@@ -592,6 +604,7 @@
     <ClCompile Include="CQ3LevelMesh.cpp" />
     <ClCompile Include="CReadFile.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
+    <ClCompile Include="CSceneNodeAnimatorCameraBlender.cpp" />
     <ClCompile Include="CSceneNodeAnimatorCameraFPS.cpp" />
     <ClCompile Include="CSceneNodeAnimatorCameraMaya.cpp" />
     <ClCompile Include="CSceneNodeAnimatorCollisionResponse.cpp" />

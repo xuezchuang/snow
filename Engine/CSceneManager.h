@@ -147,6 +147,11 @@ public:
 													 f32 translationSpeed = 1500.f, s32 id = -1, f32 distance = 70.f,
 													 bool makeActive = true) _IRR_OVERRIDE_;
 
+	virtual ICameraSceneNode* addCameraSceneNodeBlender(ISceneNode* parent = 0,
+														f32 rotateSpeed = -1500.f, f32 zoomSpeed = 200.f,
+														f32 translationSpeed = 1500.f, s32 id = -1, f32 distance = 70.f,
+														bool makeActive = true) _IRR_OVERRIDE_;
+
 	//! Adds a camera scene node which is able to be controled with the mouse and keys
 	//! like in most first person shooters (FPS):
 	virtual ICameraSceneNode* addCameraSceneNodeFPS(ISceneNode* parent = 0,

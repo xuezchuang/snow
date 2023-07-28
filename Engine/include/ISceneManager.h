@@ -608,6 +608,11 @@ public:
 													 f32 translationSpeed = 1500.f, s32 id = -1, f32 distance = 70.f,
 													 bool makeActive = true) = 0;
 
+	virtual ICameraSceneNode* addCameraSceneNodeBlender(ISceneNode* parent = 0,
+													 f32 rotateSpeed = -1500.f, f32 zoomSpeed = 200.f,
+													 f32 translationSpeed = 1500.f, s32 id = -1, f32 distance = 70.f,
+													 bool makeActive = true) = 0;
+
 	//! Adds a camera scene node with an animator which provides mouse and keyboard control appropriate for first person shooters (FPS).
 	/** This FPS camera is intended to provide a demonstration of a
 	camera that behaves like a typical First Person Shooter. It is

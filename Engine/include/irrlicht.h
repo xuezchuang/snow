@@ -62,7 +62,7 @@
 //#include "IBillboardSceneNode.h"
 //#include "IBillboardTextSceneNode.h"
 //#include "IBoneSceneNode.h"
-//#include "ICameraSceneNode.h"
+#include "ICameraSceneNode.h"
 //#include "IContextManager.h"
 //#include "ICursorControl.h"
 //#include "IDummyTransformationSceneNode.h"

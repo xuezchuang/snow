@@ -202,6 +202,7 @@ bool COpenGLDriver::genericDriverInit()
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_POINT_SMOOTH_HINT, GL_FASTEST);
 	glFrontFace(GL_CW);
+
 	// adjust flat coloring scheme to DirectX version
 #if defined(GL_ARB_provoking_vertex) || defined(GL_EXT_provoking_vertex)
 	extGlProvokingVertex(GL_FIRST_VERTEX_CONVENTION_EXT);

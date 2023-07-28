@@ -21,7 +21,7 @@ In order to move the camera, set a new target for the camera. The distance defin
 the current orbit radius the camera moves on. Distance can be changed via the setter
 or by mouse events.
 */
-class ISceneNodeAnimatorCameraMaya : public ISceneNodeAnimator
+class ISceneNodeAnimatorCameraEdit : public ISceneNodeAnimator
 {
 public:
 
