@@ -3,7 +3,6 @@
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
 #pragma once
-
 #include "irrArray.h"
 #include "IMeshBuffer.h"
 
@@ -122,7 +121,8 @@ public:
 		if (!Vertices.empty())
 		{
 			BoundingBox.reset(Vertices[0].Pos);
-			const irr::u32 vsize = Vertices.size();
+			//const irr::u32 vsize = Vertices.size();
+			u32 vsize = Vertices.size();
 			for (u32 i = 1; i < vsize; ++i)
 				BoundingBox.addInternalPoint(Vertices[i].Pos);
 		}

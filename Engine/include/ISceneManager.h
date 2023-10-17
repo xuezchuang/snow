@@ -45,6 +45,7 @@ class IVideoDriver;
 class SMaterial;
 class IImage;
 class ITexture;
+class IOpenGlShader;
 } // end namespace video
 
 namespace scene
@@ -1676,6 +1677,9 @@ public:
 	\return True if node is not visible in the current scene, else
 	false. */
 	virtual bool isCulled(const ISceneNode* node) const = 0;
+
+
+	//virtual video::IOpenGlShader* shader(const core::stringc& vertexPath, const core::stringc& fragmentPath)const = 0;
 };
 
 

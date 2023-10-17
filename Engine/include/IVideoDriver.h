@@ -47,7 +47,7 @@ class IImageWriter;
 class IMaterialRenderer;
 class IGPUProgrammingServices;
 class IRenderTarget;
-
+class IOpenGlShader;
 //! enumeration for geometry transformation states
 enum E_TRANSFORMATION_STATE
 {
@@ -1517,6 +1517,10 @@ public:
 	//! Check if the driver supports creating textures with the given color format
 	/**	\return True if the format is available, false if not. */
 	virtual bool queryTextureFormat(ECOLOR_FORMAT format) const = 0;
+
+	virtual void setCurrentShader(IOpenGlShader* _shader){}
+
+	virtual IOpenGlShader* generteShader(const core::stringc& vertexPath, const core::stringc& fragmentPath) { return 0; }
 };
 
 } // end namespace video

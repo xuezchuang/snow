@@ -38,7 +38,12 @@ constexpr auto IRRLICHT_SDK_VERSION = "1.9.0";
 //! So defines can be controlled from Makefiles or Projectfiles which allows building
 //! different library versions without having to change the sources.
 //! Example: NO_IRR_COMPILE_WITH_X11_ would disable X11
-
+//! 
+#ifdef _UNICODE
+#define _T(x) L##x
+#else
+#define _T(x) x
+#endif
 
 //! Uncomment this line to compile with the SDL device
 //#define _IRR_COMPILE_WITH_SDL_DEVICE_

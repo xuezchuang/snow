@@ -387,6 +387,7 @@ namespace scene
 //! The video namespace contains classes for accessing the video driver. All 2d and 3d rendering is done here.
 namespace video
 {
+class IOpenGlShader;
 }
 }
 

@@ -202,6 +202,8 @@
 
 #include <locale.h>
 
+#include "IOpenGlShader.h"
+
 namespace irr
 {
 namespace scene
@@ -354,7 +356,9 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 		getProfiler().add(EPID_SM_RENDER_EFFECT, L"effectnodes", L"Irrlicht scene");
 		getProfiler().add(EPID_SM_REGISTER, L"reg.render.node", L"Irrlicht scene");
 	}
-	)
+	);
+	
+	DefaultShader = Driver->generteShader(_T("../Engine/shader/shader.vs"), _T("../Engine/shader/shader.fs"));
 }
 
 
@@ -613,6 +617,7 @@ IMeshSceneNode* CSceneManager::addCubeSceneNode(f32 size, ISceneNode* parent,
 		parent = this;
 
 	IMeshSceneNode* node = new CCubeSceneNode(size, parent, this, id, position, rotation, scale);
+	node->getMesh()->setHardwareMappingHint(EHM_STATIC);
 	node->drop();
 
 	return node;
@@ -1613,6 +1618,7 @@ void CSceneManager::drawAll()
 
 	// render default objects
 	{
+		Driver->setCurrentShader(DefaultShader);
 		IRR_PROFILE(CProfileScope psDefault(EPID_SM_RENDER_DEFAULT);)
 			CurrentRenderPass = ESNRP_SOLID;
 		Driver->getOverrideMaterial().Enabled = ((Driver->getOverrideMaterial().EnablePasses & CurrentRenderPass) != 0);
@@ -2679,6 +2685,25 @@ IMeshWriter* CSceneManager::createMeshWriter(EMESH_WRITER_TYPE type)
 	return 0;
 }
 
+//video::IOpenGlShader* CSceneManager::shader(const core::stringc& vertexPath, const core::stringc& fragmentPath)const
+//{
+//	io::IReadFile* vsfile = FileSystem->createAndOpenFile(vertexPath);
+//	io::IReadFile* fsfile = FileSystem->createAndOpenFile(fragmentPath);
+//	if (!vsfile)
+//	{
+//		os::Printer::log("Unable to open shader file", vertexPath.c_str(), ELL_ERROR);
+//		return false;
+//	}
+//	if (!fsfile)
+//	{
+//		os::Printer::log("Unable to open shader file", fragmentPath.c_str(), ELL_ERROR);
+//		return false;
+//	}
+//	video::IOpenGlShader* shader = new video::COpenglShader(vsfile, fsfile);
+//	vsfile->drop();
+//	fsfile->drop();
+//	return shader;
+//}
 
 // creates a scenemanager
 ISceneManager* createSceneManager(video::IVideoDriver* driver,
@@ -2687,6 +2712,7 @@ ISceneManager* createSceneManager(video::IVideoDriver* driver,
 {
 	return new CSceneManager(driver, fs, cursorcontrol, 0, guiEnvironment);
 }
+
 
 
 } // end namespace scene

@@ -19,6 +19,12 @@ namespace io
 {
 class IFileSystem;
 }
+
+//namespace video
+//{
+//class COpenglShader;
+//}
+
 namespace scene
 {
 class IMeshCache;
@@ -547,6 +553,9 @@ public:
 	//! returns if node is culled
 	virtual bool isCulled(const ISceneNode* node) const _IRR_OVERRIDE_;
 
+	//virtual video::IOpenGlShader* shader(const core::stringc& vertexPath, const core::stringc& fragmentPath)const _IRR_OVERRIDE_;
+	
+
 private:
 
 	// load and create a mesh which we know already isn't in the cache and put it in there
@@ -651,6 +660,10 @@ private:
 	core::array<ISceneNode*> DeletionList;
 	core::array<ISceneNodeFactory*> SceneNodeFactoryList;
 	core::array<ISceneNodeAnimatorFactory*> SceneNodeAnimatorFactoryList;
+
+	//shader
+	video::IOpenGlShader* DefaultShader;
+
 
 	//! current active camera
 	ICameraSceneNode* ActiveCamera;

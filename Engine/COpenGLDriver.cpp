@@ -24,6 +24,8 @@
 #include <SDL/SDL.h>
 #endif
 
+#include "COpenglShader.h"
+#include "glGpu/GPU_init_exit.h"
 namespace irr
 {
 namespace video
@@ -67,6 +69,9 @@ COpenGLDriver::COpenGLDriver(const SIrrlichtCreationParameters& params, io::IFil
 
 #endif
 
+
+
+
 bool COpenGLDriver::initDriver()
 {
 	ContextManager->generateSurface();
@@ -80,12 +85,15 @@ bool COpenGLDriver::initDriver()
 	extGlSwapInterval(Params.Vsync ? 1 : 0);
 #endif
 
+	glewInit();
+	GPU_init();
 	return true;
 }
 
 //! destructor
 COpenGLDriver::~COpenGLDriver()
 {
+	GPU_exit();
 	RequestedLights.clear();
 
 	deleteMaterialRenders();
@@ -173,8 +181,8 @@ bool COpenGLDriver::genericDriverInit()
 	for (i = 0; i < MaxUserClipPlanes; ++i)
 		UserClipPlanes.push_back(SUserClipPlane());
 
-	for (i = 0; i < ETS_COUNT; ++i)
-		setTransform(static_cast<E_TRANSFORMATION_STATE>(i), core::IdentityMatrix);
+	//for (i = 0; i < ETS_COUNT; ++i)
+	//	setTransform(static_cast<E_TRANSFORMATION_STATE>(i), core::IdentityMatrix);
 
 	setAmbientLight(SColorf(0.0f, 0.0f, 0.0f, 0.0f));
 #ifdef GL_EXT_separate_specular_color
@@ -338,31 +346,23 @@ void COpenGLDriver::setTransform(E_TRANSFORMATION_STATE state, const core::matri
 {
 	Matrices[state] = mat;
 	Transformation3DChanged = true;
-
+	if (!shader)
+		return;
 	switch (state)
 	{
 	case ETS_VIEW:
+	{
+		shader->setMat4(_T("view"), mat);
+	}
+	break;
 	case ETS_WORLD:
 	{
-		// OpenGL only has a model matrix, view and world is not existent. so lets fake these two.
-		CacheHandler->setMatrixMode(GL_MODELVIEW);
-
-		// first load the viewing transformation for user clip planes
-		glLoadMatrixf((Matrices[ETS_VIEW]).pointer());
-
-		// we have to update the clip planes to the latest view matrix
-		for (u32 i = 0; i < MaxUserClipPlanes; ++i)
-			if (UserClipPlanes[i].Enabled)
-				uploadClipPlane(i);
-
-		// now the real model-view matrix
-		glMultMatrixf(Matrices[ETS_WORLD].pointer());
+		shader->setMat4(_T("model"), mat);
 	}
 	break;
 	case ETS_PROJECTION:
 	{
-		CacheHandler->setMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(mat.pointer());
+		shader->setMat4(_T("projection"), mat);
 	}
 	break;
 	default:
@@ -661,13 +661,13 @@ void COpenGLDriver::drawHardwareBuffer(SHWBufferLink* _HWBuffer)
 
 	if (HWBuffer->Mapped_Vertex != scene::EHM_NEVER)
 	{
-		extGlBindBuffer(GL_ARRAY_BUFFER, HWBuffer->vbo_verticesID);
+		glBindBuffer(GL_ARRAY_BUFFER, HWBuffer->vbo_verticesID);
 		vertices = 0;
 	}
 
 	if (HWBuffer->Mapped_Index != scene::EHM_NEVER)
 	{
-		extGlBindBuffer(GL_ELEMENT_ARRAY_BUFFER, HWBuffer->vbo_indicesID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, HWBuffer->vbo_indicesID);
 		indexList = 0;
 	}
 
@@ -827,16 +827,9 @@ void COpenGLDriver::drawVertexPrimitiveList(const void* vertices, u32 vertexCoun
 
 	CNullDriver::drawVertexPrimitiveList(vertices, vertexCount, indexList, primitiveCount, vType, pType, iType);
 
-	if (vertices && !FeatureAvailable[IRR_ARB_vertex_array_bgra] && !FeatureAvailable[IRR_EXT_vertex_array_bgra])
-		getColorBuffer(vertices, vertexCount, vType);
 
 	// draw everything
 	setRenderStates3DMode();
-
-	if ((pType != scene::EPT_POINTS) && (pType != scene::EPT_POINT_SPRITES))
-		CacheHandler->setClientState(true, true, true, true);
-	else
-		CacheHandler->setClientState(true, false, true, false);
 
 	//due to missing defines in OSX headers, we have to be more specific with this check
 	//#if defined(GL_ARB_vertex_array_bgra) || defined(GL_EXT_vertex_array_bgra)
@@ -845,115 +838,16 @@ void COpenGLDriver::drawVertexPrimitiveList(const void* vertices, u32 vertexCoun
 #else
 	const GLint colorSize = 4;
 #endif
-	if (vertices)
-	{
-		if (FeatureAvailable[IRR_ARB_vertex_array_bgra] || FeatureAvailable[IRR_EXT_vertex_array_bgra])
-		{
-			switch (vType)
-			{
-			case EVT_STANDARD:
-				glColorPointer(colorSize, GL_UNSIGNED_BYTE, sizeof(S3DVertex), &(static_cast<const S3DVertex*>(vertices))[0].Color);
-				break;
-			case EVT_2TCOORDS:
-				glColorPointer(colorSize, GL_UNSIGNED_BYTE, sizeof(S3DVertex2TCoords), &(static_cast<const S3DVertex2TCoords*>(vertices))[0].Color);
-				break;
-			case EVT_TANGENTS:
-				glColorPointer(colorSize, GL_UNSIGNED_BYTE, sizeof(S3DVertexTangents), &(static_cast<const S3DVertexTangents*>(vertices))[0].Color);
-				break;
-			}
-		}
-		else
-		{
-			// avoid passing broken pointer to OpenGL
-			_IRR_DEBUG_BREAK_IF(ColorBuffer.size() == 0);
-			glColorPointer(colorSize, GL_UNSIGNED_BYTE, 0, &ColorBuffer[0]);
-		}
-	}
-
 	switch (vType)
 	{
 	case EVT_STANDARD:
-		if (vertices)
-		{
-			glNormalPointer(GL_FLOAT, sizeof(S3DVertex), &(static_cast<const S3DVertex*>(vertices))[0].Normal);
-			glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex), &(static_cast<const S3DVertex*>(vertices))[0].TCoords);
-			glVertexPointer(3, GL_FLOAT, sizeof(S3DVertex), &(static_cast<const S3DVertex*>(vertices))[0].Pos);
-		}
-		else
-		{
-			glNormalPointer(GL_FLOAT, sizeof(S3DVertex), buffer_offset(12));
-			glColorPointer(colorSize, GL_UNSIGNED_BYTE, sizeof(S3DVertex), buffer_offset(24));
-			glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex), buffer_offset(28));
-			glVertexPointer(3, GL_FLOAT, sizeof(S3DVertex), 0);
-		}
-
-		if (Feature.MaxTextureUnits > 0 && CacheHandler->getTextureCache()[1])
-		{
-			CacheHandler->setClientActiveTexture(GL_TEXTURE0 + 1);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			if (vertices)
-				glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex), &(static_cast<const S3DVertex*>(vertices))[0].TCoords);
-			else
-				glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex), buffer_offset(28));
-		}
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), (void*)0);
 		break;
 	case EVT_2TCOORDS:
-		if (vertices)
-		{
-			glNormalPointer(GL_FLOAT, sizeof(S3DVertex2TCoords), &(static_cast<const S3DVertex2TCoords*>(vertices))[0].Normal);
-			glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex2TCoords), &(static_cast<const S3DVertex2TCoords*>(vertices))[0].TCoords);
-			glVertexPointer(3, GL_FLOAT, sizeof(S3DVertex2TCoords), &(static_cast<const S3DVertex2TCoords*>(vertices))[0].Pos);
-		}
-		else
-		{
-			glNormalPointer(GL_FLOAT, sizeof(S3DVertex2TCoords), buffer_offset(12));
-			glColorPointer(colorSize, GL_UNSIGNED_BYTE, sizeof(S3DVertex2TCoords), buffer_offset(24));
-			glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex2TCoords), buffer_offset(28));
-			glVertexPointer(3, GL_FLOAT, sizeof(S3DVertex2TCoords), buffer_offset(0));
-		}
-
-
-		if (Feature.MaxTextureUnits > 0)
-		{
-			CacheHandler->setClientActiveTexture(GL_TEXTURE0 + 1);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			if (vertices)
-				glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex2TCoords), &(static_cast<const S3DVertex2TCoords*>(vertices))[0].TCoords2);
-			else
-				glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex2TCoords), buffer_offset(36));
-		}
+		
 		break;
 	case EVT_TANGENTS:
-		if (vertices)
-		{
-			glNormalPointer(GL_FLOAT, sizeof(S3DVertexTangents), &(static_cast<const S3DVertexTangents*>(vertices))[0].Normal);
-			glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertexTangents), &(static_cast<const S3DVertexTangents*>(vertices))[0].TCoords);
-			glVertexPointer(3, GL_FLOAT, sizeof(S3DVertexTangents), &(static_cast<const S3DVertexTangents*>(vertices))[0].Pos);
-		}
-		else
-		{
-			glNormalPointer(GL_FLOAT, sizeof(S3DVertexTangents), buffer_offset(12));
-			glColorPointer(colorSize, GL_UNSIGNED_BYTE, sizeof(S3DVertexTangents), buffer_offset(24));
-			glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertexTangents), buffer_offset(28));
-			glVertexPointer(3, GL_FLOAT, sizeof(S3DVertexTangents), buffer_offset(0));
-		}
-
-		if (Feature.MaxTextureUnits > 0)
-		{
-			CacheHandler->setClientActiveTexture(GL_TEXTURE0 + 1);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			if (vertices)
-				glTexCoordPointer(3, GL_FLOAT, sizeof(S3DVertexTangents), &(static_cast<const S3DVertexTangents*>(vertices))[0].Tangent);
-			else
-				glTexCoordPointer(3, GL_FLOAT, sizeof(S3DVertexTangents), buffer_offset(36));
-
-			CacheHandler->setClientActiveTexture(GL_TEXTURE0 + 2);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			if (vertices)
-				glTexCoordPointer(3, GL_FLOAT, sizeof(S3DVertexTangents), &(static_cast<const S3DVertexTangents*>(vertices))[0].Binormal);
-			else
-				glTexCoordPointer(3, GL_FLOAT, sizeof(S3DVertexTangents), buffer_offset(48));
-		}
 		break;
 	}
 
@@ -1019,8 +913,7 @@ void COpenGLDriver::getColorBuffer(const void* vertices, u32 vertexCount, E_VERT
 }
 
 
-void COpenGLDriver::renderArray(const void* indexList, u32 primitiveCount,
-								scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType)
+void COpenGLDriver::renderArray(const void* indexList, u32 primitiveCount,scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType)
 {
 	GLenum indexSize = 0;
 
@@ -2039,6 +1932,7 @@ void COpenGLDriver::disableFeature(E_VIDEO_DRIVER_FEATURE feature, bool flag)
 //! Sets a material. All 3d drawing functions draw geometry now using this material.
 void COpenGLDriver::setMaterial(const SMaterial& material)
 {
+	return;
 	Material = material;
 	OverrideMaterial.apply(Material);
 
@@ -4402,6 +4296,31 @@ COpenGLCacheHandler* COpenGLDriver::getCacheHandler() const
 	return CacheHandler;
 }
 
+void COpenGLDriver::setCurrentShader(IOpenGlShader* _shader)
+{
+	shader = _shader;
+	shader->use();
+}
+
+video::IOpenGlShader* COpenGLDriver::generteShader(const core::stringc& vertexPath, const core::stringc& fragmentPath)
+{
+	io::IReadFile* vsfile = FileSystem->createAndOpenFile(vertexPath);
+	io::IReadFile* fsfile = FileSystem->createAndOpenFile(fragmentPath);
+	if (!vsfile)
+	{
+		os::Printer::log("Unable to open shader file", vertexPath.c_str(), ELL_ERROR);
+		return false;
+	}
+	if (!fsfile)
+	{
+		os::Printer::log("Unable to open shader file", fragmentPath.c_str(), ELL_ERROR);
+		return false;
+	}
+	shader = new video::COpenglShader(vsfile, fsfile);
+	vsfile->drop();
+	fsfile->drop();
+	return shader;
+}
 
 } // end namespace
 } // end namespace

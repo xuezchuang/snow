@@ -19,8 +19,15 @@
 
 namespace irr
 {
+namespace video
+{
+class IOpenGlShader;
+} // end namespace io
+
 namespace scene
 {
+
+
 class ISceneManager;
 
 //! Typedef for list of scene nodes
@@ -842,6 +849,9 @@ protected:
 
 	//! List of all animator nodes
 	core::list<ISceneNodeAnimator*> Animators;
+
+	core::stringc shaderVS;
+	core::stringc shaderFS;
 
 	//! Pointer to the scene manager
 	ISceneManager* SceneManager;

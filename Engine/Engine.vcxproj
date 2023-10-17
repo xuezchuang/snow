@@ -79,6 +79,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)Deps\Include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Deps\Libs\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)Deps\Include\;$(IncludePath)</IncludePath>
@@ -121,7 +122,8 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>_MBCS;_IRR_COMPILE_WITH_LEAK_HUNTER_;IRRLICHT_EXPORTS;_CRT_SECURE_NO_WARNINGS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;include/;zlib;$(INCLUDE_DIR);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;include/;zlib;glGpu;$(INCLUDE_DIR);</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -336,6 +338,20 @@
     <ClInclude Include="CZipReader.h" />
     <ClInclude Include="EProfileIDs.h" />
     <ClInclude Include="glext.h" />
+    <ClInclude Include="glGpu\basic_depth_info.hh" />
+    <ClInclude Include="glGpu\glGpuShaderMgr.h" />
+    <ClInclude Include="glGpu\glsl_gpu_source_list.h" />
+    <ClInclude Include="glGpu\gl_shader.hh" />
+    <ClInclude Include="glGpu\GPU_init_exit.h" />
+    <ClInclude Include="glGpu\GPU_shader.h" />
+    <ClInclude Include="glGpu\GPU_shader_builtin.h" />
+    <ClInclude Include="glGpu\gpu_shader_create_info.hh" />
+    <ClInclude Include="glGpu\gpu_shader_create_info_list.hh" />
+    <ClInclude Include="glGpu\gpu_shader_create_info_private.hh" />
+    <ClInclude Include="glGpu\gpu_shader_dependency_private.h" />
+    <ClInclude Include="glGpu\gpu_shader_private.hh" />
+    <ClInclude Include="glGpu\GPU_texture.h" />
+    <ClInclude Include="glGpu\utildefines.h" />
     <ClInclude Include="glxext.h" />
     <ClInclude Include="IAttribute.h" />
     <ClInclude Include="IBurningShader.h" />
@@ -443,6 +459,9 @@
     <ClInclude Include="S4DVertex.h" />
     <ClInclude Include="SB3DStructs.h" />
     <ClInclude Include="COpenglShader.h" />
+    <ClInclude Include="shaders\infos\gpu_interface_info.hh" />
+    <ClInclude Include="shaders\infos\gpu_shader_2D_widget_info.hh" />
+    <ClInclude Include="shaders\infos\gpu_shader_test_info.hh" />
     <ClInclude Include="SoftwareDriver2_compile_config.h" />
     <ClInclude Include="SoftwareDriver2_helper.h" />
     <ClInclude Include="zlib\crc32.h" />
@@ -634,6 +653,31 @@
     <ClCompile Include="CXMLReader.cpp" />
     <ClCompile Include="CXMLWriter.cpp" />
     <ClCompile Include="CZipReader.cpp" />
+    <ClCompile Include="glGpu\basic_depth_frag.c" />
+    <ClCompile Include="glGpu\basic_depth_vert.c" />
+    <ClCompile Include="glGpu\common_view_clipping_lib.c" />
+    <ClCompile Include="glGpu\common_view_lib.c" />
+    <ClCompile Include="glGpu\glGpuShaderMgr.cpp" />
+    <ClCompile Include="glGpu\glsl_shader_defines.c" />
+    <ClCompile Include="glGpu\gl_shader.cc" />
+    <ClCompile Include="glGpu\gpu_init_exit.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="glGpu\gpu_shader.cc" />
+    <ClCompile Include="glGpu\gpu_shader_2D_widget_base_frag.c" />
+    <ClCompile Include="glGpu\gpu_shader_2D_widget_base_vert.c" />
+    <ClCompile Include="glGpu\gpu_shader_2D_widget_shadow_frag.c" />
+    <ClCompile Include="glGpu\gpu_shader_2D_widget_shadow_vert.c" />
+    <ClCompile Include="glGpu\gpu_shader_builtin.cc" />
+    <ClCompile Include="glGpu\gpu_shader_colorspace_lib.c" />
+    <ClCompile Include="glGpu\gpu_shader_create_info.cc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="glGpu\gpu_shader_dependency.cc">
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</LanguageStandard_C>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp17</LanguageStandard>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="IBurningShader.cpp" />
     <ClCompile Include="Irrlicht.cpp" />
     <ClCompile Include="jpeglib\cdjpeg.c">
@@ -806,6 +850,19 @@
     <ProjectReference Include="..\Deps\src\glew_shared\glew_shared.vcxproj">
       <Project>{74219373-92f3-43df-9d75-4d9fb7a722fc}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\basic_depth_frag.glsl" />
+    <None Include="shaders\basic_depth_vert.glsl" />
+    <None Include="shaders\common_view_clipping_lib.glsl" />
+    <None Include="shaders\common_view_lib.glsl" />
+    <None Include="shaders\glsl_shader_defines.glsl" />
+    <None Include="shaders\gpu_shader_2D_widget_base_frag.glsl" />
+    <None Include="shaders\gpu_shader_2D_widget_base_vert.glsl" />
+    <None Include="shaders\gpu_shader_2D_widget_shadow_frag.glsl" />
+    <None Include="shaders\gpu_shader_2D_widget_shadow_vert.glsl" />
+    <None Include="shaders\shader_frag.glsl" />
+    <None Include="shaders\shader_vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

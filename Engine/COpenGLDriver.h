@@ -28,6 +28,7 @@ namespace irr
 namespace video
 {
 class IContextManager;
+class IOpenGlShader;
 
 class COpenGLDriver : public CNullDriver, public IMaterialRendererServices, public COpenGLExtensionHandler
 {
@@ -408,6 +409,7 @@ public:
 
 	COpenGLCacheHandler* getCacheHandler() const;
 
+	virtual video::IOpenGlShader* generteShader(const core::stringc & vertexPath, const core::stringc & fragmentPath) _IRR_OVERRIDE_;
 private:
 
 	bool updateVertexHardwareBuffer(SHWBufferLink_opengl* HWBuffer);
@@ -446,8 +448,11 @@ private:
 	void getColorBuffer(const void* vertices, u32 vertexCount, E_VERTEX_TYPE vType);
 
 	//! helper function doing the actual rendering.
-	void renderArray(const void* indexList, u32 primitiveCount,
-					 scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType);
+	void renderArray(const void* indexList, u32 primitiveCount, scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType);
+public:
+	void setCurrentShader(IOpenGlShader* _shader);
+
+private:
 
 	COpenGLCacheHandler* CacheHandler;
 
@@ -518,6 +523,8 @@ private:
 	IContextManager* ContextManager;
 
 	E_DEVICE_TYPE DeviceType;
+
+	IOpenGlShader* shader = 0;
 };
 
 } // end namespace video
