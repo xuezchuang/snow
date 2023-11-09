@@ -19,6 +19,7 @@
 #include "SExposedVideoData.h"
 #include "SOverrideMaterial.h"
 
+struct GPUShader;
 namespace irr
 {
 namespace io
@@ -1518,7 +1519,7 @@ public:
 	/**	\return True if the format is available, false if not. */
 	virtual bool queryTextureFormat(ECOLOR_FORMAT format) const = 0;
 
-	virtual void setCurrentShader(IOpenGlShader* _shader){}
+	virtual void setCurrentShader(GPUShader* _shader){}
 
 	virtual IOpenGlShader* generteShader(const core::stringc& vertexPath, const core::stringc& fragmentPath) { return 0; }
 };

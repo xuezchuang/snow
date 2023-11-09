@@ -26,6 +26,7 @@
 
 #include "COpenglShader.h"
 #include "glGpu/GPU_init_exit.h"
+#include "GPU_shader.h"
 namespace irr
 {
 namespace video
@@ -4296,31 +4297,32 @@ COpenGLCacheHandler* COpenGLDriver::getCacheHandler() const
 	return CacheHandler;
 }
 
-void COpenGLDriver::setCurrentShader(IOpenGlShader* _shader)
+void COpenGLDriver::setCurrentShader(GPUShader* _shader)
 {
-	shader = _shader;
-	shader->use();
+	//shader = _shader;
+	//shader->use();
+	GPU_shader_bind(_shader);
 }
 
-video::IOpenGlShader* COpenGLDriver::generteShader(const core::stringc& vertexPath, const core::stringc& fragmentPath)
-{
-	io::IReadFile* vsfile = FileSystem->createAndOpenFile(vertexPath);
-	io::IReadFile* fsfile = FileSystem->createAndOpenFile(fragmentPath);
-	if (!vsfile)
-	{
-		os::Printer::log("Unable to open shader file", vertexPath.c_str(), ELL_ERROR);
-		return false;
-	}
-	if (!fsfile)
-	{
-		os::Printer::log("Unable to open shader file", fragmentPath.c_str(), ELL_ERROR);
-		return false;
-	}
-	shader = new video::COpenglShader(vsfile, fsfile);
-	vsfile->drop();
-	fsfile->drop();
-	return shader;
-}
+//video::IOpenGlShader* COpenGLDriver::generteShader(const core::stringc& vertexPath, const core::stringc& fragmentPath)
+//{
+//	io::IReadFile* vsfile = FileSystem->createAndOpenFile(vertexPath);
+//	io::IReadFile* fsfile = FileSystem->createAndOpenFile(fragmentPath);
+//	if (!vsfile)
+//	{
+//		os::Printer::log("Unable to open shader file", vertexPath.c_str(), ELL_ERROR);
+//		return false;
+//	}
+//	if (!fsfile)
+//	{
+//		os::Printer::log("Unable to open shader file", fragmentPath.c_str(), ELL_ERROR);
+//		return false;
+//	}
+//	shader = new video::COpenglShader(vsfile, fsfile);
+//	vsfile->drop();
+//	fsfile->drop();
+//	return shader;
+//}
 
 } // end namespace
 } // end namespace

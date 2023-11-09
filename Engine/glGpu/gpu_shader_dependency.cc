@@ -29,7 +29,7 @@ extern "C" {
 #define SHADER_SOURCE(datatoc, filename, filepath) extern char datatoc[];
 	//#include "glsl_compositor_source_list.h"
 	//#include "glsl_draw_source_list.h"
-	#include "glsl_gpu_source_list.h"
+#include "glsl_gpu_source_list.h"
 #ifdef WITH_OCIO
 #  include "glsl_ocio_source_list.h"
 #endif
@@ -87,8 +87,8 @@ typedef struct GPUFunction
 typedef std::string StringRefNull;
 typedef std::string StringRef;
 
-using GPUSourceDictionnary = core::map<StringRef,struct GPUSource*>;
-using GPUFunctionDictionnary = core::map<StringRef,GPUFunction*>;
+using GPUSourceDictionnary = core::map<StringRef, struct GPUSource*>;
+using GPUFunctionDictionnary = core::map<StringRef, GPUFunction*>;
 
 #define CHECK(test_value, str, ofs, msg) \
 	if ((test_value) == -1) { \
@@ -110,60 +110,60 @@ struct GPUSource
 			  const char* file,
 			  const char* datatoc,
 			  GPUFunctionDictionnary* g_functions)
-		: fullpath(path),filename(file),source(datatoc)
+		: fullpath(path), filename(file), source(datatoc)
 	{
 		/* Scan for builtins. */
 		/* FIXME: This can trigger false positive caused by disabled #if blocks. */
 		/* TODO(fclem): Could be made faster by scanning once. */
-		if(source.find("gl_FragCoord",0) != -1)
+		if(source.find("gl_FragCoord", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::FRAG_COORD;
 		}
-		if(source.find("gl_FrontFacing",0) != -1)
+		if(source.find("gl_FrontFacing", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::FRONT_FACING;
 		}
-		if(source.find("gl_GlobalInvocationID",0) != -1)
+		if(source.find("gl_GlobalInvocationID", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::GLOBAL_INVOCATION_ID;
 		}
-		if(source.find("gl_InstanceID",0) != -1)
+		if(source.find("gl_InstanceID", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::INSTANCE_ID;
 		}
-		if(source.find("gl_LocalInvocationID",0) != -1)
+		if(source.find("gl_LocalInvocationID", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::LOCAL_INVOCATION_ID;
 		}
-		if(source.find("gl_LocalInvocationIndex",0) != -1)
+		if(source.find("gl_LocalInvocationIndex", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::LOCAL_INVOCATION_INDEX;
 		}
-		if(source.find("gl_NumWorkGroup",0) != -1)
+		if(source.find("gl_NumWorkGroup", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::NUM_WORK_GROUP;
 		}
-		if(source.find("gl_PointCoord",0) != -1)
+		if(source.find("gl_PointCoord", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::POINT_COORD;
 		}
-		if(source.find("gl_PointSize",0) != -1)
+		if(source.find("gl_PointSize", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::POINT_SIZE;
 		}
-		if(source.find("gl_PrimitiveID",0) != -1)
+		if(source.find("gl_PrimitiveID", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::PRIMITIVE_ID;
 		}
-		if(source.find("gl_VertexID",0) != -1)
+		if(source.find("gl_VertexID", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::VERTEX_ID;
 		}
-		if(source.find("gl_WorkGroupID",0) != -1)
+		if(source.find("gl_WorkGroupID", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::WORK_GROUP_ID;
 		}
-		if(source.find("gl_WorkGroupSize",0) != -1)
+		if(source.find("gl_WorkGroupSize", 0) != -1)
 		{
 			builtins |= shader::BuiltinBits::WORK_GROUP_SIZE;
 		}
@@ -185,10 +185,10 @@ struct GPUSource
 				//string_preprocess();
 			}
 			if((source.find("drw_debug_") != -1) &&
-				/* Avoid this file as it is a false positive match (matches "drw_debug_print_buf"). */
-				filename != "draw_debug_print_display_vert.glsl" &&
-				/* Avoid these two files where it makes no sense to add the dependency. */
-				!ELEM(filename,"common_debug_draw_lib.glsl","draw_debug_draw_display_vert.glsl"))
+			   /* Avoid this file as it is a false positive match (matches "drw_debug_print_buf"). */
+			   filename != "draw_debug_print_display_vert.glsl" &&
+			   /* Avoid these two files where it makes no sense to add the dependency. */
+			   !ELEM(filename, "common_debug_draw_lib.glsl", "draw_debug_draw_display_vert.glsl"))
 			{
 				builtins |= shader::BuiltinBits::USE_DEBUG_DRAW;
 			}
@@ -201,24 +201,24 @@ struct GPUSource
 		//}
 	};
 
-	static bool is_in_comment(const std::string& input,uint64_t offset)
+	static bool is_in_comment(const std::string& input, uint64_t offset)
 	{
-		return (input.rfind("/*",offset) > input.rfind("*/",offset)) ||
-			(input.rfind("//",offset) > input.rfind("\n",offset));
+		return (input.rfind("/*", offset) > input.rfind("*/", offset)) ||
+			(input.rfind("//", offset) > input.rfind("\n", offset));
 	}
 
-	template<bool check_whole_word = true,bool reversed = false,typename T>
-	static int64_t find_str(const StringRef& input,const T keyword,int64_t offset = 0)
+	template<bool check_whole_word = true, bool reversed = false, typename T>
+	static int64_t find_str(const StringRef& input, const T keyword, int64_t offset = 0)
 	{
 		while(true)
 		{
 			if constexpr(reversed)
 			{
-				offset = input.rfind(keyword,offset);
+				offset = input.rfind(keyword, offset);
 			}
 			else
 			{
-				offset = input.find(keyword,offset);
+				offset = input.find(keyword, offset);
 			}
 			if(offset > 0)
 			{
@@ -226,14 +226,14 @@ struct GPUSource
 				{
 					/* Fix false positive if something has "enum" as suffix. */
 					char previous_char = input[offset - 1];
-					if(!ELEM(previous_char,'\n','\t',' ',':','(',','))
+					if(!ELEM(previous_char, '\n', '\t', ' ', ':', '(', ','))
 					{
 						offset += (reversed) ? -1 : 1;
 						continue;
 					}
 				}
 				/* Fix case where the keyword is in a comment. */
-				if(is_in_comment(input.c_str(),offset))
+				if(is_in_comment(input.c_str(), offset))
 				{
 					offset += (reversed) ? -1 : 1;
 					continue;
@@ -254,7 +254,7 @@ struct GPUSource
 						 va_list arg)
 	{
 		size_t n;
-		n = (size_t)vsnprintf(dst,dst_maxncpy,format,arg);
+		n = (size_t)vsnprintf(dst, dst_maxncpy, format, arg);
 		if(n != -1 && n < dst_maxncpy)
 		{
 			dst[n] = '\0';
@@ -266,21 +266,21 @@ struct GPUSource
 		return n;
 	}
 
-	size_t BLI_snprintf(char* __restrict dst,size_t dst_maxncpy,const char* __restrict format,...)
+	size_t BLI_snprintf(char* __restrict dst, size_t dst_maxncpy, const char* __restrict format, ...)
 	{
 
 		size_t n;
 		va_list arg;
 
-		va_start(arg,format);
-		n = BLI_vsnprintf(dst,dst_maxncpy,format,arg);
+		va_start(arg, format);
+		n = BLI_vsnprintf(dst, dst_maxncpy, format, arg);
 		va_end(arg);
 
 		return n;
 	}
 
-	#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(*(arr)))
-	#define SNPRINTF(dst, format, ...) BLI_snprintf(dst, ARRAY_SIZE(dst), format, __VA_ARGS__)
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(*(arr)))
+#define SNPRINTF(dst, format, ...) BLI_snprintf(dst, ARRAY_SIZE(dst), format, __VA_ARGS__)
 
 	/*constexpr*/ bool endswith(const StringRef& suffix) const
 	{
@@ -304,7 +304,7 @@ struct GPUSource
 		{
 			return false;
 		}
-		for(size_t i = 0; i < prefix.size();i++)
+		for(size_t i = 0; i < prefix.size(); i++)
 		{
 			if(filename[i] != prefix[i])
 			{
@@ -322,23 +322,23 @@ struct GPUSource
 
 		while(true)
 		{
-			cursor = find_token(input,'\'',cursor + 1);
+			cursor = find_token(input, '\'', cursor + 1);
 			if(cursor == -1)
 			{
 				break;
 			}
 			/* Output anything between 2 print statement. */
-			output << input.substr(last_pos,cursor - last_pos);
+			output << input.substr(last_pos, cursor - last_pos);
 
 			/* Extract string. */
 			int64_t char_start = cursor + 1;
-			int64_t char_end = find_token(input,'\'',char_start);
-			CHECK(char_end,input,cursor,"Malformed char literal. Missing ending `'`.");
+			int64_t char_end = find_token(input, '\'', char_start);
+			CHECK(char_end, input, cursor, "Malformed char literal. Missing ending `'`.");
 
-			StringRef input_char = input.substr(char_start,char_end - char_start);
+			StringRef input_char = input.substr(char_start, char_end - char_start);
 			if(input_char.size() == 0)
 			{
-				CHECK(-1,input,cursor,"Malformed char literal. Empty character constant");
+				CHECK(-1, input, cursor, "Malformed char literal. Empty character constant");
 			}
 
 			uint8_t char_value = input_char[0];
@@ -351,19 +351,19 @@ struct GPUSource
 				}
 				else
 				{
-					CHECK(-1,input,cursor,"Unsupported escaped character");
+					CHECK(-1, input, cursor, "Unsupported escaped character");
 				}
 			}
 			else
 			{
 				if(input_char.size() > 1)
 				{
-					CHECK(-1,input,cursor,"Malformed char literal. Multi-character character constant");
+					CHECK(-1, input, cursor, "Malformed char literal. Multi-character character constant");
 				}
 			}
 
 			char hex[8];
-			SNPRINTF(hex,"0x%.2Xu",char_value);
+			SNPRINTF(hex, "0x%.2Xu", char_value);
 			output << hex;
 
 			cursor = last_pos = char_end + 1;
@@ -398,7 +398,7 @@ struct GPUSource
 		}
 
 		processed_source = source.c_str();
-		std::replace(processed_source.begin(),processed_source.end(),'"',' ');
+		std::replace(processed_source.begin(), processed_source.end(), '"', ' ');
 
 		source = processed_source.c_str();
 	}
@@ -419,65 +419,65 @@ struct GPUSource
 
 		while(true)
 		{
-			cursor = find_keyword(input,"enum ",cursor + 1);
+			cursor = find_keyword(input, "enum ", cursor + 1);
 			if(cursor == -1)
 			{
 				break;
 			}
 			/* Skip matches like `typedef enum myEnum myType;` */
-			if(cursor >= 8 && input.substr(cursor - 8,8) == "typedef ")
+			if(cursor >= 8 && input.substr(cursor - 8, 8) == "typedef ")
 			{
 				continue;
 			}
 			/* Output anything between 2 enums blocks. */
-			output += input.substr(last_pos,cursor - last_pos);
+			output += input.substr(last_pos, cursor - last_pos);
 
 			/* Extract enum type name. */
-			int64_t name_start = input.find(" ",cursor);
+			int64_t name_start = input.find(" ", cursor);
 
-			int64_t values_start = find_token(input,'{',cursor);
-			CHECK(values_start,input,cursor,"Malformed enum class. Expected \'{\' after typename.");
+			int64_t values_start = find_token(input, '{', cursor);
+			CHECK(values_start, input, cursor, "Malformed enum class. Expected \'{\' after typename.");
 
-			StringRef enum_name = input.substr(name_start,values_start - name_start);
+			StringRef enum_name = input.substr(name_start, values_start - name_start);
 			if(is_cpp)
 			{
-				int64_t name_end = find_token(enum_name,":");
-				CHECK(name_end,input,name_start,"Expected \':\' after C++ enum name.");
+				int64_t name_end = find_token(enum_name, ":");
+				CHECK(name_end, input, name_start, "Expected \':\' after C++ enum name.");
 
-				int64_t underlying_type = find_keyword(enum_name,"uint32_t",name_end);
-				CHECK(underlying_type,input,name_start,"C++ enums needs uint32_t underlying type.");
+				int64_t underlying_type = find_keyword(enum_name, "uint32_t", name_end);
+				CHECK(underlying_type, input, name_start, "C++ enums needs uint32_t underlying type.");
 
-				enum_name = input.substr(name_start,name_end);
+				enum_name = input.substr(name_start, name_end);
 			}
 
 			output += "#define " + enum_name + " uint\n";
 
 			/* Extract enum values. */
-			int64_t values_end = find_token(input,'}',values_start);
-			CHECK(values_end,input,cursor,"Malformed enum class. Expected \'}\' after values.");
+			int64_t values_end = find_token(input, '}', values_start);
+			CHECK(values_end, input, cursor, "Malformed enum class. Expected \'}\' after values.");
 
 			/* Skip opening brackets. */
 			values_start += 1;
 
-			StringRef enum_values = input.substr(values_start,values_end - values_start);
+			StringRef enum_values = input.substr(values_start, values_end - values_start);
 
 			/* Really poor check. Could be done better. */
-			int64_t token = find_token(enum_values,'{');
+			int64_t token = find_token(enum_values, '{');
 			int64_t not_found = (token == -1) ? 0 : -1;
-			CHECK(not_found,input,values_start + token,"Unexpected \'{\' token inside enum values.");
+			CHECK(not_found, input, values_start + token, "Unexpected \'{\' token inside enum values.");
 
 			/* Do not capture the comma after the last value (if present). */
-			int64_t last_equal = rfind_token(enum_values,'=',values_end);
-			int64_t last_comma = rfind_token(enum_values,',',values_end);
+			int64_t last_equal = rfind_token(enum_values, '=', values_end);
+			int64_t last_comma = rfind_token(enum_values, ',', values_end);
 			if(last_comma > last_equal)
 			{
-				enum_values = input.substr(values_start,last_comma);
+				enum_values = input.substr(values_start, last_comma);
 			}
 
 			output += "const uint " + enum_values;
 
 			int64_t semicolon_found = (input[values_end + 1] == ';') ? 0 : -1;
-			CHECK(semicolon_found,input,values_end + 1,"Expected \';\' after enum type declaration.");
+			CHECK(semicolon_found, input, values_end + 1, "Expected \';\' after enum type declaration.");
 
 			/* Skip the curly bracket but not the semicolon. */
 			cursor = last_pos = values_end + 1;
@@ -497,7 +497,7 @@ struct GPUSource
 		source = processed_source.c_str();
 	};
 	/* Return 1 one error. */
-	int init_dependencies(const GPUSourceDictionnary& dict,const GPUFunctionDictionnary& g_functions)
+	int init_dependencies(const GPUSourceDictionnary& dict, const GPUFunctionDictionnary& g_functions)
 	{
 		if(this->dependencies_init)
 		{
@@ -521,19 +521,19 @@ struct GPUSource
 		{
 			GPUSource* dependency_source = nullptr;
 			{
-				pos = source.find("pragma BLENDER_REQUIRE(",pos + 1);
+				pos = source.find("pragma BLENDER_REQUIRE(", pos + 1);
 				if(pos == -1)
 				{
 					return 0;
 				}
-				int64_t start = source.find('(',pos) + 1;
-				int64_t end = source.find(')',pos);
+				int64_t start = source.find('(', pos) + 1;
+				int64_t end = source.find(')', pos);
 				if(end == -1)
 				{
 					//print_error(source,start,"Malformed BLENDER_REQUIRE: Missing \")\" token");
 					return 1;
 				}
-				StringRef dependency_name = source.substr(start,end - start);
+				StringRef dependency_name = source.substr(start, end - start);
 				//dependency_source = dict.lookup_default(dependency_name,nullptr);
 				auto node = dict.find(dependency_name);
 				if(node == nullptr)
@@ -548,7 +548,7 @@ struct GPUSource
 			}
 
 			/* Recursive. */
-			int result = dependency_source->init_dependencies(dict,g_functions);
+			int result = dependency_source->init_dependencies(dict, g_functions);
 			if(result != 0)
 			{
 				return 1;
@@ -564,6 +564,15 @@ struct GPUSource
 		/* Precedes an eternal loop (quiet CLANG's `unreachable-code` warning). */
 		BLI_assert_unreachable();
 		return 0;
+	}
+	/* Returns the final string with all includes done. */
+	void build(std::string& result) const
+	{
+		for(u32 i = 0; i < dependencies.size(); ++i)
+		{
+			result.append(dependencies[i]->source.c_str());
+		}
+		result.append(source.c_str());
 	}
 };
 
@@ -583,7 +592,7 @@ void gpu_shader_dependency_init()
 	g_sources->set(filename, new GPUSource(filepath, filename, datatoc, g_functions));
 	//#include "glsl_compositor_source_list.h"
 	//#include "glsl_draw_source_list.h"
-	#include "glsl_gpu_source_list.h"
+#include "glsl_gpu_source_list.h"
 #undef SHADER_SOURCE
 
 	int errors = 0;
@@ -592,7 +601,7 @@ void gpu_shader_dependency_init()
 	for(Iterator = g_sources->getIterator(); !Iterator.atEnd(); )
 	{
 		auto value = Iterator.getNode()->getValue();
-		errors += value->init_dependencies(*g_sources,*g_functions);
+		errors += value->init_dependencies(*g_sources, *g_functions);
 		Iterator++;
 	}
 
@@ -600,9 +609,9 @@ void gpu_shader_dependency_init()
 
 
 
-//namespace blender::gpu::shader
-//{
-//
+namespace irr::gpu::shader
+{
+
 //BuiltinBits gpu_shader_dependency_get_builtins(const StringRefNull shader_source_name)
 //{
 //	if(shader_source_name.is_empty())
@@ -620,19 +629,19 @@ void gpu_shader_dependency_init()
 //	return source->builtins_get();
 //}
 //
-//Vector<const char*> gpu_shader_dependency_get_resolved_source(
-//	const StringRefNull shader_source_name)
-//{
-//	Vector<const char*> result;
-//	GPUSource* src = g_sources->lookup_default(shader_source_name,nullptr);
-//	if(src == nullptr)
-//	{
-//		std::cerr << "Error source not found : " << shader_source_name << std::endl;
-//	}
-//	src->build(result);
-//	return result;
-//}
-//
+std::string gpu_shader_dependency_get_resolved_source(const StringRefNull shader_source_name)
+{
+	GPUSourceDictionnary::Node* node = g_sources->find(shader_source_name);
+	if(node == nullptr)
+	{
+		std::cerr << "Error source not found : " << shader_source_name << std::endl;
+	}
+	std::string result;
+	GPUSource* src = node->getValue();
+	src->build(result);
+	return result;
+}
+
 //StringRefNull gpu_shader_dependency_get_source(const StringRefNull shader_source_name)
 //{
 //	GPUSource* src = g_sources->lookup_default(shader_source_name,nullptr);
@@ -655,5 +664,5 @@ void gpu_shader_dependency_init()
 //	}
 //	return "";
 //}
-//
-//}  // namespace blender::gpu::shader
+
+}  // namespace blender::gpu::shader

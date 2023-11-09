@@ -2,11 +2,10 @@
 #include "irrArray.h"
 #include "irrString.h"
 #include "irrMap.h"
-
 //#include "ICameraSceneNode.h"
 //#include "SViewFrustum.h"
 
-
+struct GPUShaderCreateInfo;
 namespace irr
 {
 namespace gpu
@@ -29,6 +28,7 @@ public:
 
 	void set(core::stringc str, shader::ShaderCreateInfo* data);
 	void set(core::stringc str, shader::StageInterfaceInfo* data);
+	const GPUShaderCreateInfo* GetGpuShader(core::stringc str);
 protected:	
 	//void gpu_shader_dependency_init();
 

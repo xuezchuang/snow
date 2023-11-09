@@ -32,27 +32,27 @@ extern "C" char datatoc_glsl_shader_defines_glsl[];
 
 GLShader::GLShader(const char* name) : Shader(name)
 {
-	//#if 0 /* Would be nice to have, but for now the Deferred compilation \
-	//       * does not have a GPUContext. */
-	//	BLI_assert(GLContext::get() != nullptr);
-	//#endif
-	//	shader_program_ = glCreateProgram();
-	//
-	//	debug::object_label(GL_PROGRAM, shader_program_, name);
+#if 0 /* Would be nice to have, but for now the Deferred compilation \
+	       * does not have a GPUContext. */
+	BLI_assert(GLContext::get() != nullptr);
+#endif
+	shader_program_ = glCreateProgram();
+
+	//debug::object_label(GL_PROGRAM, shader_program_, name);
 }
 
 GLShader::~GLShader()
 {
-	//#if 0 /* Would be nice to have, but for now the Deferred compilation \
-	//       * does not have a GPUContext. */
-	//	BLI_assert(GLContext::get() != nullptr);
-	//#endif
-	//	/* Invalid handles are silently ignored. */
-	//	glDeleteShader(vert_shader_);
-	//	glDeleteShader(geom_shader_);
-	//	glDeleteShader(frag_shader_);
-	//	glDeleteShader(compute_shader_);
-	//	glDeleteProgram(shader_program_);
+#if 0 /* Would be nice to have, but for now the Deferred compilation \
+	       * does not have a GPUContext. */
+	BLI_assert(GLContext::get() != nullptr);
+#endif
+	/* Invalid handles are silently ignored. */
+	glDeleteShader(vert_shader_);
+	glDeleteShader(geom_shader_);
+	glDeleteShader(frag_shader_);
+	glDeleteShader(compute_shader_);
+	glDeleteProgram(shader_program_);
 }
 //
 ///** \} */
@@ -1013,10 +1013,11 @@ GLuint GLShader::create_shader_stage(GLenum gl_stage, std::string sources)
 	}
 
 	/* Patch the shader code using the first source slot. */
-	sources = glsl_patch_get(gl_stage) + sources;
+	//sources = glsl_patch_get(gl_stage) + sources;
+	//sources = sources;
 	char* t_sou = sources.data();
-	glShaderSource(shader, (GLsizei)sources.size(), &t_sou, nullptr);
-	//glCompileShader(shader);
+	glShaderSource(shader, 1, &t_sou, nullptr);
+	glCompileShader(shader);
 
 	GLint status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -1053,26 +1054,26 @@ GLuint GLShader::create_shader_stage(GLenum gl_stage, std::string sources)
 
 	//debug::object_label(gl_stage, shader, name);
 
-	//glAttachShader(shader_program_, shader);
+	glAttachShader(shader_program_, shader);
 	return shader;
 }
 
-void GLShader::vertex_shader_from_glsl(std::string sources)
+void GLShader::vertex_shader_from_glsl(const std::string& sources)
 {
 	vert_shader_ = this->create_shader_stage(GL_VERTEX_SHADER, sources);
 }
 
-void GLShader::geometry_shader_from_glsl(std::string sources)
+void GLShader::geometry_shader_from_glsl(const std::string& sources)
 {
 	geom_shader_ = this->create_shader_stage(GL_GEOMETRY_SHADER, sources);
 }
 
-void GLShader::fragment_shader_from_glsl(std::string sources)
+void GLShader::fragment_shader_from_glsl(const std::string& sources)
 {
 	frag_shader_ = this->create_shader_stage(GL_FRAGMENT_SHADER, sources);
 }
 
-void GLShader::compute_shader_from_glsl(std::string sources)
+void GLShader::compute_shader_from_glsl(const std::string& sources)
 {
 	compute_shader_ = this->create_shader_stage(GL_COMPUTE_SHADER, sources);
 }
@@ -1119,27 +1120,27 @@ bool GLShader::finalize(const shader::ShaderCreateInfo* info)
 	return true;
 }
 
-///** \} */
-//
-///* -------------------------------------------------------------------- */
-///** \name Binding
-// * \{ */
-//
-//void GLShader::bind()
-//{
-//	BLI_assert(shader_program_ != 0);
-//	glUseProgram(shader_program_);
-//}
-//
-//void GLShader::unbind()
-//{
-//#ifndef NDEBUG
-//	glUseProgram(0);
-//#endif
-//}
-//
-///** \} */
-//
+/** \} */
+
+/* -------------------------------------------------------------------- */
+/** \name Binding
+ * \{ */
+
+void GLShader::bind()
+{
+	BLI_assert(shader_program_ != 0);
+	glUseProgram(shader_program_);
+}
+
+void GLShader::unbind()
+{
+#ifndef NDEBUG
+	glUseProgram(0);
+#endif
+}
+
+/** \} */
+
 ///* -------------------------------------------------------------------- */
 ///** \name Transform feedback
 // *

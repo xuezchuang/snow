@@ -19,6 +19,7 @@
 #include "IProfiler.h"
 
 #include "os.h"
+#include "glGpuShaderMgr.h"
 
 // We need this include for the case of skinned mesh support without
 // any such loader
@@ -358,7 +359,8 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 	}
 	);
 	
-	DefaultShader = Driver->generteShader(_T("../Engine/shader/shader.vs"), _T("../Engine/shader/shader.fs"));
+	//DefaultShader = Driver->generteShader(_T("../Engine/shader/shader.vs"), _T("../Engine/shader/shader.fs"));
+	DefaultShader = GPU_shader_create_from_info_name("gpu_shader_Test");// irr::gpu::CGpuShaderMgr::Instance()->GetGpuShader(_T("gpu_shader_Test"));
 }
 
 

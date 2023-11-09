@@ -1,6 +1,6 @@
 #include "glGpuShaderMgr.h"
 //#include "gpu_shader_create_info_list.hh"
-
+#include "GPU_shader.h"
 #undef GPU_SHADER_INTERFACE_INFO
 #undef GPU_SHADER_CREATE_INFO
 
@@ -38,6 +38,18 @@ void CGpuShaderMgr::InitShader()
 {
 	//gpu_shader_dependency_init();
 }
+
+const GPUShaderCreateInfo* CGpuShaderMgr::GetGpuShader(core::stringc str)
+{
+	auto pNode = mapCreateInfoDictionnary.find(str);
+	if(pNode)
+	{
+		const shader::ShaderCreateInfo* _info = pNode->getValue();
+		return reinterpret_cast<const GPUShaderCreateInfo*>(_info);
+	}
+	return nullptr;
+}
+
 
 } // end namespace
 } // end namespace

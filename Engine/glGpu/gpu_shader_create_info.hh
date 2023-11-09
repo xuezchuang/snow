@@ -756,11 +756,6 @@ public:
 		return *(Self*)this;
 	}
 
-
-
-
-
-
 	/************************************************************************/
 	/*				name Additional Create Info								*/
 	/************************************************************************/
@@ -776,6 +771,18 @@ public:
 		additional_info(args...);
 		return *(Self*)this;
 	}
+
+	/************************************************************************/
+	/*					Recursive evaluation.								*/
+	/************************************************************************/
+
+	void finalize();
+
+	std::string check_error() const;
+
+	/** Error detection that some backend compilers do not complain about. */
+	void validate_merge(const ShaderCreateInfo& other_info);
+	void validate_vertex_attributes(const ShaderCreateInfo* other_info = nullptr);
 };
 
 }

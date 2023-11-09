@@ -660,7 +660,7 @@
     <ClCompile Include="glGpu\glGpuShaderMgr.cpp" />
     <ClCompile Include="glGpu\glsl_shader_defines.c" />
     <ClCompile Include="glGpu\gl_shader.cc" />
-    <ClCompile Include="glGpu\gpu_init_exit.c">
+    <ClCompile Include="glGpu\gpu_init_exit.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="glGpu\gpu_shader.cc" />
@@ -678,6 +678,8 @@
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp17</LanguageStandard>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="glGpu\shader_frag.c" />
+    <ClCompile Include="glGpu\shader_vert.c" />
     <ClCompile Include="IBurningShader.cpp" />
     <ClCompile Include="Irrlicht.cpp" />
     <ClCompile Include="jpeglib\cdjpeg.c">

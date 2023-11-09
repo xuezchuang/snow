@@ -10,8 +10,8 @@
 #include "gpu_shader_create_info.hh"
 
 GPU_SHADER_CREATE_INFO(gpu_shader_Test)
-	.vertex_source("gpu_shader_2D_widget_base_vert.glsl")
-	.fragment_source("gpu_shader_2D_widget_base_frag.glsl")
+	.vertex_source("shader_vert.glsl")
+	.fragment_source("shader_frag.glsl");
 
 
 

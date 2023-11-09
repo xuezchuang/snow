@@ -409,7 +409,7 @@ public:
 
 	COpenGLCacheHandler* getCacheHandler() const;
 
-	virtual video::IOpenGlShader* generteShader(const core::stringc & vertexPath, const core::stringc & fragmentPath) _IRR_OVERRIDE_;
+	//virtual video::IOpenGlShader* generteShader(const core::stringc & vertexPath, const core::stringc & fragmentPath) _IRR_OVERRIDE_;
 private:
 
 	bool updateVertexHardwareBuffer(SHWBufferLink_opengl* HWBuffer);
@@ -450,7 +450,7 @@ private:
 	//! helper function doing the actual rendering.
 	void renderArray(const void* indexList, u32 primitiveCount, scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType);
 public:
-	void setCurrentShader(IOpenGlShader* _shader);
+	void setCurrentShader(GPUShader* _shader);
 
 private:
 

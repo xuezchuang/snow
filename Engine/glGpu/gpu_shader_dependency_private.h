@@ -8,6 +8,7 @@ extern "C" {
 
 	void gpu_shader_dependency_exit(void);
 
+	typedef std::string StringRefNull;
 #ifdef __cplusplus
 }
 #endif
@@ -19,12 +20,16 @@ extern "C" {
 //
 //#include "gpu_shader_create_info.hh"
 //
-//namespace blender::gpu::shader
-//{
+
+
+
+namespace irr::gpu::shader
+{
 //
 //BuiltinBits gpu_shader_dependency_get_builtins(const StringRefNull source_name);
 //
-//Vector<const char*> gpu_shader_dependency_get_resolved_source(const StringRefNull source_name);
+
+std::string gpu_shader_dependency_get_resolved_source(const StringRefNull source_name);
 //StringRefNull gpu_shader_dependency_get_source(const StringRefNull source_name);
 //
 ///**
@@ -35,6 +40,6 @@ extern "C" {
 //StringRefNull gpu_shader_dependency_get_filename_from_source_string(
 //	const StringRefNull source_string);
 //
-//}  // namespace blender::gpu::shader
+}  // namespace blender::gpu::shader
 //
 //#endif

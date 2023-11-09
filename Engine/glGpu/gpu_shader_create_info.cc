@@ -32,305 +32,303 @@ using InterfaceDictionnary = irr::core::map<StringRef,StageInterfaceInfo*>;
 static CreateInfoDictionnary* g_create_infos = nullptr;
 static InterfaceDictionnary* g_interfaces = nullptr;
 
-//void ShaderCreateInfo::finalize()
-//{
-//	if(finalized_)
-//	{
-//		return;
-//	}
-//	finalized_ = true;
-//
-//	Set<StringRefNull> deps_merged;
-//
-//	validate_vertex_attributes();
-//
-//	for(auto& info_name : additional_infos_)
-//	{
-//		/* Fetch create info. */
-//		const ShaderCreateInfo& info = *reinterpret_cast<const ShaderCreateInfo*>(
-//			gpu_shader_create_info_get(info_name.c_str()));
-//
-//		/* Recursive. */
-//		const_cast<ShaderCreateInfo&>(info).finalize();
-//
-//		interface_names_size_ += info.interface_names_size_;
-//
-//		/* NOTE: EEVEE Materials can result in nested includes. To avoid duplicate
-//		 * shader resources, we need to avoid inserting duplicates.
-//		 * TODO: Optimize create info preparation to include each individual "additional_info"
-//		 * only a single time. */
-//		vertex_inputs_.extend_non_duplicates(info.vertex_inputs_);
-//		fragment_outputs_.extend_non_duplicates(info.fragment_outputs_);
-//		vertex_out_interfaces_.extend_non_duplicates(info.vertex_out_interfaces_);
-//		geometry_out_interfaces_.extend_non_duplicates(info.geometry_out_interfaces_);
-//
-//		validate_vertex_attributes(&info);
-//
-//		/* Insert with duplicate check. */
-//		push_constants_.extend_non_duplicates(info.push_constants_);
-//		defines_.extend_non_duplicates(info.defines_);
-//		batch_resources_.extend_non_duplicates(info.batch_resources_);
-//		pass_resources_.extend_non_duplicates(info.pass_resources_);
-//		typedef_sources_.extend_non_duplicates(info.typedef_sources_);
-//
-//		if(info.early_fragment_test_)
-//		{
-//			early_fragment_test_ = true;
-//		}
-//		/* Modify depth write if has been changed from default.
-//		 * `UNCHANGED` implies gl_FragDepth is not used at all. */
-//		if(info.depth_write_ != DepthWrite::UNCHANGED)
-//		{
-//			depth_write_ = info.depth_write_;
-//		}
-//
-//		validate_merge(info);
-//
-//		auto assert_no_overlap = [&](const bool test,const StringRefNull error)
-//		{
-//			if(!test)
-//			{
-//				std::cout << name_ << ": Validation failed while merging " << info.name_ << " : ";
-//				std::cout << error << std::endl;
-//				BLI_assert(0);
-//			}
-//		};
-//
-//		if(!deps_merged.add(info.name_))
-//		{
-//			assert_no_overlap(false,"additional info already merged via another info");
-//		}
-//
-//		if(info.compute_layout_.local_size_x != -1)
-//		{
-//			assert_no_overlap(compute_layout_.local_size_x == -1,"Compute layout already defined");
-//			compute_layout_ = info.compute_layout_;
-//		}
-//
-//		if(!info.vertex_source_.is_empty())
-//		{
-//			assert_no_overlap(vertex_source_.is_empty(),"Vertex source already existing");
-//			vertex_source_ = info.vertex_source_;
-//		}
-//		if(!info.geometry_source_.is_empty())
-//		{
-//			assert_no_overlap(geometry_source_.is_empty(),"Geometry source already existing");
-//			geometry_source_ = info.geometry_source_;
-//			geometry_layout_ = info.geometry_layout_;
-//		}
-//		if(!info.fragment_source_.is_empty())
-//		{
-//			assert_no_overlap(fragment_source_.is_empty(),"Fragment source already existing");
-//			fragment_source_ = info.fragment_source_;
-//		}
-//		if(!info.compute_source_.is_empty())
-//		{
-//			assert_no_overlap(compute_source_.is_empty(),"Compute source already existing");
-//			compute_source_ = info.compute_source_;
-//		}
-//	}
-//
-//	if(auto_resource_location_)
-//	{
-//		int images = 0,samplers = 0,ubos = 0,ssbos = 0;
-//
-//		auto set_resource_slot = [&](Resource& res)
-//		{
-//			switch(res.bind_type)
-//			{
-//			case Resource::BindType::UNIFORM_BUFFER:
-//				res.slot = ubos++;
-//				break;
-//			case Resource::BindType::STORAGE_BUFFER:
-//				res.slot = ssbos++;
-//				break;
-//			case Resource::BindType::SAMPLER:
-//				res.slot = samplers++;
-//				break;
-//			case Resource::BindType::IMAGE:
-//				res.slot = images++;
-//				break;
-//			}
-//		};
-//
-//		for(auto& res : batch_resources_)
-//		{
-//			set_resource_slot(res);
-//		}
-//		for(auto& res : pass_resources_)
-//		{
-//			set_resource_slot(res);
-//		}
-//	}
-//}
-//
-//std::string ShaderCreateInfo::check_error() const
-//{
-//	std::string error;
-//
-//	/* At least a vertex shader and a fragment shader are required, or only a compute shader. */
-//	if(this->compute_source_.is_empty())
-//	{
-//		if(this->vertex_source_.is_empty())
-//		{
-//			error += "Missing vertex shader in " + this->name_ + ".\n";
-//		}
-//		if(tf_type_ == GPU_SHADER_TFB_NONE && this->fragment_source_.is_empty())
-//		{
-//			error += "Missing fragment shader in " + this->name_ + ".\n";
-//		}
-//	}
-//	else
-//	{
-//		if(!this->vertex_source_.is_empty())
-//		{
-//			error += "Compute shader has vertex_source_ shader attached in " + this->name_ + ".\n";
-//		}
-//		if(!this->geometry_source_.is_empty())
-//		{
-//			error += "Compute shader has geometry_source_ shader attached in " + this->name_ + ".\n";
-//		}
-//		if(!this->fragment_source_.is_empty())
-//		{
-//			error += "Compute shader has fragment_source_ shader attached in " + this->name_ + ".\n";
-//		}
-//	}
-//
-//	return error;
-//}
-//
-//void ShaderCreateInfo::validate_merge(const ShaderCreateInfo& other_info)
-//{
-//	if(!auto_resource_location_)
-//	{
-//		/* Check same bind-points usage in OGL. */
-//		Set<int> images,samplers,ubos,ssbos;
-//
-//		auto register_resource = [&](const Resource& res) -> bool
-//		{
-//			switch(res.bind_type)
-//			{
-//			case Resource::BindType::UNIFORM_BUFFER:
-//				return images.add(res.slot);
-//			case Resource::BindType::STORAGE_BUFFER:
-//				return samplers.add(res.slot);
-//			case Resource::BindType::SAMPLER:
-//				return ubos.add(res.slot);
-//			case Resource::BindType::IMAGE:
-//				return ssbos.add(res.slot);
-//			default:
-//				return false;
-//			}
-//		};
-//
-//		auto print_error_msg = [&](const Resource& res,Vector<Resource>& resources)
-//		{
-//			auto print_resource_name = [&](const Resource& res)
-//			{
-//				switch(res.bind_type)
-//				{
-//				case Resource::BindType::UNIFORM_BUFFER:
-//					std::cout << "Uniform Buffer " << res.uniformbuf.name;
-//					break;
-//				case Resource::BindType::STORAGE_BUFFER:
-//					std::cout << "Storage Buffer " << res.storagebuf.name;
-//					break;
-//				case Resource::BindType::SAMPLER:
-//					std::cout << "Sampler " << res.sampler.name;
-//					break;
-//				case Resource::BindType::IMAGE:
-//					std::cout << "Image " << res.image.name;
-//					break;
-//				default:
-//					std::cout << "Unknown Type";
-//					break;
-//				}
-//			};
-//
-//			for(const Resource& _res : resources)
-//			{
-//				if(&res != &_res && res.bind_type == _res.bind_type && res.slot == _res.slot)
-//				{
-//					std::cout << name_ << ": Validation failed : Overlapping ";
-//					print_resource_name(res);
-//					std::cout << " and ";
-//					print_resource_name(_res);
-//					std::cout << " at (" << res.slot << ") while merging " << other_info.name_ << std::endl;
-//				}
-//			}
-//		};
-//
-//		for(auto& res : batch_resources_)
-//		{
-//			if(register_resource(res) == false)
-//			{
-//				print_error_msg(res,batch_resources_);
-//				print_error_msg(res,pass_resources_);
-//			}
-//		}
-//
-//		for(auto& res : pass_resources_)
-//		{
-//			if(register_resource(res) == false)
-//			{
-//				print_error_msg(res,batch_resources_);
-//				print_error_msg(res,pass_resources_);
-//			}
-//		}
-//	}
-//}
-//
-//void ShaderCreateInfo::validate_vertex_attributes(const ShaderCreateInfo* other_info)
-//{
-//	uint32_t attr_bits = 0;
-//	for(auto& attr : vertex_inputs_)
-//	{
-//		if(attr.index >= 16 || attr.index < 0)
-//		{
-//			std::cout << name_ << ": \"" << attr.name
-//				<< "\" : Type::MAT3 unsupported as vertex attribute." << std::endl;
-//			BLI_assert(0);
-//		}
-//		if(attr.index >= 16 || attr.index < 0)
-//		{
-//			std::cout << name_ << ": Invalid index for attribute \"" << attr.name << "\"" << std::endl;
-//			BLI_assert(0);
-//		}
-//		uint32_t attr_new = 0;
-//		if(attr.type == Type::MAT4)
-//		{
-//			for(int i = 0; i < 4; i++)
-//			{
-//				attr_new |= 1 << (attr.index + i);
-//			}
-//		}
-//		else
-//		{
-//			attr_new |= 1 << attr.index;
-//		}
-//
-//		if((attr_bits & attr_new) != 0)
-//		{
-//			std::cout << name_ << ": Attribute \"" << attr.name
-//				<< "\" overlap one or more index from another attribute."
-//				" Note that mat4 takes up 4 indices.";
-//			if(other_info)
-//			{
-//				std::cout << " While merging " << other_info->name_ << std::endl;
-//			}
-//			std::cout << std::endl;
-//			BLI_assert(0);
-//		}
-//		attr_bits |= attr_new;
-//	}
-//}
+void ShaderCreateInfo::finalize()
+{
+	if(finalized_)
+	{
+		return;
+	}
+	finalized_ = true;
+
+	//Set<StringRefNull> deps_merged;
+	Vector<StringRef> deps_merged;
+
+
+	validate_vertex_attributes();
+
+	for(auto& info_name : additional_infos_)
+	{
+		/* Fetch create info. */
+		const ShaderCreateInfo& info = *reinterpret_cast<const ShaderCreateInfo*>(irr::gpu::CGpuShaderMgr::Instance()->GetGpuShader(info_name.c_str()));
+
+		/* Recursive. */
+		const_cast<ShaderCreateInfo&>(info).finalize();
+
+		interface_names_size_ += info.interface_names_size_;
+
+		/* NOTE: EEVEE Materials can result in nested includes. To avoid duplicate
+		 * shader resources, we need to avoid inserting duplicates.
+		 * TODO: Optimize create info preparation to include each individual "additional_info"
+		 * only a single time. */
+		//vertex_inputs_.extend_non_duplicates(info.vertex_inputs_);
+		//fragment_outputs_.extend_non_duplicates(info.fragment_outputs_);
+		//vertex_out_interfaces_.extend_non_duplicates(info.vertex_out_interfaces_);
+		//geometry_out_interfaces_.extend_non_duplicates(info.geometry_out_interfaces_);
+
+		validate_vertex_attributes(&info);
+
+		/* Insert with duplicate check. */
+		//push_constants_.extend_non_duplicates(info.push_constants_);
+		//defines_.extend_non_duplicates(info.defines_);
+		//batch_resources_.extend_non_duplicates(info.batch_resources_);
+		//pass_resources_.extend_non_duplicates(info.pass_resources_);
+		//typedef_sources_.extend_non_duplicates(info.typedef_sources_);
+
+		if(info.early_fragment_test_)
+		{
+			early_fragment_test_ = true;
+		}
+		/* Modify depth write if has been changed from default.
+		 * `UNCHANGED` implies gl_FragDepth is not used at all. */
+		if(info.depth_write_ != DepthWrite::UNCHANGED)
+		{
+			depth_write_ = info.depth_write_;
+		}
+
+		validate_merge(info);
+
+		auto assert_no_overlap = [&](const bool test, const StringRefNull error)
+		{
+			if(!test)
+			{
+				std::cout << name_ << ": Validation failed while merging " << info.name_ << " : ";
+				std::cout << error << std::endl;
+				BLI_assert(0);
+			}
+		};
+
+		deps_merged.push_back(info.name_);
+		//if(!deps_merged.push_back(info.name_))
+		//{
+		//	assert_no_overlap(false, "additional info already merged via another info");
+		//}
+
+		if(info.compute_layout_.local_size_x != -1)
+		{
+			assert_no_overlap(compute_layout_.local_size_x == -1, "Compute layout already defined");
+			compute_layout_ = info.compute_layout_;
+		}
+
+		if(!info.vertex_source_.empty())
+		{
+			assert_no_overlap(vertex_source_.empty(), "Vertex source already existing");
+			vertex_source_ = info.vertex_source_;
+		}
+		if(!info.geometry_source_.empty())
+		{
+			assert_no_overlap(geometry_source_.empty(), "Geometry source already existing");
+			geometry_source_ = info.geometry_source_;
+			geometry_layout_ = info.geometry_layout_;
+		}
+		if(!info.fragment_source_.empty())
+		{
+			assert_no_overlap(fragment_source_.empty(), "Fragment source already existing");
+			fragment_source_ = info.fragment_source_;
+		}
+		if(!info.compute_source_.empty())
+		{
+			assert_no_overlap(compute_source_.empty(), "Compute source already existing");
+			compute_source_ = info.compute_source_;
+		}
+	}
+
+	/*if(auto_resource_location_)
+	{
+		int images = 0, samplers = 0, ubos = 0, ssbos = 0;
+
+		auto set_resource_slot = [&](Resource& res)
+		{
+			switch(res.bind_type)
+			{
+			case Resource::BindType::UNIFORM_BUFFER:
+				res.slot = ubos++;
+				break;
+			case Resource::BindType::STORAGE_BUFFER:
+				res.slot = ssbos++;
+				break;
+			case Resource::BindType::SAMPLER:
+				res.slot = samplers++;
+				break;
+			case Resource::BindType::IMAGE:
+				res.slot = images++;
+				break;
+			}
+		};
+
+		for(auto& res : batch_resources_)
+		{
+			set_resource_slot(res);
+		}
+		for(auto& res : pass_resources_)
+		{
+			set_resource_slot(res);
+		}
+	}*/
+}
+
+std::string ShaderCreateInfo::check_error() const
+{
+	std::string error;
+
+	///* At least a vertex shader and a fragment shader are required, or only a compute shader. */
+	//if(this->compute_source_.is_empty())
+	//{
+	//	if(this->vertex_source_.is_empty())
+	//	{
+	//		error += "Missing vertex shader in " + this->name_ + ".\n";
+	//	}
+	//	if(tf_type_ == GPU_SHADER_TFB_NONE && this->fragment_source_.is_empty())
+	//	{
+	//		error += "Missing fragment shader in " + this->name_ + ".\n";
+	//	}
+	//}
+	//else
+	//{
+	//	if(!this->vertex_source_.is_empty())
+	//	{
+	//		error += "Compute shader has vertex_source_ shader attached in " + this->name_ + ".\n";
+	//	}
+	//	if(!this->geometry_source_.is_empty())
+	//	{
+	//		error += "Compute shader has geometry_source_ shader attached in " + this->name_ + ".\n";
+	//	}
+	//	if(!this->fragment_source_.is_empty())
+	//	{
+	//		error += "Compute shader has fragment_source_ shader attached in " + this->name_ + ".\n";
+	//	}
+	//}
+
+	return error;
+}
+
+void ShaderCreateInfo::validate_merge(const ShaderCreateInfo& other_info)
+{
+	//if(!auto_resource_location_)
+	//{
+	//	/* Check same bind-points usage in OGL. */
+	//	Set<int> images,samplers,ubos,ssbos;
+
+	//	auto register_resource = [&](const Resource& res) -> bool
+	//	{
+	//		switch(res.bind_type)
+	//		{
+	//		case Resource::BindType::UNIFORM_BUFFER:
+	//			return images.add(res.slot);
+	//		case Resource::BindType::STORAGE_BUFFER:
+	//			return samplers.add(res.slot);
+	//		case Resource::BindType::SAMPLER:
+	//			return ubos.add(res.slot);
+	//		case Resource::BindType::IMAGE:
+	//			return ssbos.add(res.slot);
+	//		default:
+	//			return false;
+	//		}
+	//	};
+
+	//	auto print_error_msg = [&](const Resource& res,Vector<Resource>& resources)
+	//	{
+	//		auto print_resource_name = [&](const Resource& res)
+	//		{
+	//			switch(res.bind_type)
+	//			{
+	//			case Resource::BindType::UNIFORM_BUFFER:
+	//				std::cout << "Uniform Buffer " << res.uniformbuf.name;
+	//				break;
+	//			case Resource::BindType::STORAGE_BUFFER:
+	//				std::cout << "Storage Buffer " << res.storagebuf.name;
+	//				break;
+	//			case Resource::BindType::SAMPLER:
+	//				std::cout << "Sampler " << res.sampler.name;
+	//				break;
+	//			case Resource::BindType::IMAGE:
+	//				std::cout << "Image " << res.image.name;
+	//				break;
+	//			default:
+	//				std::cout << "Unknown Type";
+	//				break;
+	//			}
+	//		};
+
+	//		for(const Resource& _res : resources)
+	//		{
+	//			if(&res != &_res && res.bind_type == _res.bind_type && res.slot == _res.slot)
+	//			{
+	//				std::cout << name_ << ": Validation failed : Overlapping ";
+	//				print_resource_name(res);
+	//				std::cout << " and ";
+	//				print_resource_name(_res);
+	//				std::cout << " at (" << res.slot << ") while merging " << other_info.name_ << std::endl;
+	//			}
+	//		}
+	//	};
+
+	//	for(auto& res : batch_resources_)
+	//	{
+	//		if(register_resource(res) == false)
+	//		{
+	//			print_error_msg(res,batch_resources_);
+	//			print_error_msg(res,pass_resources_);
+	//		}
+	//	}
+
+	//	for(auto& res : pass_resources_)
+	//	{
+	//		if(register_resource(res) == false)
+	//		{
+	//			print_error_msg(res,batch_resources_);
+	//			print_error_msg(res,pass_resources_);
+	//		}
+	//	}
+	//}
+}
+
+void ShaderCreateInfo::validate_vertex_attributes(const ShaderCreateInfo* other_info)
+{
+	uint32_t attr_bits = 0;
+	for(auto& attr : vertex_inputs_)
+	{
+		if(attr.index >= 16 || attr.index < 0)
+		{
+			std::cout << name_ << ": \"" << attr.name<< "\" : Type::MAT3 unsupported as vertex attribute." << std::endl;
+			BLI_assert(0);
+		}
+		if(attr.index >= 16 || attr.index < 0)
+		{
+			std::cout << name_ << ": Invalid index for attribute \"" << attr.name << "\"" << std::endl;
+			BLI_assert(0);
+		}
+		uint32_t attr_new = 0;
+		if(attr.type == Type::MAT4)
+		{
+			for(int i = 0; i < 4; i++)
+			{
+				attr_new |= 1 << (attr.index + i);
+			}
+		}
+		else
+		{
+			attr_new |= 1 << attr.index;
+		}
+
+		if((attr_bits & attr_new) != 0)
+		{
+			std::cout << name_ << ": Attribute \"" << attr.name << "\" overlap one or more index from another attribute."
+				" Note that mat4 takes up 4 indices.";
+			if(other_info)
+			{
+				std::cout << " While merging " << other_info->name_ << std::endl;
+			}
+			std::cout << std::endl;
+			BLI_assert(0);
+		}
+		attr_bits |= attr_new;
+	}
+}
 
 }  // namespace blender::gpu::shader
 
 using namespace irr::gpu;
 using namespace irr::gpu::shader;
-
-
 
 void gpu_shader_create_info_init()
 {
@@ -450,4 +448,6 @@ void gpu_shader_create_info_init()
 //  printf("\n");
 //  return success == total;
 //}
+
+
 

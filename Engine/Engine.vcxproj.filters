@@ -850,26 +850,32 @@
     <ClCompile Include="glGpu\glsl_shader_defines.c">
       <Filter>Irrlicht\video\Opengl\shader\00 Binary Source</Filter>
     </ClCompile>
+    <ClCompile Include="glGpu\shader_frag.c">
+      <Filter>Irrlicht\video\Opengl\shader\00 Binary Source</Filter>
+    </ClCompile>
+    <ClCompile Include="glGpu\shader_vert.c">
+      <Filter>Irrlicht\video\Opengl\shader\00 Binary Source</Filter>
+    </ClCompile>
     <ClCompile Include="glGpu\gl_shader.cc">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="glGpu\gpu_init_exit.c">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClCompile>
-    <ClCompile Include="glGpu\gpu_shader.cc">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
+    <ClCompile Include="glGpu\gpu_init_exit.cc">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
     </ClCompile>
     <ClCompile Include="glGpu\gpu_shader_builtin.cc">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
     </ClCompile>
     <ClCompile Include="glGpu\gpu_shader_create_info.cc">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
     </ClCompile>
     <ClCompile Include="glGpu\gpu_shader_dependency.cc">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
+    </ClCompile>
+    <ClCompile Include="glGpu\gpu_shader.cc">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu\00</Filter>
     </ClCompile>
     <ClCompile Include="glGpu\glGpuShaderMgr.cpp">
-      <Filter>Irrlicht\video\Opengl\shader</Filter>
+      <Filter>Irrlicht\video\Opengl\shader\shaderMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1746,50 +1752,50 @@
     <ClInclude Include="shaders\infos\gpu_interface_info.hh">
       <Filter>Irrlicht\video\Opengl\shader\01 info</Filter>
     </ClInclude>
-    <ClInclude Include="glGpu\basic_depth_info.hh">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\gl_shader.hh">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
     <ClInclude Include="glGpu\glsl_gpu_source_list.h">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\GPU_init_exit.h">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\GPU_shader.h">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\GPU_shader_builtin.h">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\gpu_shader_create_info.hh">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\gpu_shader_create_info_list.hh">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\gpu_shader_create_info_private.hh">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\gpu_shader_dependency_private.h">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\gpu_shader_private.hh">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\GPU_texture.h">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU</Filter>
     </ClInclude>
     <ClInclude Include="glGpu\utildefines.h">
-      <Filter>Irrlicht\video\Opengl\shader\01</Filter>
-    </ClInclude>
-    <ClInclude Include="glGpu\glGpuShaderMgr.h">
-      <Filter>Irrlicht\video\Opengl\shader</Filter>
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU</Filter>
     </ClInclude>
     <ClInclude Include="shaders\infos\gpu_shader_test_info.hh">
       <Filter>Irrlicht\video\Opengl\shader\01 info</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\basic_depth_info.hh">
+      <Filter>Irrlicht\video\Opengl\shader\01 info</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\gl_shader.hh">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\GPU_shader.h">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu\00</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\GPU_init_exit.h">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\GPU_shader_builtin.h">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\gpu_shader_create_info.hh">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\gpu_shader_create_info_list.hh">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\gpu_shader_create_info_private.hh">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\gpu_shader_dependency_private.h">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\GPU_texture.h">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\gpu_shader_private.hh">
+      <Filter>Irrlicht\video\Opengl\shader\01 GPU\gpu\01</Filter>
+    </ClInclude>
+    <ClInclude Include="glGpu\glGpuShaderMgr.h">
+      <Filter>Irrlicht\video\Opengl\shader\shaderMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1919,11 +1925,26 @@
     <Filter Include="Irrlicht\video\Opengl\shader\01 info">
       <UniqueIdentifier>{230c9bc3-37aa-4898-8e54-2af072af7a2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Irrlicht\video\Opengl\shader\01">
-      <UniqueIdentifier>{829ee1f4-5395-4e1c-bb29-7b28bae439b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Irrlicht\video\Opengl\shader\00 Binary Source">
       <UniqueIdentifier>{3048c88f-c19f-4a53-952f-b33ba31bdf56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\shader\01 GPU">
+      <UniqueIdentifier>{829ee1f4-5395-4e1c-bb29-7b28bae439b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\shader\01 GPU\gpu">
+      <UniqueIdentifier>{db93d8d4-2da9-46c5-97fd-d5c534e4c51f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\shader\01 GPU\gpu\00">
+      <UniqueIdentifier>{b31346f8-40e8-4855-9862-67c33278244a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\shader\01 GPU\opengl">
+      <UniqueIdentifier>{da9b3b05-5f21-4c05-8684-3949176813bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\shader\01 GPU\gpu\01">
+      <UniqueIdentifier>{6e0db497-0f1e-49d7-91cf-f4eac5704a3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Irrlicht\video\Opengl\shader\shaderMgr">
+      <UniqueIdentifier>{22bcae18-d65c-4386-9fe7-102a7a8010cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

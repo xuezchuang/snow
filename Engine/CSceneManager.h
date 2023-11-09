@@ -12,7 +12,7 @@
 #include "IMeshLoader.h"
 #include "CAttributes.h"
 #include "ILightManager.h"
-
+#include "GPU_shader.h"
 namespace irr
 {
 namespace io
@@ -662,8 +662,8 @@ private:
 	core::array<ISceneNodeAnimatorFactory*> SceneNodeAnimatorFactoryList;
 
 	//shader
-	video::IOpenGlShader* DefaultShader;
-
+	//video::IOpenGlShader* DefaultShader;
+	GPUShader* DefaultShader;
 
 	//! current active camera
 	ICameraSceneNode* ActiveCamera;

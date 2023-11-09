@@ -51,16 +51,16 @@ public:
 	Shader(const char* name);
 	virtual ~Shader();
 
-	virtual void vertex_shader_from_glsl(const shader::ShaderCreateInfo& info) = 0;
-	virtual void geometry_shader_from_glsl(const shader::ShaderCreateInfo& info) = 0;
-	virtual void fragment_shader_from_glsl(const shader::ShaderCreateInfo& info) = 0;
-	virtual void compute_shader_from_glsl(const shader::ShaderCreateInfo& info) = 0;
+	virtual void vertex_shader_from_glsl(const std::string& sources) = 0;
+	virtual void geometry_shader_from_glsl(const std::string& sources) = 0;
+	virtual void fragment_shader_from_glsl(const std::string& sources) = 0;
+	virtual void compute_shader_from_glsl(const std::string& sources) = 0;
 	virtual bool finalize(const shader::ShaderCreateInfo* info = nullptr) = 0;
 	/* Pre-warms PSOs using parent shader's cached PSO descriptors. Limit specifies maximum PSOs to
 	 * warm. If -1, compiles all PSO permutations in parent shader.
 	 *
 	 * See `GPU_shader_warm_cache(..)` in `GPU_shader.h` for more information. */
-	virtual void warm_cache(int limit) = 0;
+	//virtual void warm_cache(int limit) = 0;
 
 	//virtual void transform_feedback_names_set(Span<const char*> name_list, eGPUShaderTFBType geom_type) = 0;
 
@@ -70,8 +70,8 @@ public:
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 
-	virtual void uniform_float(int location, int comp_len, int array_size, const float* data) = 0;
-	virtual void uniform_int(int location, int comp_len, int array_size, const int* data) = 0;
+	//virtual void uniform_float(int location, int comp_len, int array_size, const float* data) = 0;
+	//virtual void uniform_int(int location, int comp_len, int array_size, const int* data) = 0;
 
 	std::string defines_declare(const shader::ShaderCreateInfo& info) const;
 	virtual std::string resources_declare(const shader::ShaderCreateInfo& info) const = 0;
@@ -82,7 +82,7 @@ public:
 	virtual std::string compute_layout_declare(const shader::ShaderCreateInfo& info) const = 0;
 
 	/* DEPRECATED: Kept only because of BGL API. */
-	virtual int program_handle_get() const = 0;
+	//virtual int program_handle_get() const = 0;
 
 	inline const char* const name_get() const
 	{

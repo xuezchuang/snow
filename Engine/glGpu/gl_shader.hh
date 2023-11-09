@@ -8,17 +8,15 @@
 
 #pragma once
 
-//#include "MEM_guardedalloc.h"
-//
+  //#include "MEM_guardedalloc.h"
+  //
 #include "gl/glew.h"
 //
 #include "gpu_shader_create_info.hh"
 #include "gpu_shader_private.hh"
 
-namespace irr
-{
-namespace gpu
-{
+namespace irr{
+namespace gpu{
 
 /**
  * Implementation of shader compilation and uniforms handling using OpenGL.
@@ -39,36 +37,36 @@ private:
 	/** True if any shader failed to compile. */
 	bool compilation_failed_ = false;
 
-//	eGPUShaderTFBType transform_feedback_type_ = GPU_SHADER_TFB_NONE;
-//
+	//	eGPUShaderTFBType transform_feedback_type_ = GPU_SHADER_TFB_NONE;
+	//
 public:
 	GLShader(const char* name);
 	~GLShader();
 
 	///** Return true on success. */
-	virtual void vertex_shader_from_glsl(std::string sources);
-	virtual void geometry_shader_from_glsl(std::string sources);
-	virtual void fragment_shader_from_glsl(std::string sources);
-	virtual void compute_shader_from_glsl(std::string sources);
-	virtual bool finalize(const shader::ShaderCreateInfo* info = nullptr);
+	virtual void vertex_shader_from_glsl(const std::string& sources) override;
+	virtual void geometry_shader_from_glsl(const std::string& sources) override;
+	virtual void fragment_shader_from_glsl(const std::string& sources) override;
+	virtual void compute_shader_from_glsl(const std::string& sources) override;
+	virtual bool finalize(const shader::ShaderCreateInfo* info = nullptr) override;
 	//void warm_cache(int /*limit*/) override {};
 
-	virtual std::string resources_declare(const shader::ShaderCreateInfo& info) const;
-	virtual std::string vertex_interface_declare(const shader::ShaderCreateInfo& info) const;
-	virtual std::string fragment_interface_declare(const shader::ShaderCreateInfo& info) const;
-	virtual std::string geometry_interface_declare(const shader::ShaderCreateInfo& info) const;
-	virtual std::string geometry_layout_declare(const shader::ShaderCreateInfo& info) const;
-	virtual std::string compute_layout_declare(const shader::ShaderCreateInfo& info) const;
+	virtual std::string resources_declare(const shader::ShaderCreateInfo& info) const override;
+	virtual std::string vertex_interface_declare(const shader::ShaderCreateInfo& info) const override;
+	virtual std::string fragment_interface_declare(const shader::ShaderCreateInfo& info) const override;
+	virtual std::string geometry_interface_declare(const shader::ShaderCreateInfo& info) const override;
+	virtual std::string geometry_layout_declare(const shader::ShaderCreateInfo& info) const override;
+	virtual std::string compute_layout_declare(const shader::ShaderCreateInfo& info) const override;
 
-//	/** Should be called before linking. */
-//	void transform_feedback_names_set(Span<const char*> name_list,
-//									  eGPUShaderTFBType geom_type) override;
-//	bool transform_feedback_enable(GPUVertBuf* buf) override;
-//	void transform_feedback_disable() override;
-//
-//	void bind() override;
-//	void unbind() override;
-//
+	//	/** Should be called before linking. */
+	//	void transform_feedback_names_set(Span<const char*> name_list,
+	//									  eGPUShaderTFBType geom_type) override;
+	//	bool transform_feedback_enable(GPUVertBuf* buf) override;
+	//	void transform_feedback_disable() override;
+	//
+	virtual void bind() override;
+	virtual void unbind() override;
+	//
 //	void uniform_float(int location, int comp_len, int array_size, const float* data) override;
 //	void uniform_int(int location, int comp_len, int array_size, const int* data) override;
 //
@@ -86,15 +84,15 @@ private:
 	/** Create, compile and attach the shader stage to the shader program. */
 	GLuint create_shader_stage(GLenum gl_stage, std::string sources);
 
-//	/**
-//	 * \brief features available on newer implementation such as native barycentric coordinates
-//	 * and layered rendering, necessitate a geometry shader to work on older hardware.
-//	 */
-//	std::string workaround_geometry_shader_source_create(const shader::ShaderCreateInfo& info);
-//
-//	bool do_geometry_shader_injection(const shader::ShaderCreateInfo* info);
+	//	/**
+	//	 * \brief features available on newer implementation such as native barycentric coordinates
+	//	 * and layered rendering, necessitate a geometry shader to work on older hardware.
+	//	 */
+	//	std::string workaround_geometry_shader_source_create(const shader::ShaderCreateInfo& info);
+	//
+	//	bool do_geometry_shader_injection(const shader::ShaderCreateInfo* info);
 
-	//MEM_CXX_CLASS_ALLOC_FUNCS("GLShader");
+		//MEM_CXX_CLASS_ALLOC_FUNCS("GLShader");
 };
 
 //class GLLogParser : public GPULogParser
