@@ -359,8 +359,11 @@ CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs,
 	}
 	);
 	
-	//DefaultShader = Driver->generteShader(_T("../Engine/shader/shader.vs"), _T("../Engine/shader/shader.fs"));
-	DefaultShader = GPU_shader_create_from_info_name("gpu_shader_Test");// irr::gpu::CGpuShaderMgr::Instance()->GetGpuShader(_T("gpu_shader_Test"));
+	if(driver->getDriverType() == video::EDT_OPENGL_4_6)
+	{
+		//DefaultShader = Driver->generteShader(_T("../Engine/shader/shader.vs"), _T("../Engine/shader/shader.fs"));
+		DefaultShader = GPU_shader_create_from_info_name("gpu_shader_Test");// irr::gpu::CGpuShaderMgr::Instance()->GetGpuShader(_T("gpu_shader_Test"));
+	}
 }
 
 
@@ -1407,7 +1410,7 @@ u32 CSceneManager::registerNodeForRendering(ISceneNode* node, E_SCENE_NODE_RENDE
 		}
 		break;
 	case ESNRP_AUTOMATIC:
-		if (!isCulled(node))
+		//if (!isCulled(node))
 		{
 			const u32 count = node->getMaterialCount();
 
@@ -1491,6 +1494,12 @@ void CSceneManager::drawAll()
 
 	u32 i; // new ISO for scoping problem in some compilers
 
+
+	if(Driver->getDriverType() == video::EDT_OPENGL_4_6)
+	{
+		Driver->setCurrentShader(DefaultShader);
+	}
+
 	// reset all transforms
 	Driver->setMaterial(video::SMaterial());
 	Driver->setTransform(video::ETS_PROJECTION, core::IdentityMatrix);
@@ -1512,14 +1521,14 @@ void CSceneManager::drawAll()
 	*/
 	IRR_PROFILE(getProfiler().start(EPID_SM_RENDER_CAMERAS));
 	camWorldPos.set(0, 0, 0);
-	if (ActiveCamera)
+	if(ActiveCamera)
 	{
 		ActiveCamera->render();
 		camWorldPos = ActiveCamera->getAbsolutePosition();
 	}
 	IRR_PROFILE(getProfiler().stop(EPID_SM_RENDER_CAMERAS));
 
-	// let all nodes register themselves
+	//let all nodes register themselves
 	OnRegisterSceneNode();
 
 	if (LightManager)
@@ -1534,8 +1543,8 @@ void CSceneManager::drawAll()
 		if (LightManager)
 			LightManager->OnRenderPassPreRender(CurrentRenderPass);
 
-		for (i = 0; i < CameraList.size(); ++i)
-			CameraList[i]->render();
+		//for (i = 0; i < CameraList.size(); ++i)
+		//	CameraList[i]->render();
 
 		CameraList.set_used(0);
 
@@ -1617,10 +1626,8 @@ void CSceneManager::drawAll()
 			LightManager->OnRenderPassPostRender(CurrentRenderPass);
 	}
 
-
 	// render default objects
 	{
-		Driver->setCurrentShader(DefaultShader);
 		IRR_PROFILE(CProfileScope psDefault(EPID_SM_RENDER_DEFAULT);)
 			CurrentRenderPass = ESNRP_SOLID;
 		Driver->getOverrideMaterial().Enabled = ((Driver->getOverrideMaterial().EnablePasses & CurrentRenderPass) != 0);
@@ -1643,6 +1650,7 @@ void CSceneManager::drawAll()
 			for (i = 0; i < SolidNodeList.size(); ++i)
 				SolidNodeList[i].Node->render();
 		}
+		return;
 
 #ifdef _IRR_SCENEMANAGER_DEBUG
 		Parameters->setAttribute("drawn_solid", (s32)SolidNodeList.size());

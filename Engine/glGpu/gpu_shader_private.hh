@@ -51,6 +51,7 @@ public:
 	Shader(const char* name);
 	virtual ~Shader();
 
+	virtual int GPU_shader_get_uniform(const char* name) = 0;
 	virtual void vertex_shader_from_glsl(const std::string& sources) = 0;
 	virtual void geometry_shader_from_glsl(const std::string& sources) = 0;
 	virtual void fragment_shader_from_glsl(const std::string& sources) = 0;
@@ -70,8 +71,8 @@ public:
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 
-	//virtual void uniform_float(int location, int comp_len, int array_size, const float* data) = 0;
-	//virtual void uniform_int(int location, int comp_len, int array_size, const int* data) = 0;
+	virtual void uniform_float(int location, int comp_len, int array_size, const float* data) = 0;
+	virtual void uniform_int(int location, int comp_len, int array_size, const int* data) = 0;
 
 	std::string defines_declare(const shader::ShaderCreateInfo& info) const;
 	virtual std::string resources_declare(const shader::ShaderCreateInfo& info) const = 0;

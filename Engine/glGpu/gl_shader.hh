@@ -43,6 +43,7 @@ public:
 	GLShader(const char* name);
 	~GLShader();
 
+	virtual int GPU_shader_get_uniform(const char* name) override;
 	///** Return true on success. */
 	virtual void vertex_shader_from_glsl(const std::string& sources) override;
 	virtual void geometry_shader_from_glsl(const std::string& sources) override;
@@ -66,9 +67,9 @@ public:
 	//
 	virtual void bind() override;
 	virtual void unbind() override;
-	//
-//	void uniform_float(int location, int comp_len, int array_size, const float* data) override;
-//	void uniform_int(int location, int comp_len, int array_size, const int* data) override;
+	
+	virtual void uniform_float(int location, int comp_len, int array_size, const float* data);
+	virtual void uniform_int(int location, int comp_len, int array_size, const int* data);
 //
 //	/** DEPRECATED: Kept only because of BGL API. */
 //	int program_handle_get() const override;

@@ -167,11 +167,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\irrlicht\source\Irrlicht\CMeshManipulator.h" />
-    <ClInclude Include="..\..\irrlicht\source\Irrlicht\COSOperator.h" />
     <ClInclude Include="..\..\irrlicht\source\Irrlicht\ITriangleRenderer.h" />
-    <ClInclude Include="..\..\irrlicht\source\Irrlicht\lzma\LzmaDec.h" />
-    <ClInclude Include="..\..\irrlicht\source\Irrlicht\lzma\Types.h" />
     <ClInclude Include="aesGladman\aes.h" />
     <ClInclude Include="aesGladman\aesopt.h" />
     <ClInclude Include="aesGladman\fileenc.h" />
@@ -267,6 +263,7 @@
     <ClInclude Include="CMD3MeshFileLoader.h" />
     <ClInclude Include="CMemoryFile.h" />
     <ClInclude Include="CMeshCache.h" />
+    <ClInclude Include="CMeshManipulator.h" />
     <ClInclude Include="CMeshTextureLoader.h" />
     <ClInclude Include="CMountPointReader.h" />
     <ClInclude Include="CMS3DMeshFileLoader.h" />
@@ -296,6 +293,7 @@
     <ClInclude Include="COpenGLShaderMaterialRendererOld.h" />
     <ClInclude Include="COpenGLSLMaterialRenderer.h" />
     <ClInclude Include="COpenGLSLMaterialRendererOld.h" />
+    <ClInclude Include="COSOperator.h" />
     <ClInclude Include="CPakReader.h" />
     <ClInclude Include="CPLYMeshFileLoader.h" />
     <ClInclude Include="CPLYMeshWriter.h" />
@@ -454,6 +452,8 @@
     <ClInclude Include="libpng\pnglibconf.h" />
     <ClInclude Include="libpng\pngpriv.h" />
     <ClInclude Include="libpng\pngstruct.h" />
+    <ClInclude Include="lzma\LzmaDec.h" />
+    <ClInclude Include="lzma\Types.h" />
     <ClInclude Include="os.h" />
     <ClInclude Include="S2DVertex.h" />
     <ClInclude Include="S4DVertex.h" />
@@ -479,9 +479,6 @@
     <ClInclude Include="zlib\zutil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\irrlicht\source\Irrlicht\CMeshManipulator.cpp" />
-    <ClCompile Include="..\..\irrlicht\source\Irrlicht\COSOperator.cpp" />
-    <ClCompile Include="..\..\irrlicht\source\Irrlicht\lzma\LzmaDec.c" />
     <ClCompile Include="aesGladman\aescrypt.cpp" />
     <ClCompile Include="aesGladman\aeskey.cpp" />
     <ClCompile Include="aesGladman\aestab.cpp" />
@@ -592,6 +589,7 @@
     <ClCompile Include="CMD3MeshFileLoader.cpp" />
     <ClCompile Include="CMemoryFile.cpp" />
     <ClCompile Include="CMeshCache.cpp" />
+    <ClCompile Include="CMeshManipulator.cpp" />
     <ClCompile Include="CMeshTextureLoader.cpp" />
     <ClCompile Include="CMountPointReader.cpp" />
     <ClCompile Include="CMS3DMeshFileLoader.cpp" />
@@ -616,6 +614,7 @@
     <ClCompile Include="COpenGLShaderMaterialRendererOld.cpp" />
     <ClCompile Include="COpenGLSLMaterialRenderer.cpp" />
     <ClCompile Include="COpenGLSLMaterialRendererOld.cpp" />
+    <ClCompile Include="COSOperator.cpp" />
     <ClCompile Include="CPakReader.cpp" />
     <ClCompile Include="CPLYMeshFileLoader.cpp" />
     <ClCompile Include="CPLYMeshWriter.cpp" />
@@ -823,6 +822,7 @@
     <ClCompile Include="libpng\pngwrite.c" />
     <ClCompile Include="libpng\pngwtran.c" />
     <ClCompile Include="libpng\pngwutil.c" />
+    <ClCompile Include="lzma\LzmaDec.c" />
     <ClCompile Include="os.cpp" />
     <ClCompile Include="zlib\adler32.c" />
     <ClCompile Include="zlib\compress.c" />

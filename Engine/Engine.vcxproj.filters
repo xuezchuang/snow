@@ -13,9 +13,6 @@
     <ClCompile Include="CVideoModeList.cpp">
       <Filter>Irrlicht\video</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\irrlicht\source\Irrlicht\COSOperator.cpp">
-      <Filter>Irrlicht\irr</Filter>
-    </ClCompile>
     <ClCompile Include="CWGLManager.cpp">
       <Filter>Irrlicht\video\Opengl\Context</Filter>
     </ClCompile>
@@ -54,9 +51,6 @@
     </ClCompile>
     <ClCompile Include="CSoftwareTexture.cpp">
       <Filter>Irrlicht\video\Software</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\irrlicht\source\Irrlicht\CMeshManipulator.cpp">
-      <Filter>Irrlicht\scene</Filter>
     </ClCompile>
     <ClCompile Include="CSoftwareDriver2.cpp">
       <Filter>Irrlicht\video\Burning Video</Filter>
@@ -333,9 +327,6 @@
     </ClCompile>
     <ClCompile Include="bzip2\decompress.c">
       <Filter>extern\bzip2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\irrlicht\source\Irrlicht\lzma\LzmaDec.c">
-      <Filter>extern</Filter>
     </ClCompile>
     <ClCompile Include="CPakReader.cpp">
       <Filter>Irrlicht\io</Filter>
@@ -877,6 +868,15 @@
     <ClCompile Include="glGpu\glGpuShaderMgr.cpp">
       <Filter>Irrlicht\video\Opengl\shader\shaderMgr</Filter>
     </ClCompile>
+    <ClCompile Include="COSOperator.cpp">
+      <Filter>Irrlicht\irr</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshManipulator.cpp">
+      <Filter>Irrlicht\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="lzma\LzmaDec.c">
+      <Filter>extern</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\position2d.h">
@@ -1017,9 +1017,6 @@
     <ClInclude Include="include\SSkinMeshBuffer.h">
       <Filter>include\scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\irrlicht\source\Irrlicht\COSOperator.h">
-      <Filter>Irrlicht\irr</Filter>
-    </ClInclude>
     <ClInclude Include="CWGLManager.h">
       <Filter>Irrlicht\video\Opengl\Context</Filter>
     </ClInclude>
@@ -1154,9 +1151,6 @@
     </ClInclude>
     <ClInclude Include="CSoftwareTexture.h">
       <Filter>Irrlicht\video\Software</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\irrlicht\source\Irrlicht\CMeshManipulator.h">
-      <Filter>Irrlicht\scene</Filter>
     </ClInclude>
     <ClInclude Include="CSoftwareDriver2.h">
       <Filter>Irrlicht\video\Burning Video</Filter>
@@ -1409,12 +1403,6 @@
     </ClInclude>
     <ClInclude Include="bzip2\bzlib_private.h">
       <Filter>extern\bzip2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\irrlicht\source\Irrlicht\lzma\Types.h">
-      <Filter>extern</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\irrlicht\source\Irrlicht\lzma\LzmaDec.h">
-      <Filter>extern</Filter>
     </ClInclude>
     <ClInclude Include="CPakReader.h">
       <Filter>Irrlicht\io</Filter>
@@ -1796,6 +1784,18 @@
     </ClInclude>
     <ClInclude Include="glGpu\glGpuShaderMgr.h">
       <Filter>Irrlicht\video\Opengl\shader\shaderMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="COSOperator.h">
+      <Filter>Irrlicht\irr</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshManipulator.h">
+      <Filter>Irrlicht\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="lzma\LzmaDec.h">
+      <Filter>extern</Filter>
+    </ClInclude>
+    <ClInclude Include="lzma\Types.h">
+      <Filter>extern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

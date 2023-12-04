@@ -120,12 +120,6 @@ extern "C" {
 	int GPU_shader_get_sampler_binding(GPUShader* shader, const char* name);
 
 	/**
-	 * Returns uniform location.
-	 * If cached, it is faster than querying the interface for each uniform assignment.
-	 */
-	int GPU_shader_get_uniform(GPUShader* shader, const char* name);
-
-	/**
 	 * Sets a generic push constant (a.k.a. uniform).
 	 * \a length and \a array_size should match the create info push_constant declaration.
 	 */

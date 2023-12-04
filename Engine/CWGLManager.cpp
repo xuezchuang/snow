@@ -8,8 +8,12 @@
 
 #include "os.h"
 
+#include "gl/glew.h"
 #include <GL/gl.h>
+//#include "glext.h"
 #include "wglext.h"
+
+
 
 #ifdef _MSC_VER
 #pragma comment(lib, "OpenGL32.lib")
@@ -65,7 +69,7 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 	clientSize.bottom = Params.WindowSize.Height;
 
 	DWORD style = WS_POPUP;
-	if (!Params.Fullscreen)
+	if(!Params.Fullscreen)
 		style = WS_SYSMENU | WS_BORDER | WS_CAPTION | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
 	AdjustWindowRect(&clientSize, style, FALSE);
@@ -79,7 +83,7 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 	HWND temporary_wnd = CreateWindow(ClassName, __TEXT(""), style, windowLeft,
 									  windowTop, realWidth, realHeight, NULL, NULL, lhInstance, NULL);
 
-	if (!temporary_wnd)
+	if(!temporary_wnd)
 	{
 		os::Printer::log("Cannot create a temporary window.", ELL_ERROR);
 		UnregisterClass(ClassName, lhInstance);
@@ -112,11 +116,11 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 	};
 	pfd = tmp_pfd;
 
-	for (u32 i = 0; i < 6; ++i)
+	for(u32 i = 0; i < 6; ++i)
 	{
-		if (i == 1)
+		if(i == 1)
 		{
-			if (Params.Stencilbuffer)
+			if(Params.Stencilbuffer)
 			{
 				os::Printer::log("Cannot create a GL device with stencil buffer, disabling stencil shadows.", ELL_WARNING);
 				Params.Stencilbuffer = false;
@@ -125,26 +129,26 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 			else
 				continue;
 		}
-		else if (i == 2)
+		else if(i == 2)
 		{
 			pfd.cDepthBits = 24;
 		}
-		else if (i == 3)
+		else if(i == 3)
 		{
-			if (Params.Bits != 16)
+			if(Params.Bits != 16)
 				pfd.cDepthBits = 16;
 			else
 				continue;
 		}
-		else if (i == 4)
+		else if(i == 4)
 		{
 			// try single buffer
-			if (Params.Doublebuffer)
+			if(Params.Doublebuffer)
 				pfd.dwFlags &= ~PFD_DOUBLEBUFFER;
 			else
 				continue;
 		}
-		else if (i == 5)
+		else if(i == 5)
 		{
 			os::Printer::log("Cannot create a GL device context", "No suitable format for temporary window.", ELL_ERROR);
 			ReleaseDC(temporary_wnd, HDc);
@@ -155,14 +159,14 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 
 		// choose pixelformat
 		PixelFormat = ChoosePixelFormat(HDc, &pfd);
-		if (PixelFormat)
+		if(PixelFormat)
 			break;
 	}
 
 	SetPixelFormat(HDc, PixelFormat, &pfd);
 	os::Printer::log("Create temporary GL rendering context", ELL_DEBUG);
 	HGLRC hrc = wglCreateContext(HDc);
-	if (!hrc)
+	if(!hrc)
 	{
 		os::Printer::log("Cannot create a temporary GL rendering context.", ELL_ERROR);
 		ReleaseDC(temporary_wnd, HDc);
@@ -175,7 +179,7 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 	CurrentContext.OpenGLWin32.HRc = hrc;
 	CurrentContext.OpenGLWin32.HWnd = temporary_wnd;
 
-	if (!activateContext(CurrentContext, false))
+	if(!activateContext(CurrentContext, false))
 	{
 		os::Printer::log("Cannot activate a temporary GL rendering context.", ELL_ERROR);
 		wglDeleteContext(hrc);
@@ -188,33 +192,34 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 	core::stringc wglExtensions;
 #ifdef WGL_ARB_extensions_string
 	PFNWGLGETEXTENSIONSSTRINGARBPROC irrGetExtensionsString = (PFNWGLGETEXTENSIONSSTRINGARBPROC)wglGetProcAddress("wglGetExtensionsStringARB");
-	if (irrGetExtensionsString)
+	if(irrGetExtensionsString)
 		wglExtensions = irrGetExtensionsString(HDc);
 #elif defined(WGL_EXT_extensions_string)
 	PFNWGLGETEXTENSIONSSTRINGEXTPROC irrGetExtensionsString = (PFNWGLGETEXTENSIONSSTRINGEXTPROC)wglGetProcAddress("wglGetExtensionsStringEXT");
-	if (irrGetExtensionsString)
+	if(irrGetExtensionsString)
 		wglExtensions = irrGetExtensionsString(HDc);
 #endif
 	const bool pixel_format_supported = (wglExtensions.find("WGL_ARB_pixel_format") != -1);
 	const bool multi_sample_supported = ((wglExtensions.find("WGL_ARB_multisample") != -1) ||
-										 (wglExtensions.find("WGL_EXT_multisample") != -1) || (wglExtensions.find("WGL_3DFX_multisample") != -1));
+										 (wglExtensions.find("WGL_EXT_multisample") != -1) || 
+										 (wglExtensions.find("WGL_3DFX_multisample") != -1));
 #ifdef _DEBUG
 	os::Printer::log("WGL_extensions", wglExtensions);
 #endif
 
 #ifdef WGL_ARB_pixel_format
 	PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormat_ARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
-	if (pixel_format_supported && wglChoosePixelFormat_ARB)
+	if(pixel_format_supported && wglChoosePixelFormat_ARB)
 	{
 		// This value determines the number of samples used for antialiasing
 		// My experience is that 8 does not show a big
 		// improvement over 4, but 4 shows a big improvement
 		// over 2.
 
-		if (Params.AntiAlias > 32)
+		if(Params.AntiAlias > 32)
 			Params.AntiAlias = 32;
 
-		f32 fAttributes[] = { 0.0, 0.0 };
+		f32 fAttributes[] = {0.0, 0.0};
 		s32 iAttributes[] =
 		{
 			WGL_DRAW_TO_WINDOW_ARB,1,
@@ -248,12 +253,12 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 		int iAttrSize = sizeof(iAttributes) / sizeof(int);
 		const bool framebuffer_srgb_supported = ((wglExtensions.find("WGL_ARB_framebuffer_sRGB") != -1) ||
 												 (wglExtensions.find("WGL_EXT_framebuffer_sRGB") != -1));
-		if (!framebuffer_srgb_supported)
+		if(!framebuffer_srgb_supported)
 		{
 			memmove(&iAttributes[24], &iAttributes[26], sizeof(int) * (iAttrSize - 26));
 			iAttrSize -= 2;
 		}
-		if (!multi_sample_supported)
+		if(!multi_sample_supported)
 		{
 			memmove(&iAttributes[20], &iAttributes[24], sizeof(int) * (iAttrSize - 24));
 			iAttrSize -= 4;
@@ -267,12 +272,12 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 			UINT numFormats = 0;
 			const BOOL valid = wglChoosePixelFormat_ARB(HDc, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
 
-			if (valid && numFormats)
+			if(valid && numFormats)
 				rv = pixelFormat;
 			else
 				iAttributes[21] -= 1;
-		} while (rv == 0 && iAttributes[21] > 1);
-		if (rv)
+		} while(rv == 0 && iAttributes[21] > 1);
+		if(rv)
 		{
 			PixelFormat = rv;
 			Params.AntiAlias = iAttributes[21];
@@ -281,6 +286,13 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 	else
 #endif
 		Params.AntiAlias = 0;
+
+	GLenum err = glewInit();
+	if(GLEW_OK != err)
+	{
+		os::Printer::log("glew Error.", ELL_ERROR);
+		return false;
+	}
 
 	// this only terminates the temporary HRc
 	destroyContext();
@@ -292,12 +304,12 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 	// now get new window
 	CurrentContext.OpenGLWin32.HWnd = videodata.OpenGLWin32.HWnd;
 	// get hdc
-	if (!(CurrentContext.OpenGLWin32.HDc = GetDC((HWND)videodata.OpenGLWin32.HWnd)))
+	if(!(CurrentContext.OpenGLWin32.HDc = GetDC((HWND)videodata.OpenGLWin32.HWnd)))
 	{
 		os::Printer::log("Cannot create a GL device context.", ELL_ERROR);
 		return false;
 	}
-	if (!PrimaryContext.OpenGLWin32.HWnd)
+	if(!PrimaryContext.OpenGLWin32.HWnd)
 	{
 		PrimaryContext.OpenGLWin32.HWnd = CurrentContext.OpenGLWin32.HWnd;
 		PrimaryContext.OpenGLWin32.HDc = CurrentContext.OpenGLWin32.HDc;
@@ -308,9 +320,9 @@ bool CWGLManager::initialize(const SIrrlichtCreationParameters& params, const SE
 
 void CWGLManager::terminate()
 {
-	if (CurrentContext.OpenGLWin32.HDc)
+	if(CurrentContext.OpenGLWin32.HDc)
 		ReleaseDC((HWND)CurrentContext.OpenGLWin32.HWnd, (HDC)CurrentContext.OpenGLWin32.HDc);
-	if (PrimaryContext.OpenGLWin32.HDc && PrimaryContext.OpenGLWin32.HDc == CurrentContext.OpenGLWin32.HDc)
+	if(PrimaryContext.OpenGLWin32.HDc && PrimaryContext.OpenGLWin32.HDc == CurrentContext.OpenGLWin32.HDc)
 		memset(&PrimaryContext, 0, sizeof(PrimaryContext));
 	memset(&CurrentContext, 0, sizeof(CurrentContext));
 }
@@ -319,13 +331,13 @@ bool CWGLManager::generateSurface()
 {
 	HDC HDc = (HDC)CurrentContext.OpenGLWin32.HDc;
 	// search for pixel format the simple way
-	if (PixelFormat == 0 || (!SetPixelFormat(HDc, PixelFormat, &pfd)))
+	if(PixelFormat == 0 || (!SetPixelFormat(HDc, PixelFormat, &pfd)))
 	{
-		for (u32 i = 0; i < 5; ++i)
+		for(u32 i = 0; i < 5; ++i)
 		{
-			if (i == 1)
+			if(i == 1)
 			{
-				if (Params.Stencilbuffer)
+				if(Params.Stencilbuffer)
 				{
 					os::Printer::log("Cannot create a GL device with stencil buffer, disabling stencil shadows.", ELL_WARNING);
 					Params.Stencilbuffer = false;
@@ -335,19 +347,19 @@ bool CWGLManager::generateSurface()
 					continue;
 			}
 			else
-				if (i == 2)
+				if(i == 2)
 				{
 					pfd.cDepthBits = 24;
 				}
-			if (i == 3)
+			if(i == 3)
 			{
-				if (Params.Bits != 16)
+				if(Params.Bits != 16)
 					pfd.cDepthBits = 16;
 				else
 					continue;
 			}
 			else
-				if (i == 4)
+				if(i == 4)
 				{
 					os::Printer::log("Cannot create a GL device context", "No suitable format.", ELL_ERROR);
 					return false;
@@ -355,28 +367,28 @@ bool CWGLManager::generateSurface()
 
 			// choose pixelformat
 			PixelFormat = ChoosePixelFormat(HDc, &pfd);
-			if (PixelFormat)
+			if(PixelFormat)
 				break;
 		}
 
 		// set pixel format
-		if (!SetPixelFormat(HDc, PixelFormat, &pfd))
+		if(!SetPixelFormat(HDc, PixelFormat, &pfd))
 		{
 			os::Printer::log("Cannot set the pixel format.", ELL_ERROR);
 			return false;
 		}
 	}
 
-	if (pfd.cAlphaBits != 0)
+	if(pfd.cAlphaBits != 0)
 	{
-		if (pfd.cRedBits == 8)
+		if(pfd.cRedBits == 8)
 			ColorFormat = ECF_A8R8G8B8;
 		else
 			ColorFormat = ECF_A1R5G5B5;
 	}
 	else
 	{
-		if (pfd.cRedBits == 8)
+		if(pfd.cRedBits == 8)
 			ColorFormat = ECF_R8G8B8;
 		else
 			ColorFormat = ECF_R5G6B5;
@@ -396,7 +408,7 @@ bool CWGLManager::generateContext()
 	// create rendering context
 #ifdef WGL_ARB_create_context
 	PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribs_ARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
-	if (wglCreateContextAttribs_ARB)
+	if(wglCreateContextAttribs_ARB)
 	{
 		// with 3.0 all available profiles should be usable, higher versions impose restrictions
 		// we need at least 1.1
@@ -414,7 +426,7 @@ bool CWGLManager::generateContext()
 		hrc = wglCreateContext(HDc);
 	os::Printer::log("Irrlicht context");
 
-	if (!hrc)
+	if(!hrc)
 	{
 		os::Printer::log("Cannot create a GL rendering context.", ELL_ERROR);
 		return false;
@@ -422,7 +434,7 @@ bool CWGLManager::generateContext()
 
 	// set exposed data
 	CurrentContext.OpenGLWin32.HRc = hrc;
-	if (!PrimaryContext.OpenGLWin32.HRc)
+	if(!PrimaryContext.OpenGLWin32.HRc)
 		PrimaryContext.OpenGLWin32.HRc = CurrentContext.OpenGLWin32.HRc;
 
 	return true;
@@ -435,18 +447,18 @@ const SExposedVideoData& CWGLManager::getContext() const
 
 bool CWGLManager::activateContext(const SExposedVideoData& videoData, bool restorePrimaryOnZero)
 {
-	if (videoData.OpenGLWin32.HWnd && videoData.OpenGLWin32.HDc && videoData.OpenGLWin32.HRc)
+	if(videoData.OpenGLWin32.HWnd && videoData.OpenGLWin32.HDc && videoData.OpenGLWin32.HRc)
 	{
-		if (!wglMakeCurrent((HDC)videoData.OpenGLWin32.HDc, (HGLRC)videoData.OpenGLWin32.HRc))
+		if(!wglMakeCurrent((HDC)videoData.OpenGLWin32.HDc, (HGLRC)videoData.OpenGLWin32.HRc))
 		{
 			os::Printer::log("Render Context switch failed.");
 			return false;
 		}
 		CurrentContext = videoData;
 	}
-	else if (!restorePrimaryOnZero && !videoData.OpenGLWin32.HDc && !videoData.OpenGLWin32.HRc)
+	else if(!restorePrimaryOnZero && !videoData.OpenGLWin32.HDc && !videoData.OpenGLWin32.HRc)
 	{
-		if (!wglMakeCurrent((HDC)0, (HGLRC)0))
+		if(!wglMakeCurrent((HDC)0, (HGLRC)0))
 		{
 			os::Printer::log("Render Context reset failed.");
 			return false;
@@ -454,9 +466,9 @@ bool CWGLManager::activateContext(const SExposedVideoData& videoData, bool resto
 		CurrentContext = videoData;
 	}
 	// set back to main context
-	else if (!videoData.OpenGLWin32.HWnd && CurrentContext.OpenGLWin32.HDc != PrimaryContext.OpenGLWin32.HDc)
+	else if(!videoData.OpenGLWin32.HWnd && CurrentContext.OpenGLWin32.HDc != PrimaryContext.OpenGLWin32.HDc)
 	{
-		if (!wglMakeCurrent((HDC)PrimaryContext.OpenGLWin32.HDc, (HGLRC)PrimaryContext.OpenGLWin32.HRc))
+		if(!wglMakeCurrent((HDC)PrimaryContext.OpenGLWin32.HDc, (HGLRC)PrimaryContext.OpenGLWin32.HRc))
 		{
 			os::Printer::log("Render Context switch failed.");
 			return false;
@@ -468,14 +480,14 @@ bool CWGLManager::activateContext(const SExposedVideoData& videoData, bool resto
 
 void CWGLManager::destroyContext()
 {
-	if (CurrentContext.OpenGLWin32.HRc)
+	if(CurrentContext.OpenGLWin32.HRc)
 	{
-		if (!wglMakeCurrent((HDC)CurrentContext.OpenGLWin32.HDc, 0))
+		if(!wglMakeCurrent((HDC)CurrentContext.OpenGLWin32.HDc, 0))
 			os::Printer::log("Release of render context failed.", ELL_WARNING);
 
-		if (!wglDeleteContext((HGLRC)CurrentContext.OpenGLWin32.HRc))
+		if(!wglDeleteContext((HGLRC)CurrentContext.OpenGLWin32.HRc))
 			os::Printer::log("Deletion of render context failed.", ELL_WARNING);
-		if (PrimaryContext.OpenGLWin32.HRc == CurrentContext.OpenGLWin32.HRc)
+		if(PrimaryContext.OpenGLWin32.HRc == CurrentContext.OpenGLWin32.HRc)
 			PrimaryContext.OpenGLWin32.HRc = 0;
 		CurrentContext.OpenGLWin32.HRc = 0;
 	}

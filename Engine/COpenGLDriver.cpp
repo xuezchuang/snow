@@ -86,7 +86,7 @@ bool COpenGLDriver::initDriver()
 	extGlSwapInterval(Params.Vsync ? 1 : 0);
 #endif
 
-	glewInit();
+	
 	GPU_init();
 	return true;
 }
@@ -353,17 +353,20 @@ void COpenGLDriver::setTransform(E_TRANSFORMATION_STATE state, const core::matri
 	{
 	case ETS_VIEW:
 	{
-		shader->setMat4(_T("view"), mat);
+		const float(*matrixData)[4] = reinterpret_cast<const float(*)[4]>(mat.pointer());
+		GPU_shader_uniform_mat4(shader, _T("view"), matrixData);
 	}
 	break;
 	case ETS_WORLD:
 	{
-		shader->setMat4(_T("model"), mat);
+		const float(*matrixData)[4] = reinterpret_cast<const float(*)[4]>(mat.pointer());
+		GPU_shader_uniform_mat4(shader, _T("model"), matrixData);
 	}
 	break;
 	case ETS_PROJECTION:
 	{
-		shader->setMat4(_T("projection"), mat);
+		const float(*matrixData)[4] = reinterpret_cast<const float(*)[4]>(mat.pointer());
+		GPU_shader_uniform_mat4(shader, _T("projection"), matrixData);
 	}
 	break;
 	default:
@@ -438,9 +441,15 @@ bool COpenGLDriver::updateVertexHardwareBuffer(SHWBufferLink_opengl* HWBuffer)
 
 	//get or create buffer
 	bool newBuffer = false;
+
+
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
 	if (!HWBuffer->vbo_verticesID)
 	{
-		extGlGenBuffers(1, &HWBuffer->vbo_verticesID);
+		glGenBuffers(1, &HWBuffer->vbo_verticesID);
 		if (!HWBuffer->vbo_verticesID)
 			return false;
 		newBuffer = true;
@@ -450,24 +459,24 @@ bool COpenGLDriver::updateVertexHardwareBuffer(SHWBufferLink_opengl* HWBuffer)
 		newBuffer = true;
 	}
 
-	extGlBindBuffer(GL_ARRAY_BUFFER, HWBuffer->vbo_verticesID);
+	glBindBuffer(GL_ARRAY_BUFFER, HWBuffer->vbo_verticesID);
 
 	// copy data to graphics card
 	if (!newBuffer)
-		extGlBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * vertexSize, vbuf);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * vertexSize, vbuf);
 	else
 	{
 		HWBuffer->vbo_verticesSize = vertexCount * vertexSize;
 
 		if (HWBuffer->Mapped_Vertex == scene::EHM_STATIC)
-			extGlBufferData(GL_ARRAY_BUFFER, vertexCount * vertexSize, vbuf, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, vertexCount * vertexSize, vbuf, GL_STATIC_DRAW);
 		else if (HWBuffer->Mapped_Vertex == scene::EHM_DYNAMIC)
-			extGlBufferData(GL_ARRAY_BUFFER, vertexCount * vertexSize, vbuf, GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, vertexCount * vertexSize, vbuf, GL_DYNAMIC_DRAW);
 		else //scene::EHM_STREAM
-			extGlBufferData(GL_ARRAY_BUFFER, vertexCount * vertexSize, vbuf, GL_STREAM_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, vertexCount * vertexSize, vbuf, GL_STREAM_DRAW);
 	}
 
-	extGlBindBuffer(GL_ARRAY_BUFFER, 0);
+	//extGlBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return (!testGLError(__LINE__));
 #else
@@ -660,6 +669,7 @@ void COpenGLDriver::drawHardwareBuffer(SHWBufferLink* _HWBuffer)
 	const void* vertices = mb->getVertices();
 	const void* indexList = mb->getIndices();
 
+
 	if (HWBuffer->Mapped_Vertex != scene::EHM_NEVER)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, HWBuffer->vbo_verticesID);
@@ -814,7 +824,7 @@ static inline u8* buffer_offset(const long offset)
 	return ((u8*)0 + offset);
 }
 
-
+//static bool bTestFirst = true;
 //! draws a vertex primitive list
 void COpenGLDriver::drawVertexPrimitiveList(const void* vertices, u32 vertexCount,
 											const void* indexList, u32 primitiveCount,
@@ -831,7 +841,6 @@ void COpenGLDriver::drawVertexPrimitiveList(const void* vertices, u32 vertexCoun
 
 	// draw everything
 	setRenderStates3DMode();
-
 	//due to missing defines in OSX headers, we have to be more specific with this check
 	//#if defined(GL_ARB_vertex_array_bgra) || defined(GL_EXT_vertex_array_bgra)
 #ifdef GL_BGRA
@@ -842,8 +851,12 @@ void COpenGLDriver::drawVertexPrimitiveList(const void* vertices, u32 vertexCoun
 	switch (vType)
 	{
 	case EVT_STANDARD:
+		//GLint param;
+		//glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &param);
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1); 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), (void*)0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), (void*)(sizeof(core::vector3df)*2+sizeof(SColor)));
 		break;
 	case EVT_2TCOORDS:
 		
@@ -914,11 +927,28 @@ void COpenGLDriver::getColorBuffer(const void* vertices, u32 vertexCount, E_VERT
 }
 
 
+const char* vertexShaderSource =
+	"#version 330 core\n"
+	"layout (location = 0) in vec3 aPos;\n"
+	"void main()\n"
+	"{\n"
+	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+	"}\0";
+const char* fragmentShaderSource = "#version 330 core\n"
+	"out vec4 FragColor;\n"
+	"void main()\n"
+	"{\n"
+	"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+	"}\n\0";
+bool bInit = true;
+unsigned int shaderProgram = 0;
+unsigned int VAO;
+unsigned int VBO, EBO;
 void COpenGLDriver::renderArray(const void* indexList, u32 primitiveCount,scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType)
 {
 	GLenum indexSize = 0;
 
-	switch (iType)
+	switch(iType)
 	{
 	case EIT_16BIT:
 	{
@@ -1009,7 +1039,116 @@ void COpenGLDriver::renderArray(const void* indexList, u32 primitiveCount,scene:
 		glDrawElements(GL_TRIANGLE_FAN, primitiveCount + 2, indexSize, indexList);
 		break;
 	case scene::EPT_TRIANGLES:
+		GLint param_vao,param_ebo;
+		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &param_vao);
+		glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &param_ebo);
+
+		/************************************************************************/
+		/*								后处理数据								*/
+		/************************************************************************/
+
+		if(0)
+		{
+			if(bInit)
+			{
+				bInit = false;
+				shaderProgram = glCreateProgram();
+				unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+				glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+				glCompileShader(vertexShader);
+				// check for shader compile errors
+				int success;
+				char infoLog[512];
+				glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+				if(!success)
+				{
+					glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+					os::Printer::log("ERROR::SHADER::VERTEX::COMPILATION_FAILED", ELL_ERROR);
+				}
+				// fragment shader
+				unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+				glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+				glCompileShader(fragmentShader);
+				// check for shader compile errors
+				glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+				if(!success)
+				{
+					glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+					os::Printer::log("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED", ELL_ERROR);
+				}
+				shaderProgram = glCreateProgram();
+				glAttachShader(shaderProgram, vertexShader);
+				glAttachShader(shaderProgram, fragmentShader);
+				glLinkProgram(shaderProgram);
+				// check for linking errors
+				glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+				if(!success)
+				{
+					glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+					os::Printer::log("ERROR::SHADER::PROGRAM::LINKING_FAILED", ELL_ERROR);
+				}
+				glDeleteShader(vertexShader);
+				glDeleteShader(fragmentShader);
+				// ------------------------------------------------------------------
+				float vertices[] = {
+					 0.5f,  0.5f, 0.0f,  // top right
+					 0.5f, -0.5f, 0.0f,  // bottom right
+					-0.5f, -0.5f, 0.0f,  // bottom left
+					-0.5f,  0.5f, 0.0f   // top left 
+				};
+
+				unsigned int indices[] =
+				{  // note that we start from 0!
+					0, 1, 3,  // first Triangle
+					1, 2, 3   // second Triangle
+				};
+
+				
+				glGenVertexArrays(1, &VAO);
+				glGenBuffers(1, &VBO);
+				glGenBuffers(1, &EBO);
+				// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+				glBindVertexArray(VAO);
+
+				glBindBuffer(GL_ARRAY_BUFFER, VBO);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+				glEnableVertexAttribArray(0);
+
+				// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+				// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+				//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+				// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+				// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+				glBindVertexArray(0);
+			}
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+			glEnableVertexAttribArray(0);
+			glEnableVertexAttribArray(1);
+			glUseProgram(shaderProgram);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glBindVertexArray(VAO);
+			glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &param_ebo);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			break;
+		}
+
+		/************************************************************************/
+
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//glClear(GL_COLOR_BUFFER_BIT);
+		//glUseProgram(shaderProgram);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, primitiveCount * 3, indexSize, indexList);
+		//glDrawElements(GL_TRIANGLES, 3, indexSize, indexList);
 		break;
 	case scene::EPT_QUAD_STRIP:
 		glDrawElements(GL_QUAD_STRIP, primitiveCount * 2 + 2, indexSize, indexList);
@@ -1933,7 +2072,6 @@ void COpenGLDriver::disableFeature(E_VIDEO_DRIVER_FEATURE feature, bool flag)
 //! Sets a material. All 3d drawing functions draw geometry now using this material.
 void COpenGLDriver::setMaterial(const SMaterial& material)
 {
-	return;
 	Material = material;
 	OverrideMaterial.apply(Material);
 
@@ -1991,23 +2129,23 @@ void COpenGLDriver::setRenderStates3DMode()
 	if (CurrentRenderMode != ERM_3D)
 	{
 		// Reset Texture Stages
-		CacheHandler->setBlend(false);
-		CacheHandler->setAlphaTest(false);
-		CacheHandler->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		CacheHandler->setActiveTexture(GL_TEXTURE0_ARB);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		//CacheHandler->setBlend(false);
+		//CacheHandler->setAlphaTest(false);
+		//CacheHandler->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//CacheHandler->setActiveTexture(GL_TEXTURE0_ARB);
+		//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-		// switch back the matrices
-		CacheHandler->setMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf((Matrices[ETS_VIEW] * Matrices[ETS_WORLD]).pointer());
+		//// switch back the matrices
+		//CacheHandler->setMatrixMode(GL_MODELVIEW);
+		//glLoadMatrixf((Matrices[ETS_VIEW] * Matrices[ETS_WORLD]).pointer());
 
-		CacheHandler->setMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(Matrices[ETS_PROJECTION].pointer());
+		//CacheHandler->setMatrixMode(GL_PROJECTION);
+		//glLoadMatrixf(Matrices[ETS_PROJECTION].pointer());
 
 		ResetRenderStates = true;
 #ifdef GL_EXT_clip_volume_hint
-		if (FeatureAvailable[IRR_EXT_clip_volume_hint])
-			glHint(GL_CLIP_VOLUME_CLIPPING_HINT_EXT, GL_NICEST);
+		//if (FeatureAvailable[IRR_EXT_clip_volume_hint])
+		//	glHint(GL_CLIP_VOLUME_CLIPPING_HINT_EXT, GL_NICEST);
 #endif
 	}
 
@@ -2015,14 +2153,15 @@ void COpenGLDriver::setRenderStates3DMode()
 	{
 		// unset old material
 
-		if (LastMaterial.MaterialType != Material.MaterialType &&
-			static_cast<u32>(LastMaterial.MaterialType) < MaterialRenderers.size())
+		if(LastMaterial.MaterialType != Material.MaterialType && static_cast<u32>(LastMaterial.MaterialType) < MaterialRenderers.size())
 			MaterialRenderers[LastMaterial.MaterialType].Renderer->OnUnsetMaterial();
 
 		// set new material.
 		if (static_cast<u32>(Material.MaterialType) < MaterialRenderers.size())
-			MaterialRenderers[Material.MaterialType].Renderer->OnSetMaterial(
-				Material, LastMaterial, ResetRenderStates, this);
+		{
+			MaterialRenderers[Material.MaterialType].Renderer->OnSetMaterial(Material, LastMaterial, ResetRenderStates, this);
+		}
+			
 
 		LastMaterial = Material;
 		CacheHandler->correctCacheMaterial(LastMaterial);
@@ -2306,6 +2445,7 @@ void COpenGLDriver::setBasicRenderStates(const SMaterial& material, const SMater
 	if (resetAllRenderStates || (lastmaterial.Wireframe != material.Wireframe) || (lastmaterial.PointCloud != material.PointCloud))
 		glPolygonMode(GL_FRONT_AND_BACK, material.Wireframe ? GL_LINE : material.PointCloud ? GL_POINT : GL_FILL);
 
+	
 	// ZBuffer
 	switch (material.ZBuffer)
 	{
@@ -2348,8 +2488,10 @@ void COpenGLDriver::setBasicRenderStates(const SMaterial& material, const SMater
 		break;
 	}
 
+	
+
 	// ZWrite
-	if (getWriteZBuffer(material))
+	if(getWriteZBuffer(material))
 	{
 		CacheHandler->setDepthMask(true);
 	}
@@ -2357,6 +2499,7 @@ void COpenGLDriver::setBasicRenderStates(const SMaterial& material, const SMater
 	{
 		CacheHandler->setDepthMask(false);
 	}
+	return;
 
 	// Back face culling
 	if ((material.FrontfaceCulling) && (material.BackfaceCulling))
@@ -3516,7 +3659,7 @@ void COpenGLDriver::OnResize(const core::dimension2d<u32>& size)
 //! Returns type of video driver
 E_DRIVER_TYPE COpenGLDriver::getDriverType() const
 {
-	return EDT_OPENGL;
+	return EDT_OPENGL_4_6;
 }
 
 
@@ -3810,13 +3953,13 @@ void COpenGLDriver::clearBuffers(u16 flag, SColor color, f32 depth, u8 stencil)
 		mask |= GL_DEPTH_BUFFER_BIT;
 	}
 
-	if (flag & ECBF_STENCIL)
+	if(flag & ECBF_STENCIL)
 	{
 		glClearStencil(stencil);
 		mask |= GL_STENCIL_BUFFER_BIT;
 	}
 
-	if (mask)
+	if(mask)
 		glClear(mask);
 
 	CacheHandler->setColorMask(colorMask);
@@ -4299,9 +4442,10 @@ COpenGLCacheHandler* COpenGLDriver::getCacheHandler() const
 
 void COpenGLDriver::setCurrentShader(GPUShader* _shader)
 {
-	//shader = _shader;
+	shader = _shader;
 	//shader->use();
 	GPU_shader_bind(_shader);
+	//glBindVertexArray(1);
 }
 
 //video::IOpenGlShader* COpenGLDriver::generteShader(const core::stringc& vertexPath, const core::stringc& fragmentPath)

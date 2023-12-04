@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
 	const io::path mediaPath = getExampleMediaPath();
 
-	scene::ISceneNode* CubeNode = smgr->addCubeSceneNode();
+	scene::ISceneNode* CubeNode = smgr->addCubeSceneNode(10);
 	if (CubeNode) 
 	{
 		//CubeNode->setPosition(core::vector3df(0, 0, 60));
@@ -75,9 +75,9 @@ int main(int argc, char** argv)
 	//}
 
 	
-	ICameraSceneNode* cameranNode = smgr->addCameraSceneNodeBlender();// 0, vector3df(0, 30, -40), vector3df(0, 5, 0));
-	cameranNode->setTarget(vector3df(0, 0, 0));
-	//smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	//ICameraSceneNode* cameranNode = smgr->addCameraSceneNodeBlender();// 0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	//cameranNode->setTarget(vector3df(0, 0, 0));
+	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
 	//smgr->addCameraSceneNodeFPS();
 
 	int lastFPS = -1;
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 		driver->beginScene(ECBF_COLOR | ECBF_DEPTH, SColor(255, 166, 183, 210));
 
 			smgr->drawAll();
-			guienv->drawAll();
+			//guienv->drawAll();
 
 			driver->endScene();
 

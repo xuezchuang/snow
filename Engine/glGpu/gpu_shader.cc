@@ -387,8 +387,8 @@ GPUShader* GPU_shader_create_from_info(const GPUShaderCreateInfo* _info)
 		//std::string interface = shader->fragment_interface_declare(info);
 
 		string sources;
-		standard_defines(sources);
-		sources.append("#define GPU_FRAGMENT_SHADER\n");
+		//standard_defines(sources);
+		//sources.append("#define GPU_FRAGMENT_SHADER\n");
 		//if(!info.geometry_source_.is_empty())
 		//{
 		//	sources.append("#define USE_GEOMETRY_SHADER\n");
@@ -402,6 +402,7 @@ GPUShader* GPU_shader_create_from_info(const GPUShaderCreateInfo* _info)
 		sources.append(info.fragment_source_generated.c_str());
 
 		shader->fragment_shader_from_glsl(sources);
+		shader->finalize();
 	}
 
 	//if(!info.geometry_source_.is_empty())
@@ -611,17 +612,10 @@ void GPU_shader_transform_feedback_disable(GPUShader* shader)
 
 /** \} */
 
-/* -------------------------------------------------------------------- */
-/** \name Uniforms / Resource location
- * \{ */
 
-int GPU_shader_get_uniform(GPUShader* shader, const char* name)
-{
-	//const ShaderInterface* interface = unwrap(shader)->interface;
-	//const ShaderInput* uniform = interface->uniform_get(name);
-	//return uniform ? uniform->location : -1;
-	return 1;
-}
+ /***************************************************************************************************/
+ /*						name Uniforms / Resource location											*/
+ /***************************************************************************************************/
 
 int GPU_shader_get_builtin_uniform(GPUShader* shader, int builtin)
 {
@@ -702,11 +696,10 @@ bool GPU_shader_get_attribute_info(const GPUShader* shader,
 	return true;
 }
 
-/** \} */
 
-/* -------------------------------------------------------------------- */
-/** \name Getters
- * \{ */
+ /****************************************************************************************************/
+ /*										name Getters												*/
+ /****************************************************************************************************/
 
 int GPU_shader_get_program(GPUShader* shader)
 {
@@ -714,26 +707,22 @@ int GPU_shader_get_program(GPUShader* shader)
 	return 1;
 }
 
-/** \} */
-
-/* -------------------------------------------------------------------- */
-/** \name Uniforms setters
- * \{ */
-
-void GPU_shader_uniform_float_ex(
-	GPUShader* shader, int loc, int len, int array_size, const float* value)
+ /****************************************************************************************************/
+ /*									name Uniforms setters											*/
+ /****************************************************************************************************/
+void GPU_shader_uniform_float_ex(GPUShader* shader, int loc, int len, int array_size, const float* value)
 {
-	//unwrap(shader)->uniform_float(loc, len, array_size, value);
+	unwrap(shader)->uniform_float(loc, len, array_size, value);
 }
 
 void GPU_shader_uniform_int_ex(GPUShader* shader, int loc, int len, int array_size, const int* value)
 {
-	//unwrap(shader)->uniform_int(loc, len, array_size, value);
+	unwrap(shader)->uniform_int(loc, len, array_size, value);
 }
 
 void GPU_shader_uniform_1i(GPUShader* sh, const char* name, int value)
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_int_ex(sh, loc, 1, 1, &value);
 }
 
@@ -762,37 +751,37 @@ void GPU_shader_uniform_4f(GPUShader* sh, const char* name, float x, float y, fl
 
 void GPU_shader_uniform_1f(GPUShader* sh, const char* name, float value)
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_float_ex(sh, loc, 1, 1, &value);
 }
 
 void GPU_shader_uniform_2fv(GPUShader* sh, const char* name, const float data[2])
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_float_ex(sh, loc, 2, 1, data);
 }
 
 void GPU_shader_uniform_3fv(GPUShader* sh, const char* name, const float data[3])
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_float_ex(sh, loc, 3, 1, data);
 }
 
 void GPU_shader_uniform_4fv(GPUShader* sh, const char* name, const float data[4])
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_float_ex(sh, loc, 4, 1, data);
 }
 
 void GPU_shader_uniform_2iv(GPUShader* sh, const char* name, const int data[2])
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_int_ex(sh, loc, 2, 1, data);
 }
 
 void GPU_shader_uniform_mat4(GPUShader* sh, const char* name, const float data[4][4])
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_float_ex(sh, loc, 16, 1, (const float*)data);
 }
 
@@ -805,17 +794,16 @@ void GPU_shader_uniform_mat3_as_mat4(GPUShader* sh, const char* name, const floa
 
 void GPU_shader_uniform_2fv_array(GPUShader* sh, const char* name, int len, const float(*val)[2])
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_float_ex(sh, loc, 2, len, (const float*)val);
 }
 
 void GPU_shader_uniform_4fv_array(GPUShader* sh, const char* name, int len, const float(*val)[4])
 {
-	const int loc = GPU_shader_get_uniform(sh, name);
+	const int loc = unwrap(sh)->GPU_shader_get_uniform(name);
 	GPU_shader_uniform_float_ex(sh, loc, 4, len, (const float*)val);
 }
 
-/** \} */
 
 namespace irr::gpu
 {

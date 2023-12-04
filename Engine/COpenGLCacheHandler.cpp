@@ -22,17 +22,17 @@ COpenGLCacheHandler::COpenGLCacheHandler(COpenGLDriver* driver) :
 {
 	// Initial OpenGL values from specification.
 
-	glAlphaFunc(AlphaMode, AlphaRef);
-	glDisable(GL_ALPHA_TEST);
+	//glAlphaFunc(AlphaMode, AlphaRef);
+	//glDisable(GL_ALPHA_TEST);
 
-	glMatrixMode(MatrixMode);
+	//glMatrixMode(MatrixMode);
 
-	Driver->irrGlClientActiveTexture(ClientActiveTexture);
+	//Driver->irrGlClientActiveTexture(ClientActiveTexture);
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	//glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_NORMAL_ARRAY);
+	//glDisableClientState(GL_COLOR_ARRAY);
+	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 COpenGLCacheHandler::~COpenGLCacheHandler()
@@ -52,59 +52,59 @@ void COpenGLCacheHandler::setAlphaFunc(GLenum mode, GLclampf ref)
 
 void COpenGLCacheHandler::setAlphaTest(bool enable)
 {
-	if (AlphaTest != enable)
-	{
-		if (enable)
-			glEnable(GL_ALPHA_TEST);
-		else
-			glDisable(GL_ALPHA_TEST);
-		AlphaTest = enable;
-	}
+	//if (AlphaTest != enable)
+	//{
+	//	if (enable)
+	//		glEnable(GL_ALPHA_TEST);
+	//	else
+	//		glDisable(GL_ALPHA_TEST);
+	//	AlphaTest = enable;
+	//}
 }
 
 void COpenGLCacheHandler::setClientState(bool vertex, bool normal, bool color, bool texCoord0)
 {
-	if (ClientStateVertex != vertex)
-	{
-		if (vertex)
-			glEnableClientState(GL_VERTEX_ARRAY);
-		else
-			glDisableClientState(GL_VERTEX_ARRAY);
+	//if (ClientStateVertex != vertex)
+	//{
+	//	if (vertex)
+	//		glEnableClientState(GL_VERTEX_ARRAY);
+	//	else
+	//		glDisableClientState(GL_VERTEX_ARRAY);
 
-		ClientStateVertex = vertex;
-	}
+	//	ClientStateVertex = vertex;
+	//}
 
-	if (ClientStateNormal != normal)
-	{
-		if (normal)
-			glEnableClientState(GL_NORMAL_ARRAY);
-		else
-			glDisableClientState(GL_NORMAL_ARRAY);
+	//if (ClientStateNormal != normal)
+	//{
+	//	if (normal)
+	//		glEnableClientState(GL_NORMAL_ARRAY);
+	//	else
+	//		glDisableClientState(GL_NORMAL_ARRAY);
 
-		ClientStateNormal = normal;
-	}
+	//	ClientStateNormal = normal;
+	//}
 
-	if (ClientStateColor != color)
-	{
-		if (color)
-			glEnableClientState(GL_COLOR_ARRAY);
-		else
-			glDisableClientState(GL_COLOR_ARRAY);
+	//if (ClientStateColor != color)
+	//{
+	//	if (color)
+	//		glEnableClientState(GL_COLOR_ARRAY);
+	//	else
+	//		glDisableClientState(GL_COLOR_ARRAY);
 
-		ClientStateColor = color;
-	}
+	//	ClientStateColor = color;
+	//}
 
-	if (ClientStateTexCoord0 != texCoord0)
-	{
-		setClientActiveTexture(GL_TEXTURE0_ARB);
+	//if (ClientStateTexCoord0 != texCoord0)
+	//{
+	//	setClientActiveTexture(GL_TEXTURE0_ARB);
 
-		if (texCoord0)
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		else
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	//	if (texCoord0)
+	//		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	//	else
+	//		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		ClientStateTexCoord0 = texCoord0;
-	}
+	//	ClientStateTexCoord0 = texCoord0;
+	//}
 }
 
 void COpenGLCacheHandler::setMatrixMode(GLenum mode)

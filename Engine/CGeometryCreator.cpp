@@ -20,8 +20,22 @@ IMesh* CGeometryCreator::createCubeMesh(const core::vector3df& size) const
 	SMeshBuffer* buffer = new SMeshBuffer();
 
 	// Create indices
-	const u16 u[36] = { 0,2,1,   0,3,2,   1,5,4,   1,2,5,   4,6,7,   4,5,6,
-			7,3,0,   7,6,3,   9,5,2,   9,8,5,   0,11,10,   0,10,7 };
+	const u16 u[36] = 
+	{ 
+		0,2,1,   
+		0,3,2,   
+		1,5,4,   
+		1,2,5,   
+		4,6,7,   
+		4,5,6,
+			
+		7,3,0,  
+		7,6,3,  
+		9,5,2,  
+		9,8,5,  
+		0,11,10,  
+		0,10,7 
+	};
 
 	buffer->Indices.set_used(36);
 

@@ -1047,7 +1047,10 @@ GLuint GLShader::create_shader_stage(GLenum gl_stage, std::string sources)
 	}*/
 	if(!status)
 	{
+		char c_log[5000] = "";
+		glGetShaderInfoLog(shader, sizeof(c_log), nullptr, c_log);
 		glDeleteShader(shader);
+		std::cout << c_log << std::endl;
 		compilation_failed_ = true;
 		return 0;
 	}
@@ -1094,7 +1097,10 @@ bool GLShader::finalize(const shader::ShaderCreateInfo* info)
 	//		geometry_shader_from_glsl(sources);
 	//	}
 	//
-	//	glLinkProgram(shader_program_);
+	glLinkProgram(shader_program_);
+	glDeleteShader(vert_shader_);
+	glDeleteShader(frag_shader_);
+	glUseProgram(shader_program_);
 	//
 	//	GLint status;
 	//	glGetProgramiv(shader_program_, GL_LINK_STATUS, &status);
@@ -1196,63 +1202,67 @@ void GLShader::unbind()
 //}
 //
 ///** \} */
-//
-///* -------------------------------------------------------------------- */
-///** \name Uniforms setters
-// * \{ */
-//
-//void GLShader::uniform_float(int location, int comp_len, int array_size, const float* data)
-//{
-//	switch(comp_len)
-//	{
-//	case 1:
-//		glUniform1fv(location, array_size, data);
-//		break;
-//	case 2:
-//		glUniform2fv(location, array_size, data);
-//		break;
-//	case 3:
-//		glUniform3fv(location, array_size, data);
-//		break;
-//	case 4:
-//		glUniform4fv(location, array_size, data);
-//		break;
-//	case 9:
-//		glUniformMatrix3fv(location, array_size, 0, data);
-//		break;
-//	case 16:
-//		glUniformMatrix4fv(location, array_size, 0, data);
-//		break;
-//	default:
-//		BLI_assert(0);
-//		break;
-//	}
-//}
-//
-//void GLShader::uniform_int(int location, int comp_len, int array_size, const int* data)
-//{
-//	switch(comp_len)
-//	{
-//	case 1:
-//		glUniform1iv(location, array_size, data);
-//		break;
-//	case 2:
-//		glUniform2iv(location, array_size, data);
-//		break;
-//	case 3:
-//		glUniform3iv(location, array_size, data);
-//		break;
-//	case 4:
-//		glUniform4iv(location, array_size, data);
-//		break;
-//	default:
-//		BLI_assert(0);
-//		break;
-//	}
-//}
-//
-///** \} */
-//
+
+
+/****************************************************************************************************/
+/*									name Uniforms setters											*/
+/****************************************************************************************************/
+
+void GLShader::uniform_float(int location, int comp_len, int array_size, const float* data)
+{
+	switch(comp_len)
+	{
+	case 1:
+		glUniform1fv(location, array_size, data);
+		break;
+	case 2:
+		glUniform2fv(location, array_size, data);
+		break;
+	case 3:
+		glUniform3fv(location, array_size, data);
+		break;
+	case 4:
+		glUniform4fv(location, array_size, data);
+		break;
+	case 9:
+		glUniformMatrix3fv(location, array_size, 0, data);
+		break;
+	case 16:
+		glUniformMatrix4fv(location, array_size, 0, data);
+		break;
+	default:
+		BLI_assert(0);
+		break;
+	}
+}
+
+void GLShader::uniform_int(int location, int comp_len, int array_size, const int* data)
+{
+	switch(comp_len)
+	{
+	case 1:
+		glUniform1iv(location, array_size, data);
+		break;
+	case 2:
+		glUniform2iv(location, array_size, data);
+		break;
+	case 3:
+		glUniform3iv(location, array_size, data);
+		break;
+	case 4:
+		glUniform4iv(location, array_size, data);
+		break;
+	default:
+		BLI_assert(0);
+		break;
+	}
+}
+
+int GLShader::GPU_shader_get_uniform(const char* name)
+{
+	return glGetUniformLocation(shader_program_, name);
+}
+
 ///* -------------------------------------------------------------------- */
 ///** \name GPUVertFormat from Shader
 // * \{ */

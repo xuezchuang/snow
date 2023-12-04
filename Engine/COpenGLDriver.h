@@ -22,6 +22,7 @@ class CIrrDeviceMacOSX;
 
 #include "COpenGLExtensionHandler.h"
 
+struct GPUShader;
 namespace irr
 {
 
@@ -29,6 +30,7 @@ namespace video
 {
 class IContextManager;
 class IOpenGlShader;
+
 
 class COpenGLDriver : public CNullDriver, public IMaterialRendererServices, public COpenGLExtensionHandler
 {
@@ -524,7 +526,8 @@ private:
 
 	E_DEVICE_TYPE DeviceType;
 
-	IOpenGlShader* shader = 0;
+	//IOpenGlShader* shader = 0;
+	GPUShader* shader = 0;
 };
 
 } // end namespace video
